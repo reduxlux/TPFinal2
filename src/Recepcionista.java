@@ -1,27 +1,67 @@
+import java.time.LocalDate;
+
 public class Recepcionista extends Usuario {
+
+    private Hotel hotel;
 
     public Recepcionista(String usuario, String contrasenia, String nombre) {
         super(usuario, contrasenia, nombre);
+        this.hotel = hotel;
     }
 
-    public void realizarReserva() {
-        // ...
+    public void realizarReservaRec(Reserva reserva) {
+        hotel.agregarReservaHotel(reserva);
     }
 
-    public void realizarCheckIn() {
-        // ...
+    public void realizarCheckInRec(Reserva reserva) {
+        hotel.realizarCheckInHotel(reserva);
     }
 
-    public void realizarCheckOut() {
-        // ...
+    public void realizarCheckOutRec(Ocupacion ocupacion) {
+        hotel.realizarCheckOutHotel(ocupacion);
     }
 
     public void consultarHabitaciones() {
-        // ...
+        hotel.listarHabitaciones();
+    }
+
+    public void consultarHabitacionesDisponibles() {
+        hotel.listarHabitacionesDisponibles();
+    }
+
+    public void consultarHabitacionesNoDisponibles() {
+        hotel.listarHabitacionesNoDisponibles();
+    }
+
+    public void consultarHabitacionesOcupadar() {
+        hotel.listarHabitacionesOcupadas();
+    }
+
+    public void consultarDisponibilidad(int numero, LocalDate fechaEntrada, LocalDate fechaSalida) {
+        hotel.consultarDisponibilidad(numero, fechaEntrada, fechaSalida);
+    }
+
+    public void bloquearHabitacion(int numero, String motivo) {
+        hotel.bloquearHabitacion(numero, motivo);
+    }
+
+    public void habilitarHabitacion(int numero) {
+        hotel.habilitarHabitacion(numero);
     }
 
     @Override
     public void mostrarMenu() {
-        // ...
+        System.out.println("\n=== MENÚ RECEPCIONISTA ===");
+        System.out.println("1. Realizar reserva");
+        System.out.println("2. Realizar check-in");
+        System.out.println("3. Realizar check-out");
+        System.out.println("4. Consultar habitaciones");
+        System.out.println("5. Consultar habitaciones disponibles");
+        System.out.println("6. Consultar habitaciones no disponibles");
+        System.out.println("7. Consultar habitaciones ocupadas");
+        System.out.println("8. Consultar disponibilidad habitacion");
+        System.out.println("9. Bloquear habitacion");
+        System.out.println("10. Habilitar habitacion");
+        System.out.println("0. Cerrar sesión");
     }
 }

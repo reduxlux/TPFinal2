@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Habitacion {
 
     private int numero;
@@ -62,11 +64,35 @@ public class Habitacion {
         // No se que ponerle
     }
 
-    public void liberar() {
-        // No se que ponerle
+    public void habilitar() {
+        this.estado = EEstadoHabitacion.DISPONIBLE;
+        this.motivoNoDisponible = "";
     }
 
     public void bloquear(String motivo) {
-        // No se que ponerle
+        this.estado = EEstadoHabitacion.NO_DISPONIBLE;
+        this.motivoNoDisponible = motivo;
+    }
+
+    public void mostrarInformacion() {
+        System.out.println("Habitacion: " + this.numero);
+        System.out.println("Piso: " + this.piso);
+        System.out.println("Tipo: " + this.tipo);
+        System.out.println("Estado: " + this.estado);
+        if (!estaDisponible()) {
+            System.out.println("Motivo: " + motivoNoDisponible);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Habitacion)) return false;
+        Habitacion that = (Habitacion) o;
+        return getNumero() == that.getNumero();
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(getNumero());
     }
 }

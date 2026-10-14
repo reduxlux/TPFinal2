@@ -1,8 +1,6 @@
 public enum EEstadoHabitacion {
     DISPONIBLE,
+    NO_DISPONIBLE,
     OCUPADA,
     RESERVADA,
-    EN_LIMPIEZA,
-    EN_REPARACION,
-    DESINFECTANDO
 }

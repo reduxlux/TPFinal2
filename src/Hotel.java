@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -69,39 +70,171 @@ public class Hotel {
         this.usuarios = usuarios;
     }
 
+    /// PASAJEROS
+    public void registrarPasajeroHotel(Pasajero pasajero) {
+        // No se que ponerle
+    }
+
+    /// RESERVAS
+    public void agregarReservaHotel(Reserva reserva) {
+        reservas.add(reserva);
+    }
+
+    public void realizarCheckInHotel(Reserva reserva) {
+        if (reserva == null) {
+            System.out.println("Reserva no encontrada");
+            return;
+        }
+        if (reserva.getEstado() != EEstadoReserva.CONFIRMADA) {
+            System.out.println("Reserva no confirmada");
+            return;
+        }
+        Habitacion habitacion = reserva.getHabitacion();
+        if (!habitacion.estaDisponible()) {
+            System.out.println("Habitacion no disponible");
+            return;
+        }
+        for (Ocupacion ocupacion : ocupaciones) {
+            if (ocupacion.estaActiva() &&
+                    ocupacion.getHabitacion().getNumero() == habitacion.getNumero()) {
+                System.out.println("La habitacion ya está ocupada.");
+                return;
+            }
+        }
+        Ocupacion nuevaOcupacion = new Ocupacion(
+                reserva.getPasajero(),
+                habitacion,
+                LocalDate.now()
+        );
+        ocupaciones.add(nuevaOcupacion);
+        System.out.println("Check-in realizado correctamente");
+    }
+
+    public void realizarCheckOutHotel(Ocupacion ocupacion) {
+
+        if (ocupacion == null) {
+            System.out.println("La ocupación no existe.");
+            return;
+        }
+
+        if (!ocupacion.estaActiva()) {
+            System.out.println("Esta ocupación ya finalizó.");
+            return;
+        }
+
+        ocupacion.realizarCheckOut(LocalDate.now());
+
+        System.out.println("Check-out realizado correctamente.");
+    }
+
+    /// HABITACIONES
     public void agregarHabitacion(Habitacion habitacion) {
-        // No se que ponerle
+        if (habitaciones.containsKey(habitacion.getNumero())) {
+            System.out.println("Habitacion existente");
+        } else {
+            habitaciones.put(habitacion.getNumero(), habitacion);
+            System.out.println("Habitacion agregada");
+        }
     }
 
-    public void registrarPasajero(Pasajero pasajero) {
-        // No se que ponerle
+    public Habitacion buscarHabitacion(int numero) {
+        if (habitaciones.containsKey(numero)) {
+            return habitaciones.get(numero);
+        } else {
+            System.out.println("Habitacion no encontrada");
+            return null;
+        }
     }
 
-    public void realizarReserva(Reserva reserva) {
-        // No se que ponerle
+    public void bloquearHabitacion(int numero, String motivo) {
+        Habitacion habitacion = buscarHabitacion(numero);
+        if (habitacion == null) {
+            System.out.println("Habitacion no encontrada");
+        } else if (motivo == null || motivo.isBlank()) {
+            System.out.println("Debe haber un motivo.");
+        } else {
+            habitacion.bloquear(motivo);
+            System.out.println("Habitacion bloqueada");
+        }
     }
 
-    public void realizarCheckIn(Ocupacion ocupacion) {
-        // No se que ponerle
-    }
-
-    public void realizarCheckOut(Ocupacion ocupacion) {
-        // No se que ponerle
+    public void habilitarHabitacion(int numero) {
+        Habitacion habitacion = buscarHabitacion(numero);
+        if (habitacion == null) {
+            System.out.println("Habitacion no encontrada");
+        } else {
+            habitacion.habilitar();
+            System.out.println("Habitacion habilitada");
+        }
     }
 
     public void listarHabitacionesDisponibles() {
-        // No se que ponerle
+        System.out.println("\nHabitaciones disponibles:");
+        for (Habitacion habitacion : habitaciones.values()) {
+            if (habitacion.estaDisponible()) {
+                habitacion.mostrarInformacion();
+                System.out.println("---");
+            }
+        }
     }
 
     public void listarHabitacionesOcupadas() {
-        // No se que ponerle
+        System.out.println("\nHabitaciones ocupadas:");
+        for (Ocupacion ocupacion : ocupaciones) {
+            if (ocupacion.estaActiva()) {
+                System.out.println("Habitacion: " +
+                        ocupacion.getHabitacion().getNumero());
+                System.out.println("Pasajero: " +
+                        ocupacion.getPasajero().getNombre());
+                System.out.println("Check-in: " + ocupacion.getFechaCheckIn());
+                System.out.println("---");
+            }
+        }
     }
 
     public void listarHabitacionesNoDisponibles() {
-        // No se que ponerle
+        System.out.println("\nHabitaciones no disponibles:");
+        for (Habitacion habitacion : habitaciones.values()) {
+            if (!habitacion.estaDisponible()) {
+                habitacion.mostrarInformacion();
+                System.out.println("---");
+            }
+        }
     }
 
-    public boolean consultarDisponibilidad(/* fechas */) {
-        return false;
+    public void listarHabitaciones() {
+        System.out.println("\nListado habitaciones:");
+        for (Habitacion habitacion : habitaciones.values()) {
+            habitacion.mostrarInformacion();
+            System.out.println("---");
+        }
+    }
+
+    public boolean consultarDisponibilidad(int numero, LocalDate fechaEntrada, LocalDate fechaSalida) {
+        Habitacion habitacion = buscarHabitacion(numero);
+        if (habitacion == null) {
+            System.out.println("Habitacion no encontrada");
+            return false;
+        }
+        if (fechaEntrada == null || fechaSalida == null || !fechaEntrada.isBefore(fechaSalida)) {
+            System.out.println("Fecha Invalida");
+            return false;
+        }
+        if (!habitacion.estaDisponible()) {
+            System.out.println("Habitacion no disponible");
+            return false;
+        }
+        for (Reserva reserva : reservas) {
+            if (reserva.getHabitacion().getNumero() == numero && reserva.getEstado() == EEstadoReserva.CONFIRMADA) {
+                boolean seSuperponen =
+                        fechaEntrada.isBefore(reserva.getFechaSalida())
+                                && fechaSalida.isAfter(reserva.getFechaEntrada());
+                if (seSuperponen) {
+                    System.out.println("La habitacion ya está reservada en esas fechas");
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
