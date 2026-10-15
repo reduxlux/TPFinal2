@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Pasajero {
 
@@ -66,4 +67,21 @@ public class Pasajero {
     }
 
     // Getters y setters
+
+
+    //metodos
+
+
+    ///equals y hashcode para agregar pasajero en hotel
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Pasajero pasajero = (Pasajero) o;
+        return Objects.equals(dni, pasajero.dni);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(dni);
+    }
 }

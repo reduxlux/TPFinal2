@@ -15,11 +15,11 @@ public class Hotel {
     public Hotel(String nombre) {
         this.nombre = nombre;
 
-        habitaciones = new HashMap<>();
-        pasajeros = new ArrayList<>();
-        reservas = new ArrayList<>();
-        ocupaciones = new ArrayList<>();
-        usuarios = new ArrayList<>();
+        this.habitaciones = new HashMap<>();
+        this.pasajeros = new ArrayList<>();
+        this.reservas = new ArrayList<>();
+        this.ocupaciones = new ArrayList<>();
+        this.usuarios = new ArrayList<>();
     }
 
     public String getNombre() {
@@ -71,34 +71,61 @@ public class Hotel {
     }
 
     /// PASAJEROS
-    public void registrarPasajeroHotel(Pasajero pasajero) {
-        // No se que ponerle
+    public boolean registrarPasajeroHotel(Pasajero p) {
+            if(pasajeros.contains(p))
+            {
+                return false;
+            }
+
+            pasajeros.add(p);
+            return true;
     }
 
     /// RESERVAS
-    public void agregarReservaHotel(Reserva reserva) {
-        reservas.add(reserva);
+    public boolean agregarReservaHotel(Reserva r) {
+        if(r == null)
+        {
+            return false;
+        }
+
+        if(reservas.contains(r))
+        {
+            return false;
+        }
+
+        if(!consultarDisponibilidad(r.getHabitacion().getNumero(), r.getFechaEntrada(),r.getFechaSalida()))
+        {
+            return false;
+        }
+
+        reservas.add(r);
+        return true;
     }
 
-    public void realizarCheckInHotel(Reserva reserva) {
+    public boolean realizarCheckInHotel(Reserva reserva) throws CheckInException{
+
         if (reserva == null) {
-            System.out.println("Reserva no encontrada");
-            return;
+            throw new CheckInException("reseva no encontrada");
         }
         if (reserva.getEstado() != EEstadoReserva.CONFIRMADA) {
-            System.out.println("Reserva no confirmada");
-            return;
+            throw new CheckInException("reserva no confirmada");
         }
+
         Habitacion habitacion = reserva.getHabitacion();
-        if (!habitacion.estaDisponible()) {
-            System.out.println("Habitacion no disponible");
-            return;
+
+        if (habitacion == null) {
+            throw new CheckInException("La reserva no tiene habitación");
         }
+
+        if (!habitacion.estaDisponible()) {
+            throw new CheckInException("habitacion no disponible");
+        }
+
+
         for (Ocupacion ocupacion : ocupaciones) {
             if (ocupacion.estaActiva() &&
                     ocupacion.getHabitacion().getNumero() == habitacion.getNumero()) {
-                System.out.println("La habitacion ya está ocupada.");
-                return;
+                throw new CheckInException("la habitacion ya esta ocupada");
             }
         }
         Ocupacion nuevaOcupacion = new Ocupacion(
@@ -106,8 +133,9 @@ public class Hotel {
                 habitacion,
                 LocalDate.now()
         );
+
         ocupaciones.add(nuevaOcupacion);
-        System.out.println("Check-in realizado correctamente");
+        return true;
     }
 
     public void realizarCheckOutHotel(Ocupacion ocupacion) {

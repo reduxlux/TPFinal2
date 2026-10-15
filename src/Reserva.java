@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Reserva {
 
@@ -74,4 +75,21 @@ public class Reserva {
     public boolean estaVigente() {
         return estado == EEstadoReserva.CONFIRMADA;
     }
+
+
+    ///equals y hashcode
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Reserva reserva = (Reserva) o;
+        return id == reserva.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+
 }
