@@ -63,13 +63,26 @@ public class Pasajero {
 
     /// METODOS
 
-    public void agregarEstadia(Ocupacion ocupacion) {
+    public boolean agregarEstadia(Ocupacion ocupacion) {
+        if(ocupacion == null || historial.contiene(ocupacion))
+        {
+            return  false;
+        }
+
+        if(!this.equals(ocupacion.getPasajero()))
+        {
+            return false;
+        }
+
         historial.agregar(ocupacion);
+        return true;
     }
 
     public void mostrarHistorial() {
         // ...
     }
+
+
 
 
 
