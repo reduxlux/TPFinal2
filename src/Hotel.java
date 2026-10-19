@@ -167,6 +167,17 @@ public class Hotel {
         }
     }
 
+    public boolean eliminarHabitacion(int numeroHabitacion) {
+        if (habitaciones.containsKey(numeroHabitacion)) {
+            habitaciones.remove(numeroHabitacion);
+            System.out.println("Habitacion eliminada.");
+            return true;
+        } else {
+            System.out.println("Habitacion no existente");
+            return false;
+        }
+    }
+
     public Habitacion buscarHabitacion(int numero) {
         if (habitaciones.containsKey(numero)) {
             return habitaciones.get(numero);

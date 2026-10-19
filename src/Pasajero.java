@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Pasajero {
@@ -8,15 +7,17 @@ public class Pasajero {
     private String origen;
     private String domicilioOrigen;
 
-    private ArrayList<Ocupacion> historial;
+    private Repositorio<Ocupacion> historial;
 
     public Pasajero(String nombre, String dni, String origen, String domicilioOrigen) {
         this.nombre = nombre;
         this.dni = dni;
         this.origen = origen;
         this.domicilioOrigen = domicilioOrigen;
-        this.historial = new ArrayList<>();
+        this.historial = new Repositorio<>();
     }
+
+    /// GETTERS Y SETTERS
 
     public String getNombre() {
         return nombre;
@@ -50,26 +51,25 @@ public class Pasajero {
         this.domicilioOrigen = domicilioOrigen;
     }
 
-    public ArrayList<Ocupacion> getHistorial() {
+    public Repositorio<Ocupacion> getHistorial() {
         return historial;
     }
 
-    public void setHistorial(ArrayList<Ocupacion> historial) {
+    public void setHistorial(Repositorio<Ocupacion> historial) {
         this.historial = historial;
     }
 
+    /// METODOS
+
     public void agregarEstadia(Ocupacion ocupacion) {
-        historial.add(ocupacion);
+        historial.agregar(ocupacion);
     }
 
     public void mostrarHistorial() {
         // ...
     }
 
-    // Getters y setters
 
-
-    //metodos
 
 
     ///equals y hashcode para agregar pasajero en hotel
