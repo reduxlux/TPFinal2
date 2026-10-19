@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public abstract class Usuario implements Autenticable {
 
     private String usuario;
@@ -35,14 +37,29 @@ public abstract class Usuario implements Autenticable {
     }
 
     @Override
-    public void iniciarSesion() {
-        // ...
+    public void iniciarSesion(String nombre, String dni, String usuario) {
+
+
     }
 
     @Override
-    public void cerrarSesion() {
+    public void cerrarSesion(String usuario) {
         // ...
     }
 
     public abstract void mostrarMenu();
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario1 = (Usuario) o;
+        return Objects.equals(usuario, usuario1.usuario) && Objects.equals(contrasenia, usuario1.contrasenia) && Objects.equals(nombre, usuario1.nombre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(usuario, contrasenia, nombre);
+    }
+
+
 }
