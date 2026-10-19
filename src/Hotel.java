@@ -136,7 +136,6 @@ public class Hotel {
         );
 
         ocupaciones.agregar(nuevaOcupacion);
-        System.out.println("Check-in realizado correctamente.");
         return true;
     }
 

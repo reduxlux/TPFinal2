@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Administrador extends Usuario {
 
     Hotel hotel;
@@ -30,5 +32,10 @@ public class Administrador extends Usuario {
     @Override
     public void mostrarMenu() {
         // ...
+    }
+
+    @Override
+    public void iniciarSesion(String nombre, String dni, String usuario) {
+
     }
 }

@@ -1,6 +1,7 @@
 public interface Autenticable {
 
-    void iniciarSesion();
+    void iniciarSesion(String dni, String nombre, String usuario);
 
-    void cerrarSesion();
+    void cerrarSesion(String usuario);
+
 }
