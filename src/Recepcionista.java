@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.Scanner;
 
 public class Recepcionista extends Usuario {
 
@@ -51,17 +52,22 @@ public class Recepcionista extends Usuario {
 
     @Override
     public void mostrarMenu() {
-        System.out.println("\n=== MENÚ RECEPCIONISTA ===");
-        System.out.println("1. Realizar reserva");
-        System.out.println("2. Realizar check-in");
-        System.out.println("3. Realizar check-out");
-        System.out.println("4. Consultar habitaciones");
-        System.out.println("5. Consultar habitaciones disponibles");
-        System.out.println("6. Consultar habitaciones no disponibles");
-        System.out.println("7. Consultar habitaciones ocupadas");
-        System.out.println("8. Consultar disponibilidad habitacion");
-        System.out.println("9. Bloquear habitacion");
-        System.out.println("10. Habilitar habitacion");
-        System.out.println("0. Cerrar sesión");
+        int opcion;
+        Scanner sc = new Scanner(System.in);
+        do {
+            System.out.println("\n=== MENÚ RECEPCIONISTA ===");
+            System.out.println("1. Realizar reserva");
+            System.out.println("2. Realizar check-in");
+            System.out.println("3. Realizar check-out");
+            System.out.println("4. Consultar habitaciones");
+            System.out.println("5. Consultar habitaciones disponibles");
+            System.out.println("6. Consultar habitaciones no disponibles");
+            System.out.println("7. Consultar habitaciones ocupadas");
+            System.out.println("8. Consultar disponibilidad habitacion");
+            System.out.println("9. Bloquear habitacion");
+            System.out.println("10. Habilitar habitacion");
+            System.out.println("0. Cerrar sesión");
+            opcion = sc.nextInt();
+        } while (opcion != 0);
     }
 }

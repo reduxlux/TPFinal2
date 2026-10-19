@@ -1,5 +1,4 @@
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Hotel {
@@ -7,19 +6,19 @@ public class Hotel {
     private String nombre;
 
     private HashMap<Integer, Habitacion> habitaciones;
-    private ArrayList<Pasajero> pasajeros;
-    private ArrayList<Reserva> reservas;
-    private ArrayList<Ocupacion> ocupaciones;
-    private ArrayList<Usuario> usuarios;
+    private Repositorio<Pasajero> pasajeros;
+    private Repositorio<Reserva> reservas;
+    private Repositorio<Ocupacion> ocupaciones;
+    private Repositorio<Usuario> usuarios;
 
     public Hotel(String nombre) {
         this.nombre = nombre;
 
         this.habitaciones = new HashMap<>();
-        this.pasajeros = new ArrayList<>();
-        this.reservas = new ArrayList<>();
-        this.ocupaciones = new ArrayList<>();
-        this.usuarios = new ArrayList<>();
+        this.pasajeros = new Repositorio<>();
+        this.reservas = new Repositorio<>();
+        this.ocupaciones = new Repositorio<>();
+        this.usuarios = new Repositorio<>();
     }
 
     public String getNombre() {
@@ -38,71 +37,72 @@ public class Hotel {
         this.habitaciones = habitaciones;
     }
 
-    public ArrayList<Pasajero> getPasajeros() {
+    public Repositorio<Pasajero> getPasajeros() {
         return pasajeros;
     }
 
-    public void setPasajeros(ArrayList<Pasajero> pasajeros) {
+    public void setPasajeros(Repositorio<Pasajero> pasajeros) {
         this.pasajeros = pasajeros;
     }
 
-    public ArrayList<Reserva> getReservas() {
+    public Repositorio<Reserva> getReservas() {
         return reservas;
     }
 
-    public void setReservas(ArrayList<Reserva> reservas) {
+    public void setReservas(Repositorio<Reserva> reservas) {
         this.reservas = reservas;
     }
 
-    public ArrayList<Ocupacion> getOcupaciones() {
+    public Repositorio<Ocupacion> getOcupaciones() {
         return ocupaciones;
     }
 
-    public void setOcupaciones(ArrayList<Ocupacion> ocupaciones) {
+    public void setOcupaciones(Repositorio<Ocupacion> ocupaciones) {
         this.ocupaciones = ocupaciones;
     }
 
-    public ArrayList<Usuario> getUsuarios() {
+    public Repositorio<Usuario> getUsuarios() {
         return usuarios;
     }
 
-    public void setUsuarios(ArrayList<Usuario> usuarios) {
+    public void setUsuarios(Repositorio<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
 
     /// PASAJEROS
     public boolean registrarPasajeroHotel(Pasajero p) {
-            if(pasajeros.contains(p))
-            {
-                return false;
-            }
+        if (p == null || pasajeros.contiene(p)) {
+            return false;
+        }
 
-            pasajeros.add(p);
-            return true;
+        pasajeros.agregar(p);
+        return true;
     }
 
     /// RESERVAS
     public boolean agregarReservaHotel(Reserva r) {
-        if(r == null)
+        if (r == null
+                || reservas.contiene(r)
+                || r.getHabitacion() == null
+                || r.getPasajero() == null
+                || r.getFechaEntrada() == null
+                || r.getFechaSalida() == null)
         {
             return false;
         }
 
-        if(reservas.contains(r))
-        {
+        if (!consultarDisponibilidad(
+                r.getHabitacion().getNumero(),
+                r.getFechaEntrada(),
+                r.getFechaSalida())) {
             return false;
         }
 
-        if(!consultarDisponibilidad(r.getHabitacion().getNumero(), r.getFechaEntrada(),r.getFechaSalida()))
-        {
-            return false;
-        }
-
-        reservas.add(r);
+        reservas.agregar(r);
         return true;
     }
 
-    public boolean realizarCheckInHotel(Reserva reserva) throws CheckInException{
+    public boolean realizarCheckInHotel(Reserva reserva) throws CheckInException {
 
         if (reserva == null) {
             throw new CheckInException("reseva no encontrada");
@@ -123,8 +123,9 @@ public class Hotel {
 
 
         for (Ocupacion ocupacion : ocupaciones) {
-            if (ocupacion.estaActiva() &&
-                    ocupacion.getHabitacion().getNumero() == habitacion.getNumero()) {
+            if (ocupacion.estaActiva()
+                    && ocupacion.getHabitacion().getNumero()
+                    == habitacion.getNumero()) {
                 throw new CheckInException("la habitacion ya esta ocupada");
             }
         }
@@ -134,7 +135,8 @@ public class Hotel {
                 LocalDate.now()
         );
 
-        ocupaciones.add(nuevaOcupacion);
+        ocupaciones.agregar(nuevaOcupacion);
+        System.out.println("Check-in realizado correctamente.");
         return true;
     }
 

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public class Repositorio<T> {
+public class Repositorio<T> implements Iterable<T> {
 
     private ArrayList<T> elementos;
 
@@ -25,4 +26,18 @@ public class Repositorio<T> {
     public int cantidad() {
         return elementos.size();
     }
+
+    public boolean contiene(T elemento) {
+        return elementos.contains(elemento);
+    }
+
+    public boolean estaVacio() {
+        return elementos.isEmpty();
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return elementos.iterator();
+    }
+
 }
