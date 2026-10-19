@@ -1,3 +1,6 @@
+package clases;
+import interfaces.Autenticable;
+
 import java.util.Objects;
 
 public abstract class Usuario implements Autenticable {
@@ -36,17 +39,6 @@ public abstract class Usuario implements Autenticable {
         this.nombre = nombre;
     }
 
-    @Override
-    public void iniciarSesion(String nombre, String dni, String usuario) {
-
-
-    }
-
-    @Override
-    public void cerrarSesion(String usuario) {
-        // ...
-    }
-
     public abstract void mostrarMenu();
 
     @Override
@@ -61,5 +53,13 @@ public abstract class Usuario implements Autenticable {
         return Objects.hash(usuario, contrasenia, nombre);
     }
 
+    @Override
+    public void iniciarSesion(String dni, String nombre, String usuario) {
 
+    }
+
+    @Override
+    public void cerrarSesion(String usuario) {
+
+    }
 }

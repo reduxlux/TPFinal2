@@ -1,3 +1,6 @@
+package clases;
+import Enum.EEstadoReserva;
+
 import java.time.LocalDate;
 import java.util.Objects;
 

@@ -1,3 +1,8 @@
+package clases;
+import Excepciones.CheckInException;
+import Enum.EEstadoReserva;
+
+
 import java.time.LocalDate;
 import java.util.HashMap;
 
@@ -159,20 +164,20 @@ public class Hotel {
     /// HABITACIONES
     public void agregarHabitacion(Habitacion habitacion) {
         if (habitaciones.containsKey(habitacion.getNumero())) {
-            System.out.println("Habitacion existente");
+            System.out.println("clases.Habitacion existente");
         } else {
             habitaciones.put(habitacion.getNumero(), habitacion);
-            System.out.println("Habitacion agregada");
+            System.out.println("clases.Habitacion agregada");
         }
     }
 
     public boolean eliminarHabitacion(int numeroHabitacion) {
         if (habitaciones.containsKey(numeroHabitacion)) {
             habitaciones.remove(numeroHabitacion);
-            System.out.println("Habitacion eliminada.");
+            System.out.println("clases.Habitacion eliminada.");
             return true;
         } else {
-            System.out.println("Habitacion no existente");
+            System.out.println("clases.Habitacion no existente");
             return false;
         }
     }
@@ -181,7 +186,7 @@ public class Hotel {
         if (habitaciones.containsKey(numero)) {
             return habitaciones.get(numero);
         } else {
-            System.out.println("Habitacion no encontrada");
+            System.out.println("clases.Habitacion no encontrada");
             return null;
         }
     }
@@ -189,22 +194,22 @@ public class Hotel {
     public void bloquearHabitacion(int numero, String motivo) {
         Habitacion habitacion = buscarHabitacion(numero);
         if (habitacion == null) {
-            System.out.println("Habitacion no encontrada");
+            System.out.println("clases.Habitacion no encontrada");
         } else if (motivo == null || motivo.isBlank()) {
             System.out.println("Debe haber un motivo.");
         } else {
             habitacion.bloquear(motivo);
-            System.out.println("Habitacion bloqueada");
+            System.out.println("clases.Habitacion bloqueada");
         }
     }
 
     public void habilitarHabitacion(int numero) {
         Habitacion habitacion = buscarHabitacion(numero);
         if (habitacion == null) {
-            System.out.println("Habitacion no encontrada");
+            System.out.println("clases.Habitacion no encontrada");
         } else {
             habitacion.habilitar();
-            System.out.println("Habitacion habilitada");
+            System.out.println("clases.Habitacion habilitada");
         }
     }
 
@@ -222,9 +227,9 @@ public class Hotel {
         System.out.println("\nHabitaciones ocupadas:");
         for (Ocupacion ocupacion : ocupaciones) {
             if (ocupacion.estaActiva()) {
-                System.out.println("Habitacion: " +
+                System.out.println("clases.Habitacion: " +
                         ocupacion.getHabitacion().getNumero());
-                System.out.println("Pasajero: " +
+                System.out.println("clases.Pasajero: " +
                         ocupacion.getPasajero().getNombre());
                 System.out.println("Check-in: " + ocupacion.getFechaCheckIn());
                 System.out.println("---");
@@ -253,7 +258,7 @@ public class Hotel {
     public boolean consultarDisponibilidad(int numero, LocalDate fechaEntrada, LocalDate fechaSalida) {
         Habitacion habitacion = buscarHabitacion(numero);
         if (habitacion == null) {
-            System.out.println("Habitacion no encontrada");
+            System.out.println("clases.Habitacion no encontrada");
             return false;
         }
         if (fechaEntrada == null || fechaSalida == null || !fechaEntrada.isBefore(fechaSalida)) {
@@ -261,7 +266,7 @@ public class Hotel {
             return false;
         }
         if (!habitacion.estaDisponible()) {
-            System.out.println("Habitacion no disponible");
+            System.out.println("clases.Habitacion no disponible");
             return false;
         }
         for (Reserva reserva : reservas) {

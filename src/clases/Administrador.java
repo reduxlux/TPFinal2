@@ -1,4 +1,4 @@
-import java.util.Objects;
+package clases;
 
 public class Administrador extends Usuario {
 
@@ -36,6 +36,12 @@ public class Administrador extends Usuario {
 
     @Override
     public void iniciarSesion(String nombre, String dni, String usuario) {
+
+
+    }
+
+    @Override
+    public void cerrarSesion(String usuario) {
 
     }
 }

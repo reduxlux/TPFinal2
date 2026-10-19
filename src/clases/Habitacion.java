@@ -1,4 +1,6 @@
-import java.util.Objects;
+package clases;
+import Enum.EEstadoHabitacion;
+import Enum.ETipoHabitacion;
 
 public class Habitacion {
 
@@ -75,7 +77,7 @@ public class Habitacion {
     }
 
     public void mostrarInformacion() {
-        System.out.println("Habitacion: " + this.numero);
+        System.out.println("clases.Habitacion: " + this.numero);
         System.out.println("Piso: " + this.piso);
         System.out.println("Tipo: " + this.tipo);
         System.out.println("Estado: " + this.estado);
