@@ -1,6 +1,7 @@
 package clases;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Ocupacion {
 
@@ -56,5 +57,19 @@ public class Ocupacion {
 
     public void realizarCheckOut(LocalDate fecha) {
         this.fechaCheckOut = fecha;
+    }
+
+    ///equeal y hashcode
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Ocupacion ocupacion = (Ocupacion) o;
+        return Objects.equals(pasajero, ocupacion.pasajero) && Objects.equals(habitacion, ocupacion.habitacion) && Objects.equals(fechaCheckIn, ocupacion.fechaCheckIn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pasajero, habitacion, fechaCheckIn);
     }
 }

@@ -78,8 +78,20 @@ public class Pasajero {
         return true;
     }
 
-    public void mostrarHistorial() {
-        // ...
+    public String mostrarHistorial() {
+
+        StringBuilder mensaje = new StringBuilder();
+
+        if(historial.estaVacio())
+        {
+            return "El pasajero no tiene estadias registradas";
+        }
+        for(Ocupacion ocupacion : historial)
+        {
+            mensaje.append(ocupacion).append("\n");
+        }
+
+        return mensaje.toString();
     }
 
 
