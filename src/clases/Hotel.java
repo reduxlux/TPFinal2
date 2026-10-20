@@ -337,4 +337,21 @@ public class Hotel {
         }
         return true;
     }
+
+    public Usuario buscarUsuario(String usuario, String contrasenia) {
+        for (Administrador a : administradores) {
+            if (a.getUsuario().equals(usuario) &&
+                    a.getContrasenia().equals(contrasenia)) {
+                return a;
+            }
+        }
+
+        for (Recepcionista r : recepcionistas) {
+            if (r.getUsuario().equals(usuario) &&
+                    r.getContrasenia().equals(contrasenia)) {
+                return r;
+            }
+        }
+        return null;
+    }
 }

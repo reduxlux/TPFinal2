@@ -52,8 +52,7 @@ public class Recepcionista extends Usuario {
         hotel.habilitarHabitacion(numero);
     }
 
-    @Override
-    public void mostrarMenu() {
+    public void menuRecepcion() {
         int opcion;
         Scanner sc = new Scanner(System.in);
         do {
@@ -69,7 +68,12 @@ public class Recepcionista extends Usuario {
             System.out.println("9. Bloquear habitacion");
             System.out.println("10. Habilitar habitacion");
             System.out.println("0. Cerrar sesión");
-            opcion = sc.nextInt();
+            opcion = Integer.parseInt(sc.nextLine());
+
+            switch (opcion) {
+                case 1:
+                    break;
+            }
         } while (opcion != 0);
     }
 

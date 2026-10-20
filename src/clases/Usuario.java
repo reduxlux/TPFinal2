@@ -39,8 +39,6 @@ public abstract class Usuario implements Autenticable {
         this.nombre = nombre;
     }
 
-    public abstract void mostrarMenu();
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
