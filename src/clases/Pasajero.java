@@ -94,8 +94,26 @@ public class Pasajero {
         return mensaje.toString();
     }
 
+    public int contarEstadias() {
+        return historial.cantidad();
+    }
 
 
+    public Ocupacion obtenerUltimaEstadia() {
+
+        Ocupacion ultima = null;
+
+        for (Ocupacion ocupacion : historial) {
+
+            if (ultima == null ||
+                    ocupacion.getFechaCheckIn().isAfter(ultima.getFechaCheckIn())) {
+
+                ultima = ocupacion;
+            }
+        }
+
+        return ultima;
+    }
 
 
 

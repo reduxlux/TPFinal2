@@ -84,6 +84,24 @@ public class Hotel {
         return true;
     }
 
+    public Habitacion obtenerHabitacionActual(Pasajero pasajero) {
+
+        if (pasajero == null) {
+            return null;
+        }
+
+        for (Ocupacion ocupacion : ocupaciones) {
+
+            if (ocupacion.getPasajero().equals(pasajero)
+                    && ocupacion.getFechaCheckOut() == null) {
+
+                return ocupacion.getHabitacion();
+            }
+        }
+
+        return null;
+    }
+
     /// RESERVAS
     public boolean agregarReservaHotel(Reserva r) {
         if (r == null
