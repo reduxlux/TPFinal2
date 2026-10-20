@@ -9,7 +9,6 @@ public class Recepcionista extends Usuario {
 
     public Recepcionista(String usuario, String contrasenia, String nombre) {
         super(usuario, contrasenia, nombre);
-        this.hotel = hotel;
     }
 
     public void realizarReservaRec(Reserva reserva) {
@@ -72,6 +71,48 @@ public class Recepcionista extends Usuario {
 
             switch (opcion) {
                 case 1:
+                    realizarReservaRec(null);
+                    // falta crearReserva en clase Reserva
+                    break;
+                case 2:
+                    realizarCheckInRec(null);
+                    // falta reserva?
+                case 3:
+                    realizarCheckOutRec(null);
+                    // falta reserva
+                    break;
+                case 4:
+                    consultarHabitaciones();
+                    break;
+                case 5:
+                    consultarHabitacionesDisponibles();
+                    break;
+                case 6:
+                    consultarHabitacionesNoDisponibles();
+                    break;
+                case 7:
+                    consultarHabitacionesOcupadar();
+                    break;
+                case 8:
+                    consultarDisponibilidad(opcion, LocalDate.now(), LocalDate.now());
+                    break;
+                case 9:
+                    int nroHabitacion1;
+                    String motivo;
+                    System.out.println("Ingresar numero de habitacion a bloquear: ");
+                    nroHabitacion1 = Integer.parseInt(sc.nextLine());
+                    System.out.println("Ingresar motivo de bloqueo: ");
+                    motivo = sc.nextLine();
+                    bloquearHabitacion(nroHabitacion1, motivo);
+                    break;
+                case 10:
+                    int nroHabitacion2;
+                    System.out.println("Ingresar numero de habitacion a habilitar: ");
+                    nroHabitacion2 = Integer.parseInt(sc.nextLine());
+                    habilitarHabitacion(nroHabitacion2);
+                    break;
+                case 0:
+                    System.out.println("Saliendo...");
                     break;
             }
         } while (opcion != 0);

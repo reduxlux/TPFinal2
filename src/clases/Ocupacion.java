@@ -2,7 +2,7 @@ package clases;
 
 import java.time.LocalDate;
 import java.util.Objects;
-
+/// INFORMACION DE HABITACION OCUPADA
 public class Ocupacion {
 
     private Pasajero pasajero;
@@ -59,7 +59,7 @@ public class Ocupacion {
         this.fechaCheckOut = fecha;
     }
 
-    ///equeal y hashcode
+    ///equal y hashcode
 
     @Override
     public boolean equals(Object o) {

@@ -1,6 +1,7 @@
 package clases;
 
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Pasajero {
 
@@ -64,13 +65,11 @@ public class Pasajero {
     /// METODOS
 
     public boolean agregarEstadia(Ocupacion ocupacion) {
-        if(ocupacion == null || historial.contiene(ocupacion))
-        {
-            return  false;
+        if (ocupacion == null || historial.contiene(ocupacion)) {
+            return false;
         }
 
-        if(!this.equals(ocupacion.getPasajero()))
-        {
+        if (!this.equals(ocupacion.getPasajero())) {
             return false;
         }
 
@@ -82,12 +81,10 @@ public class Pasajero {
 
         StringBuilder mensaje = new StringBuilder();
 
-        if(historial.estaVacio())
-        {
+        if (historial.estaVacio()) {
             return "El pasajero no tiene estadias registradas";
         }
-        for(Ocupacion ocupacion : historial)
-        {
+        for (Ocupacion ocupacion : historial) {
             mensaje.append(ocupacion).append("\n");
         }
 
@@ -115,8 +112,46 @@ public class Pasajero {
         return ultima;
     }
 
+    public void menuPasajero() {
+        int opcion;
+        Scanner sc = new Scanner(System.in);
 
-    ///equals y hashcode para agregar pasajero en hotel
+        do {
+            System.out.println("=== MENU PASAJEROS ===");
+            System.out.println("1. Agregar estadia.");
+            System.out.println("2. Mostrar estadia.");
+            System.out.println("3. Eliminar estadia.");
+            System.out.println("4. Mostrar historial.");
+            System.out.println("0. Salir.");
+            opcion = Integer.parseInt(sc.nextLine());
+
+            switch (opcion) {
+                case 1:
+                    agregarEstadia(null);
+                    // METODO CREAR ESTADIA (darle valores)
+                    break;
+                case 2:
+                    // crear metodo mostrarEstadiaActual
+                    break;
+                case 3:
+                    // crear metodo eliminarUltimaEstadia(Ocupacion)
+                    break;
+                case 4:
+                    mostrarHistorial();
+                    break;
+                case 0:
+                    System.out.println("Saliendo...");
+                    break;
+                default:
+                    System.out.println("Opcion invalida. Intente nuevamente.");
+                    break;
+            }
+        } while (opcion != 0);
+
+    }
+
+
+    /// equals y hashcode para agregar pasajero en hotel
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

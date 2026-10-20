@@ -91,6 +91,8 @@ public class Administrador extends Usuario {
                     eliminarHabitacion(nroHabitacion);
                     break;
                 case 0:
+                    // cerrarSesion();
+                    // falta implementar
                     System.out.println("Saliendo...");
                     break;
             }
