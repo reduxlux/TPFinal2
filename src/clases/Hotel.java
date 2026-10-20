@@ -3,6 +3,7 @@ import Excepciones.CheckInException;
 import Enum.EEstadoReserva;
 
 
+
 import java.time.LocalDate;
 import java.util.HashMap;
 
@@ -138,6 +139,8 @@ public class Hotel {
         administradores.agregar(nuevoAdministrador);
         return true;
     }
+
+
 
     /// RESERVAS
     public boolean agregarReservaHotel(Reserva r) {
