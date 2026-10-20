@@ -11,67 +11,83 @@ public class Hotel {
     private String nombre;
 
     private HashMap<Integer, Habitacion> habitaciones;
-    private Repositorio<Pasajero> pasajeros;
     private Repositorio<Reserva> reservas;
     private Repositorio<Ocupacion> ocupaciones;
-    private Repositorio<Usuario> usuarios;
+    private Repositorio<Pasajero> pasajeros;
+    private Repositorio<Administrador> administradores;
+    private Repositorio<Recepcionista> recepcionistas;
 
     public Hotel(String nombre) {
         this.nombre = nombre;
 
         this.habitaciones = new HashMap<>();
-        this.pasajeros = new Repositorio<>();
         this.reservas = new Repositorio<>();
         this.ocupaciones = new Repositorio<>();
-        this.usuarios = new Repositorio<>();
+        this.administradores = new Repositorio<>();
+        this.recepcionistas = new Repositorio<>();
+        this.pasajeros = new Repositorio<>();
     }
+
+    //getters
+
 
     public String getNombre() {
         return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public HashMap<Integer, Habitacion> getHabitaciones() {
         return habitaciones;
     }
 
-    public void setHabitaciones(HashMap<Integer, Habitacion> habitaciones) {
-        this.habitaciones = habitaciones;
-    }
-
-    public Repositorio<Pasajero> getPasajeros() {
-        return pasajeros;
-    }
-
-    public void setPasajeros(Repositorio<Pasajero> pasajeros) {
-        this.pasajeros = pasajeros;
-    }
-
     public Repositorio<Reserva> getReservas() {
         return reservas;
-    }
-
-    public void setReservas(Repositorio<Reserva> reservas) {
-        this.reservas = reservas;
     }
 
     public Repositorio<Ocupacion> getOcupaciones() {
         return ocupaciones;
     }
 
+    public Repositorio<Pasajero> getPasajeros() {
+        return pasajeros;
+    }
+
+    public Repositorio<Administrador> getAdministradores() {
+        return administradores;
+    }
+
+    public Repositorio<Recepcionista> getRecepcionistas() {
+        return recepcionistas;
+    }
+
+    //setters
+
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setHabitaciones(HashMap<Integer, Habitacion> habitaciones) {
+        this.habitaciones = habitaciones;
+    }
+
+    public void setReservas(Repositorio<Reserva> reservas) {
+        this.reservas = reservas;
+    }
+
     public void setOcupaciones(Repositorio<Ocupacion> ocupaciones) {
         this.ocupaciones = ocupaciones;
     }
 
-    public Repositorio<Usuario> getUsuarios() {
-        return usuarios;
+    public void setPasajeros(Repositorio<Pasajero> pasajeros) {
+        this.pasajeros = pasajeros;
     }
 
-    public void setUsuarios(Repositorio<Usuario> usuarios) {
-        this.usuarios = usuarios;
+    public void setAdministradores(Repositorio<Administrador> administradores) {
+        this.administradores = administradores;
+    }
+
+    public void setRecepcionistas(Repositorio<Recepcionista> recepcionistas) {
+        this.recepcionistas = recepcionistas;
     }
 
     /// PASAJEROS
@@ -100,6 +116,27 @@ public class Hotel {
         }
 
         return null;
+    }
+
+    ///ADMINISTRADORES
+
+    public boolean agregarAdministrador(Administrador nuevoAdministrador) {
+
+        if (nuevoAdministrador == null) {
+            return false;
+        }
+
+        for (Administrador a : administradores) {
+
+            if (administradores.contiene(nuevoAdministrador))
+            {
+                    return false;
+            }
+
+        }
+
+        administradores.agregar(nuevoAdministrador);
+        return true;
     }
 
     /// RESERVAS

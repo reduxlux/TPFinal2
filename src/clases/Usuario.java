@@ -45,15 +45,11 @@ public abstract class Usuario implements Autenticable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario1 = (Usuario) o;
-        return Objects.equals(usuario, usuario1.usuario) && Objects.equals(contrasenia, usuario1.contrasenia) && Objects.equals(nombre, usuario1.nombre);
+        return Objects.equals(usuario, usuario1.usuario);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(usuario, contrasenia, nombre);
+        return Objects.hashCode(usuario);
     }
-
-
-
-
 }

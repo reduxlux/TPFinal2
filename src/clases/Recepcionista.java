@@ -72,4 +72,14 @@ public class Recepcionista extends Usuario {
             opcion = sc.nextInt();
         } while (opcion != 0);
     }
+
+    @Override
+    public void iniciarSesion(String dni, String nombre, String usuario) {
+
+    }
+
+    @Override
+    public void cerrarSesion(String usuario) {
+
+    }
 }

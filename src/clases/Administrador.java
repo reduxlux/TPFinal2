@@ -1,16 +1,21 @@
 package clases;
 
+import java.util.Scanner;
+
 public class Administrador extends Usuario {
 
     Hotel hotel;
+    Scanner teclado = new Scanner(System.in);
 
-    public Administrador(Hotel hotel, String usuario, String contrasenia, String nombre) {
+    public Administrador(String usuario, String contrasenia, String nombre) {
         super(usuario, contrasenia, nombre);
-        this.hotel = hotel;
     }
 
-    public void crearUsuario() {
-        // ...
+
+
+
+    public boolean crearAdministrador(Administrador nuevoAdministrador) {
+        return hotel.agregarAdministrador(nuevoAdministrador);
     }
 
     public void realizarBackup() {
