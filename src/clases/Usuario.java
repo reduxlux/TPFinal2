@@ -53,13 +53,7 @@ public abstract class Usuario implements Autenticable {
         return Objects.hash(usuario, contrasenia, nombre);
     }
 
-    @Override
-    public void iniciarSesion(String dni, String nombre, String usuario) {
 
-    }
 
-    @Override
-    public void cerrarSesion(String usuario) {
 
-    }
 }

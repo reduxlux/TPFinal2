@@ -116,7 +116,6 @@ public class Pasajero {
     }
 
 
-
     ///equals y hashcode para agregar pasajero en hotel
     @Override
     public boolean equals(Object o) {
