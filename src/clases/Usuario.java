@@ -1,5 +1,7 @@
 package clases;
 import interfaces.Autenticable;
+import Enum.EEstadoAdministrador;
+import Enum.EEstadoRecepcionista;
 
 import java.util.Objects;
 
@@ -9,35 +11,46 @@ public abstract class Usuario implements Autenticable {
     private String contrasenia;
     private String nombre;
 
+    Hotel hotel;
+
     public Usuario(String usuario, String contrasenia, String nombre) {
         this.usuario = usuario;
         this.contrasenia = contrasenia;
         this.nombre = nombre;
     }
 
+    //getters
+
+
     public String getUsuario() {
         return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
     }
 
     public String getContrasenia() {
         return contrasenia;
     }
 
-    public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
-    }
-
     public String getNombre() {
         return nombre;
+    }
+
+    //setters
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    //metodos
+
+
 
     @Override
     public boolean equals(Object o) {
