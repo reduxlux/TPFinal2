@@ -7,6 +7,8 @@ import java.util.Objects;
 
 public abstract class Usuario implements Autenticable {
 
+    private int id;
+    private int contador = 0;
     private String usuario;
     private String contrasenia;
     private String nombre;
