@@ -7,8 +7,8 @@ import java.util.Objects;
 
 public abstract class Usuario implements Autenticable {
 
-    private int id;
-    private int contador = 0;
+    private final int id;
+    private static int contador = 0;
     private String usuario;
     private String contrasenia;
     private String nombre;
@@ -19,10 +19,15 @@ public abstract class Usuario implements Autenticable {
         this.usuario = usuario;
         this.contrasenia = contrasenia;
         this.nombre = nombre;
+        this.id = contador++;
     }
 
     //getters
 
+
+    public int getId() {
+        return id;
+    }
 
     public String getUsuario() {
         return usuario;
@@ -53,16 +58,14 @@ public abstract class Usuario implements Autenticable {
     //metodos
 
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Usuario usuario1 = (Usuario) o;
-        return Objects.equals(usuario, usuario1.usuario);
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Usuario usuario = (Usuario) object;
+        return id == usuario.id;
     }
 
-    @Override
     public int hashCode() {
-        return Objects.hashCode(usuario);
+        return Objects.hash(super.hashCode(), id);
     }
 }
