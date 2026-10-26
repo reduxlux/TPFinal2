@@ -12,6 +12,7 @@ public abstract class Usuario implements Autenticable {
     private String usuario;
     private String contrasenia;
     private String nombre;
+    private boolean sesionIniciada;
 
     Hotel hotel;
 
@@ -20,6 +21,7 @@ public abstract class Usuario implements Autenticable {
         this.contrasenia = contrasenia;
         this.nombre = nombre;
         this.id = contador++;
+        this.sesionIniciada = false;
     }
 
     //getters
@@ -39,6 +41,10 @@ public abstract class Usuario implements Autenticable {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public boolean isSesionIniciada() {
+        return sesionIniciada;
     }
 
     //setters
@@ -67,5 +73,27 @@ public abstract class Usuario implements Autenticable {
 
     public int hashCode() {
         return Objects.hash(super.hashCode(), id);
+    }
+
+    @Override
+    public boolean iniciarSesion(String usuario, String contrasenia) {
+        if (this.usuario.equalsIgnoreCase(usuario)
+        && this.contrasenia.equals(contrasenia)) {
+            sesionIniciada = true;
+            System.out.println("Sesion Iniciada.");
+            return true;
+        }
+        System.out.println("Usuario o constrasenia incorrectos.");
+        return false;
+    }
+
+    @Override
+    public void cerrarSesion() {
+        if (sesionIniciada) {
+            sesionIniciada = false;
+            System.out.println("Sesion cerrada.");
+        } else {
+            System.out.println("No hay ninguna sesion iniciada.");
+        }
     }
 }

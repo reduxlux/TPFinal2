@@ -40,10 +40,12 @@ public class Menu {
                     Usuario u = hotel.buscarUsuario(usuario, contrasenia);
                     if (u == null || contrasenia.isEmpty() || usuario.isEmpty()) {
                         System.out.println("Usuario o contraseña incorrectos");
-                    } else if (u instanceof Administrador) {
-                        menuAdmin((Administrador) u);
-                    } else if (u instanceof Recepcionista) {
-                        menuRecepcion((Recepcionista) u);
+                    } else if (u.iniciarSesion(usuario, contrasenia)) {
+                        if (u instanceof Administrador) {
+                            menuAdmin((Administrador) u);
+                        } else if (u instanceof Recepcionista) {
+                            menuRecepcion((Recepcionista) u);
+                        }
                     }
                     break;
                 case 0:
@@ -83,7 +85,7 @@ public class Menu {
                     a.eliminarHabitacion(nroHabitacion);
                     break;
                 case 0:
-                    // cerrarSesion();
+                    a.cerrarSesion();
                     // falta implementar
                     System.out.println("Saliendo...");
                     break;
@@ -153,6 +155,7 @@ public class Menu {
                     r.habilitarHabitacion(nroHabitacion2);
                     break;
                 case 0:
+                    r.cerrarSesion();
                     System.out.println("Saliendo...");
                     break;
             }

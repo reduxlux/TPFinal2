@@ -2,8 +2,7 @@ package interfaces;
 
 public interface Autenticable {
 
-    void iniciarSesion(String dni, String nombre, String usuario);
+    boolean iniciarSesion(String usuario, String contrasenia);
 
-    void cerrarSesion(String usuario);
-
+    void cerrarSesion();
 }

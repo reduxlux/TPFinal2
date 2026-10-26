@@ -1,7 +1,6 @@
 package clases;
 
 import java.time.LocalDate;
-import java.util.Scanner;
 
 public class Recepcionista extends Usuario {
 
@@ -49,15 +48,5 @@ public class Recepcionista extends Usuario {
 
     public void habilitarHabitacion(int numero) {
         hotel.habilitarHabitacion(numero);
-    }
-
-    @Override
-    public void iniciarSesion(String dni, String nombre, String usuario) {
-
-    }
-
-    @Override
-    public void cerrarSesion(String usuario) {
-
     }
 }

@@ -51,15 +51,4 @@ public class Administrador extends Usuario {
         hotel.eliminarHabitacion(numeroHabitacion);
     }
 
-
-    @Override
-    public void iniciarSesion(String nombre, String dni, String usuario) {
-
-
-    }
-
-    @Override
-    public void cerrarSesion(String usuario) {
-
-    }
 }
