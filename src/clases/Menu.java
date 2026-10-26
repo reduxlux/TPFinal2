@@ -5,8 +5,6 @@ import java.util.Scanner;
 public class Menu {
     int opcion;
     Hotel hotel;
-    Administrador a;
-    Recepcionista r;
     Scanner sc = new Scanner(System.in);
 
     public Menu(int opcion) {
@@ -42,9 +40,9 @@ public class Menu {
                     if (u == null || contrasenia.isEmpty() || usuario.isEmpty()) {
                         System.out.println("Usuario o contraseña incorrectos");
                     } else if (u instanceof Administrador) {
-                        a.menuAdmin();
+                        (Administrador) u.menuAdmin();
                     } else if (u instanceof Recepcionista) {
-                        r.menuRecepcion();
+                        (Recepcionista) u.menuRecepcion();
                     }
                     break;
                 case 0:
