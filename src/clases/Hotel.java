@@ -100,15 +100,15 @@ public final class Hotel {
         return true;
     }
 
-    public Habitacion obtenerHabitacionActual(Pasajero pasajero) {
+    public Habitacion obtenerHabitacionActual(String dni) {
 
-        if (pasajero == null) {
+        if (dni == null) {
             return null;
         }
 
         for (Ocupacion ocupacion : ocupaciones) {
 
-            if (ocupacion.getPasajero().equals(pasajero)
+            if (ocupacion.getPasajero().getDni().equals(dni)
                     && ocupacion.getFechaCheckOut() == null) {
 
                 return ocupacion.getHabitacion();
@@ -195,6 +195,7 @@ public final class Hotel {
                 throw new ExcepcionPropia("la habitacion ya esta ocupada");
             }
         }
+
         Ocupacion nuevaOcupacion = new Ocupacion(
                 reserva.getPasajero(),
                 habitacion,
