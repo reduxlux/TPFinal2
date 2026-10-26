@@ -14,9 +14,9 @@ public final class Hotel {
     private HashMap<Integer, Habitacion> habitaciones;
     private Repositorio<Reserva> reservas;
     private Repositorio<Ocupacion> ocupaciones;
-    private Repositorio<Pasajero> pasajeros;
-    private Repositorio<Administrador> administradores;
-    private Repositorio<Recepcionista> recepcionistas;
+    private RepoMap<String, Pasajero> pasajeros;
+    private RepoMap<Integer, Administrador> administradores;
+    private RepoMap<Integer, Recepcionista> recepcionistas;
 
     public Hotel(String nombre) {
         this.nombre = nombre;
@@ -24,9 +24,9 @@ public final class Hotel {
         this.habitaciones = new HashMap<>();
         this.reservas = new Repositorio<>();
         this.ocupaciones = new Repositorio<>();
-        this.administradores = new Repositorio<>();
-        this.recepcionistas = new Repositorio<>();
-        this.pasajeros = new Repositorio<>();
+        this.administradores = new RepoMap<>();
+        this.recepcionistas = new RepoMap<>();
+        this.pasajeros = new RepoMap<>();
     }
 
     //getters
@@ -47,15 +47,15 @@ public final class Hotel {
         return ocupaciones;
     }
 
-    public Repositorio<Pasajero> getPasajeros() {
+    public RepoMap<String, Pasajero> getPasajeros() {
         return pasajeros;
     }
 
-    public Repositorio<Administrador> getAdministradores() {
+    public RepoMap<Integer, Administrador> getAdministradores() {
         return administradores;
     }
 
-    public Repositorio<Recepcionista> getRecepcionistas() {
+    public RepoMap<Integer, Recepcionista> getRecepcionistas() {
         return recepcionistas;
     }
 
@@ -78,25 +78,25 @@ public final class Hotel {
         this.ocupaciones = ocupaciones;
     }
 
-    public void setPasajeros(Repositorio<Pasajero> pasajeros) {
+    public void setPasajeros(RepoMap<String, Pasajero> pasajeros) {
         this.pasajeros = pasajeros;
     }
 
-    public void setAdministradores(Repositorio<Administrador> administradores) {
+    public void setAdministradores(RepoMap<Integer, Administrador> administradores) {
         this.administradores = administradores;
     }
 
-    public void setRecepcionistas(Repositorio<Recepcionista> recepcionistas) {
+    public void setRecepcionistas(RepoMap<Integer, Recepcionista> recepcionistas) {
         this.recepcionistas = recepcionistas;
     }
 
     /// PASAJEROS
     public boolean registrarPasajeroHotel(Pasajero p) {
-        if (p == null || pasajeros.contiene(p)) {
+        if (p.getDni() == null || pasajeros.contiene(p.getDni())) {
             return false;
         }
 
-        pasajeros.agregar(p);
+        pasajeros.agregar(p.getDni(), p);
         return true;
     }
 
@@ -126,20 +126,11 @@ public final class Hotel {
 
     public boolean agregarAdministrador(Administrador nuevoAdministrador) {
 
-        if (nuevoAdministrador == null) {
+        if (nuevoAdministrador == null || administradores.contiene(nuevoAdministrador.getId())) {
             return false;
         }
 
-        for (Administrador a : administradores) {
-
-            if (administradores.contiene(nuevoAdministrador))
-            {
-                    return false;
-            }
-
-        }
-
-        administradores.agregar(nuevoAdministrador);
+        administradores.agregar(nuevoAdministrador.getId(), nuevoAdministrador);
         return true;
     }
 
@@ -346,14 +337,14 @@ public final class Hotel {
     }
 
     public Usuario buscarUsuario(String usuario, String contrasenia) {
-        for (Administrador a : administradores) {
+        for (Administrador a : administradores.getPersonas().values()) {
             if (a.getUsuario().equals(usuario) &&
                     a.getContrasenia().equals(contrasenia)) {
                 return a;
             }
         }
 
-        for (Recepcionista r : recepcionistas) {
+        for (Recepcionista r : recepcionistas.getPersonas().values()) {
             if (r.getUsuario().equals(usuario) &&
                     r.getContrasenia().equals(contrasenia)) {
                 return r;

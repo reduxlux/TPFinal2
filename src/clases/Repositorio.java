@@ -11,7 +11,9 @@ public class Repositorio<T> implements Iterable<T> {
         elementos = new ArrayList<>();
     }
 
-    // Hay que ponerle un getter/setter?
+    public ArrayList<T> getElementos() {
+        return elementos;
+    }
 
     public void agregar(T elemento) {
         elementos.add(elemento);
