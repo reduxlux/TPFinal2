@@ -3,15 +3,17 @@ package clases;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Repositorio<T> implements Iterable<T> {
+public class RepoArr<T> implements Iterable<T> {
 
     private ArrayList<T> elementos;
 
-    public Repositorio() {
+    public RepoArr() {
         elementos = new ArrayList<>();
     }
 
-    // Hay que ponerle un getter/setter?
+    public ArrayList<T> getElementos() {
+        return elementos;
+    }
 
     public void agregar(T elemento) {
         elementos.add(elemento);
