@@ -62,41 +62,4 @@ public class Administrador extends Usuario {
     public void cerrarSesion(String usuario) {
 
     }
-
-    public void menuAdmin() {
-        int opcion;
-        Scanner sc = new Scanner(System.in);
-        do {
-            System.out.println("=== MENU ADMIN ===");
-            System.out.println("1. Crear administrador.");
-            System.out.println("2. Eliminar usuario.");
-            System.out.println("3. Agregar habitacion.");
-            System.out.println("4. Eliminar habitacion.");
-            System.out.println("0. Salir del programa.");
-            opcion = Integer.parseInt(sc.nextLine());
-
-            switch (opcion) {
-                case 1:
-                    crearAdministrador();
-                    break;
-                case 2:
-                    // eliminar usuario
-                    break;
-                case 3:
-                    agregarHabitacion(null);
-                    // pasarle habitacion
-                    break;
-                case 4:
-                    System.out.println("Ingresar numero habitacion a eliminar: ");
-                    int nroHabitacion = Integer.parseInt(sc.nextLine());
-                    eliminarHabitacion(nroHabitacion);
-                    break;
-                case 0:
-                    // cerrarSesion();
-                    // falta implementar
-                    System.out.println("Saliendo...");
-                    break;
-            }
-        } while (opcion != 0);
-    }
 }
