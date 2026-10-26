@@ -12,8 +12,8 @@ public final class Hotel {
     private String nombre;
 
     private HashMap<Integer, Habitacion> habitaciones;
-    private Repositorio<Reserva> reservas;
-    private Repositorio<Ocupacion> ocupaciones;
+    private RepoArr<Reserva> reservas;
+    private RepoArr<Ocupacion> ocupaciones;
     private RepoMap<String, Pasajero> pasajeros;
     private RepoMap<Integer, Administrador> administradores;
     private RepoMap<Integer, Recepcionista> recepcionistas;
@@ -22,8 +22,8 @@ public final class Hotel {
         this.nombre = nombre;
 
         this.habitaciones = new HashMap<>();
-        this.reservas = new Repositorio<>();
-        this.ocupaciones = new Repositorio<>();
+        this.reservas = new RepoArr<>();
+        this.ocupaciones = new RepoArr<>();
         this.administradores = new RepoMap<>();
         this.recepcionistas = new RepoMap<>();
         this.pasajeros = new RepoMap<>();
@@ -39,11 +39,11 @@ public final class Hotel {
         return habitaciones;
     }
 
-    public Repositorio<Reserva> getReservas() {
+    public RepoArr<Reserva> getReservas() {
         return reservas;
     }
 
-    public Repositorio<Ocupacion> getOcupaciones() {
+    public RepoArr<Ocupacion> getOcupaciones() {
         return ocupaciones;
     }
 
@@ -70,11 +70,11 @@ public final class Hotel {
         this.habitaciones = habitaciones;
     }
 
-    public void setReservas(Repositorio<Reserva> reservas) {
+    public void setReservas(RepoArr<Reserva> reservas) {
         this.reservas = reservas;
     }
 
-    public void setOcupaciones(Repositorio<Ocupacion> ocupaciones) {
+    public void setOcupaciones(RepoArr<Ocupacion> ocupaciones) {
         this.ocupaciones = ocupaciones;
     }
 

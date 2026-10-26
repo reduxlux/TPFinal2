@@ -15,14 +15,14 @@ public class Pasajero {
     private String domicilioOrigen;
     private static Hotel hotel = Menu.getHotel();
 
-    private Repositorio<Ocupacion> historial;
+    private RepoArr<Ocupacion> historial;
 
     public Pasajero(String nombre, String dni, String origen, String domicilioOrigen) {
         this.nombre = nombre;
         this.dni = dni;
         this.origen = origen;
         this.domicilioOrigen = domicilioOrigen;
-        this.historial = new Repositorio<>();
+        this.historial = new RepoArr<>();
     }
 
     /// GETTERS Y SETTERS
@@ -59,11 +59,11 @@ public class Pasajero {
         this.domicilioOrigen = domicilioOrigen;
     }
 
-    public Repositorio<Ocupacion> getHistorial() {
+    public RepoArr<Ocupacion> getHistorial() {
         return historial;
     }
 
-    public void setHistorial(Repositorio<Ocupacion> historial) {
+    public void setHistorial(RepoArr<Ocupacion> historial) {
         this.historial = historial;
     }
 

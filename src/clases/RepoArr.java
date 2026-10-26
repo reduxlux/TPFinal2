@@ -3,11 +3,11 @@ package clases;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Repositorio<T> implements Iterable<T> {
+public class RepoArr<T> implements Iterable<T> {
 
     private ArrayList<T> elementos;
 
-    public Repositorio() {
+    public RepoArr() {
         elementos = new ArrayList<>();
     }
 
