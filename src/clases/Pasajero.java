@@ -13,7 +13,7 @@ public class Pasajero {
     private String dni;
     private String origen;
     private String domicilioOrigen;
-    Hotel hotel;
+    private static Hotel hotel = Menu.getHotel();
 
     private Repositorio<Ocupacion> historial;
 
@@ -143,9 +143,9 @@ public class Pasajero {
 
         Habitacion habitacion = hotel.buscarHabitacion(nrohabitacion);
 
-        Ocupacion ocupacion = new Ocupacion(this, habitacion, checkin, checkout);
+        Reserva reserva = new Reserva(this, habitacion, checkin, checkout);
 
-        hotel.agregarOcupacion(ocupacion);
+        hotel.agregarReservaHotel(reserva);
     }
 
 

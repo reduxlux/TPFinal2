@@ -7,15 +7,16 @@ import java.util.Objects;
 public class Reserva {
 
     private int id;
+    private static int contador = 0;
     private Pasajero pasajero;
     private Habitacion habitacion;
     private LocalDate fechaEntrada;
     private LocalDate fechaSalida;
     private EEstadoReserva estado;
 
-    public Reserva(int id, Pasajero pasajero, Habitacion habitacion,
+    public Reserva(Pasajero pasajero, Habitacion habitacion,
                    LocalDate fechaEntrada, LocalDate fechaSalida) {
-        this.id = id;
+        this.id = contador++;
         this.pasajero = pasajero;
         this.habitacion = habitacion;
         this.fechaEntrada = fechaEntrada;

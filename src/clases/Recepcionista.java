@@ -4,8 +4,6 @@ import java.time.LocalDate;
 
 public class Recepcionista extends Usuario {
 
-    private Hotel hotel;
-
     public Recepcionista(String usuario, String contrasenia, String nombre) {
         super(usuario, contrasenia, nombre);
     }

@@ -4,12 +4,12 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Menu {
-    int opcion;
-    Hotel hotel;
+    private int opcion;
+    private static Hotel hotel;
     Scanner sc = new Scanner(System.in);
 
-    public Menu(int opcion) {
-        this.opcion = opcion;
+    public static Hotel getHotel() {
+        return hotel;
     }
 
     /// GETTER Y SETTER?
@@ -177,8 +177,7 @@ public class Menu {
 
             switch (opcion) {
                 case 1:
-                    p.agregarEstadia(null);
-                    // METODO CREAR ESTADIA (darle valores)
+                    p.crearEstadia();
                     break;
                 case 2:
                     // crear metodo mostrarEstadiaActual

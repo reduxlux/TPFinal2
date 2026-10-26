@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Administrador extends Usuario {
 
-    Hotel hotel;
     Scanner teclado = new Scanner(System.in);
 
     public Administrador(String usuario, String contrasenia, String nombre) {
@@ -12,7 +11,7 @@ public class Administrador extends Usuario {
     }
 
     public boolean crearAdministrador(Administrador nuevoAdministrador) {
-        return hotel.agregarAdministrador(nuevoAdministrador);
+        return super.getHotel().agregarAdministrador(nuevoAdministrador);
     }
 
     public void crearAdministrador() {
@@ -28,7 +27,7 @@ public class Administrador extends Usuario {
         Administrador nuevo = new Administrador(
                 usuario, contrasenia, nombre);
 
-        if (hotel.agregarAdministrador(nuevo)) {
+        if (super.getHotel().agregarAdministrador(nuevo)) {
             System.out.println("Administrador creado correctamente.");
         } else {
             System.out.println("No se pudo crear el administrador.");
@@ -44,11 +43,11 @@ public class Administrador extends Usuario {
     }
 
     public void agregarHabitacion(Habitacion habitacion) {
-        hotel.agregarHabitacion(habitacion);
+        super.getHotel().agregarHabitacion(habitacion);
     }
 
     public void eliminarHabitacion(int numeroHabitacion) {
-        hotel.eliminarHabitacion(numeroHabitacion);
+        super.getHotel().eliminarHabitacion(numeroHabitacion);
     }
 
 }

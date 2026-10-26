@@ -13,8 +13,7 @@ public abstract class Usuario implements Autenticable {
     private String contrasenia;
     private String nombre;
     private boolean sesionIniciada;
-
-    Hotel hotel;
+    private static Hotel hotel = Menu.getHotel();
 
     public Usuario(String usuario, String contrasenia, String nombre) {
         this.usuario = usuario;
@@ -26,6 +25,10 @@ public abstract class Usuario implements Autenticable {
 
     //getters
 
+
+    public Hotel getHotel() {
+        return hotel;
+    }
 
     public int getId() {
         return id;
