@@ -9,42 +9,42 @@ public class Recepcionista extends Usuario {
     }
 
     public void realizarReservaRec(Reserva reserva) {
-        hotel.agregarReservaHotel(reserva);
+        super.getHotel().agregarReservaHotel(reserva);
     }
 
     public void realizarCheckInRec(Reserva reserva) {
-        hotel.realizarCheckInHotel(reserva);
+        super.getHotel().realizarCheckInHotel(reserva);
     }
 
     public void realizarCheckOutRec(Ocupacion ocupacion) {
-        hotel.realizarCheckOutHotel(ocupacion);
+        super.getHotel().realizarCheckOutHotel(ocupacion);
     }
 
     public void consultarHabitaciones() {
-        hotel.listarHabitaciones();
+        super.getHotel().listarHabitaciones();
     }
 
     public void consultarHabitacionesDisponibles() {
-        hotel.listarHabitacionesDisponibles();
+        super.getHotel().listarHabitacionesDisponibles();
     }
 
     public void consultarHabitacionesNoDisponibles() {
-        hotel.listarHabitacionesNoDisponibles();
+        super.getHotel().listarHabitacionesNoDisponibles();
     }
 
     public void consultarHabitacionesOcupadar() {
-        hotel.listarHabitacionesOcupadas();
+        super.getHotel().listarHabitacionesOcupadas();
     }
 
     public void consultarDisponibilidad(int numero, LocalDate fechaEntrada, LocalDate fechaSalida) {
-        hotel.consultarDisponibilidad(numero, fechaEntrada, fechaSalida);
+        super.getHotel().consultarDisponibilidad(numero, fechaEntrada, fechaSalida);
     }
 
     public void bloquearHabitacion(int numero, String motivo) {
-        hotel.bloquearHabitacion(numero, motivo);
+        super.getHotel().bloquearHabitacion(numero, motivo);
     }
 
     public void habilitarHabitacion(int numero) {
-        hotel.habilitarHabitacion(numero);
+        super.getHotel().habilitarHabitacion(numero);
     }
 }
