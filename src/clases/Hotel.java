@@ -1,5 +1,5 @@
 package clases;
-import Excepciones.CheckInException;
+import Excepciones.ExcepcionPropia;
 import Enum.EEstadoReserva;
 
 
@@ -7,7 +7,7 @@ import Enum.EEstadoReserva;
 import java.time.LocalDate;
 import java.util.HashMap;
 
-public class Hotel {
+public final class Hotel {
 
     private String nombre;
 
@@ -30,7 +30,6 @@ public class Hotel {
     }
 
     //getters
-
 
     public String getNombre() {
         return nombre;
@@ -119,6 +118,10 @@ public class Hotel {
         return null;
     }
 
+    public void agregarOcupacion(Ocupacion ocupacion){
+        ocupaciones.agregar(ocupacion);
+    }
+
     ///ADMINISTRADORES
 
     public boolean agregarAdministrador(Administrador nuevoAdministrador) {
@@ -165,23 +168,23 @@ public class Hotel {
         return true;
     }
 
-    public boolean realizarCheckInHotel(Reserva reserva) throws CheckInException {
+    public boolean realizarCheckInHotel(Reserva reserva) throws ExcepcionPropia {
 
         if (reserva == null) {
-            throw new CheckInException("reseva no encontrada");
+            throw new ExcepcionPropia("reseva no encontrada");
         }
         if (reserva.getEstado() != EEstadoReserva.CONFIRMADA) {
-            throw new CheckInException("reserva no confirmada");
+            throw new ExcepcionPropia("reserva no confirmada");
         }
 
         Habitacion habitacion = reserva.getHabitacion();
 
         if (habitacion == null) {
-            throw new CheckInException("La reserva no tiene habitación");
+            throw new ExcepcionPropia("La reserva no tiene habitación");
         }
 
         if (!habitacion.estaDisponible()) {
-            throw new CheckInException("habitacion no disponible");
+            throw new ExcepcionPropia("habitacion no disponible");
         }
 
 
@@ -189,12 +192,13 @@ public class Hotel {
             if (ocupacion.estaActiva()
                     && ocupacion.getHabitacion().getNumero()
                     == habitacion.getNumero()) {
-                throw new CheckInException("la habitacion ya esta ocupada");
+                throw new ExcepcionPropia("la habitacion ya esta ocupada");
             }
         }
         Ocupacion nuevaOcupacion = new Ocupacion(
                 reserva.getPasajero(),
                 habitacion,
+                LocalDate.now(),
                 LocalDate.now()
         );
 

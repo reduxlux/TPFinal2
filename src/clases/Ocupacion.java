@@ -11,12 +11,12 @@ public class Ocupacion {
     private LocalDate fechaCheckOut;
 
     public Ocupacion(Pasajero pasajero, Habitacion habitacion,
-                     LocalDate fechaCheckIn) {
+                     LocalDate fechaCheckIn, LocalDate fechaCheckOut) {
 
         this.pasajero = pasajero;
         this.habitacion = habitacion;
         this.fechaCheckIn = fechaCheckIn;
-        this.fechaCheckOut = null;
+        this.fechaCheckOut = fechaCheckOut;
     }
 
     public Pasajero getPasajero() {

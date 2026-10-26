@@ -1,5 +1,9 @@
 package clases;
 
+import Excepciones.ExcepcionPropia;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -9,6 +13,7 @@ public class Pasajero {
     private String dni;
     private String origen;
     private String domicilioOrigen;
+    Hotel hotel;
 
     private Repositorio<Ocupacion> historial;
 
@@ -93,6 +98,54 @@ public class Pasajero {
 
     public int contarEstadias() {
         return historial.cantidad();
+    }
+
+    public void crearEstadia(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Introduzca el año de la estadía: ");
+        int anio = sc.nextInt();
+        if(anio < LocalDateTime.now().getYear()){
+            throw new ExcepcionPropia("El año es invalido");
+        }
+        System.out.println("Introduzca el mes: ");
+        int mes = sc.nextInt();
+        if(mes < 1 || mes > 12){
+            throw new ExcepcionPropia("El mes es invalido");
+        }
+        System.out.println("introduzca el día: ");
+        int dia = sc.nextInt();
+        if(dia < 0 || dia > (LocalDate.of(anio, mes, 1)).lengthOfMonth()){
+            throw new ExcepcionPropia("el dia es invalido");
+        }
+        System.out.println("introduzca el mes en el que finaliza su estadia: ");
+        int mesfin = sc.nextInt();
+        if(mesfin < 1 || mesfin > 12){
+            throw new ExcepcionPropia("El mes es invalido");
+        }
+        System.out.println("introduzca el dia en el que finaliza su estadia: ");
+        int diafin = sc.nextInt();
+        int aniofin;
+        if(mesfin < mes){
+            aniofin = anio + 1;
+        } else {
+            aniofin = anio;
+        }
+        if(dia < 0 || dia > (LocalDate.of(anio, mes, 1)).lengthOfMonth()){
+            throw new ExcepcionPropia("el dia es invalido");
+        }
+        LocalDate checkin = LocalDate.of(anio, mes, dia);
+        LocalDate checkout = LocalDate.of(aniofin, mesfin, diafin);
+
+
+        //despues hacer metodo para mostrarle las habitaciones disponibles en la fecha pedida
+
+        int nrohabitacion = sc.nextInt();
+
+        Habitacion habitacion = hotel.buscarHabitacion(nrohabitacion);
+
+        Ocupacion ocupacion = new Ocupacion(this, habitacion, checkin, checkout);
+
+        hotel.agregarOcupacion(ocupacion);
     }
 
 
