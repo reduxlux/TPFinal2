@@ -157,4 +157,42 @@ public class Menu {
                     break;
             }
         } while (opcion != 0);
-    }}
+    }
+
+    public void menuPasajero(Pasajero p) {
+        int opcion;
+        Scanner sc = new Scanner(System.in);
+
+        do {
+            System.out.println("=== MENU PASAJEROS ===");
+            System.out.println("1. Agregar estadia.");
+            System.out.println("2. Mostrar estadia.");
+            System.out.println("3. Eliminar estadia.");
+            System.out.println("4. Mostrar historial.");
+            System.out.println("0. Salir.");
+            opcion = Integer.parseInt(sc.nextLine());
+
+            switch (opcion) {
+                case 1:
+                    p.agregarEstadia(null);
+                    // METODO CREAR ESTADIA (darle valores)
+                    break;
+                case 2:
+                    // crear metodo mostrarEstadiaActual
+                    break;
+                case 3:
+                    // crear metodo eliminarUltimaEstadia(Ocupacion)
+                    break;
+                case 4:
+                    p.mostrarHistorial();
+                    break;
+                case 0:
+                    System.out.println("Saliendo...");
+                    break;
+                default:
+                    System.out.println("Opcion invalida. Intente nuevamente.");
+                    break;
+            }
+        } while (opcion != 0);
+    }
+}
