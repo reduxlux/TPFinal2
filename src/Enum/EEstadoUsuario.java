@@ -1,7 +1,8 @@
 package Enum;
 
-public enum EEstadoAdministrador {
+public enum EEstadoUsuario {
 
     ACTIVO,
     INACTIVO
+
 }

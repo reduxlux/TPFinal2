@@ -1,7 +1,5 @@
 package clases;
 import interfaces.Autenticable;
-import Enum.EEstadoAdministrador;
-import Enum.EEstadoRecepcionista;
 
 import java.util.Objects;
 

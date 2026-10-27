@@ -14,16 +14,17 @@ public class Pasajero {
     private String dni;
     private String origen;
     private String domicilioOrigen;
-    private static Hotel hotel = Menu.getHotel();
+    private Hotel hotel;
 
     private RepoArr<Ocupacion> historial;
 
-    public Pasajero(String nombre, String dni, String origen, String domicilioOrigen) {
+    public Pasajero(String nombre, String dni, String origen, String domicilioOrigen, Hotel hotel) {
         this.nombre = nombre;
         this.dni = dni;
         this.origen = origen;
         this.domicilioOrigen = domicilioOrigen;
         this.historial = new RepoArr<>();
+        this.hotel = hotel;
     }
 
     /// GETTERS Y SETTERS
