@@ -117,6 +117,21 @@ public final class Hotel {
         return null;
     }
 
+    public Ocupacion obtenerOcupacionActual(String dni){
+        if(dni == null){
+            return null;
+        }
+
+        for (Ocupacion ocupacion: ocupaciones){
+            if(ocupacion.getPasajero().getDni().equals(dni)
+                    && ocupacion.getFechaCheckOut() == null){
+                return ocupacion;
+            }
+        }
+
+        return null;
+    }
+
     public void agregarOcupacion(Ocupacion ocupacion){
         ocupaciones.agregar(ocupacion);
     }

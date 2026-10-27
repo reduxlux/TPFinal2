@@ -180,10 +180,10 @@ public class Menu {
                     p.crearEstadia();
                     break;
                 case 2:
-                    // crear metodo mostrarEstadiaActual
+                    p.mostrarEstadiaActual();
                     break;
                 case 3:
-                    // crear metodo eliminarUltimaEstadia(Ocupacion)
+                    p.eliminarEstadia();
                     break;
                 case 4:
                     p.mostrarHistorial();

@@ -4,6 +4,7 @@ import Excepciones.ExcepcionPropia;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -146,6 +147,40 @@ public class Pasajero {
         Reserva reserva = new Reserva(this, habitacion, checkin, checkout);
 
         hotel.agregarReservaHotel(reserva);
+
+        sc.close();
+    }
+
+    public void mostrarEstadiaActual(){
+         Ocupacion actual = hotel.obtenerOcupacionActual(dni);
+        System.out.println("su estadia actual es: " + actual.toString());
+    }
+
+    public void eliminarEstadia(){
+        int x = 1;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("que estadia desea eliminar: 1: cancelar\n");
+        for(Ocupacion ocupacion: historial){
+            if(ocupacion.getFechaCheckOut().isAfter(LocalDate.now())) {
+                System.out.println(x++ + ": " + ocupacion.toString());
+            }
+        }
+
+        int eleccion = sc.nextInt();
+        int contador = 1;
+        if(eleccion > 1){
+            Iterator<Ocupacion> it = historial.iterator();
+            while (it.hasNext()){
+                if(it.next().getFechaCheckOut().isAfter(LocalDate.now())){
+                    contador++;
+                    if(contador == x){
+                        it.remove();
+                        System.out.println("estadia eliminada correctamente\n");
+                        break;
+                    }
+                }
+            }
+        }
     }
 
 
