@@ -61,7 +61,6 @@ public final class Hotel {
 
     //setters
 
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -164,8 +163,14 @@ public final class Hotel {
         if (reserva == null) {
             throw new ExcepcionPropia("reseva no encontrada");
         }
+
         if (reserva.getEstado() != EEstadoReserva.CONFIRMADA) {
             throw new ExcepcionPropia("reserva no confirmada");
+        }
+
+        if(reserva.getPasajero() == null)
+        {
+            throw new ExcepcionPropia("La reserva no tiene pasajero");
         }
 
         Habitacion habitacion = reserva.getHabitacion();
@@ -191,28 +196,37 @@ public final class Hotel {
                 reserva.getPasajero(),
                 habitacion,
                 LocalDate.now(),
-                LocalDate.now()
+                null
         );
 
+        //guardamos la ocupacion al historial del pasajero
+        if (!reserva.getPasajero().agregarEstadia(nuevaOcupacion)) {
+            throw new ExcepcionPropia("No se pudo registrar la estadía");
+        }
+
+        //agregamos la ocupacion al repositorio del hotel
         ocupaciones.agregar(nuevaOcupacion);
+
+        habitacion.ocupar();
+
         return true;
     }
 
-    public void realizarCheckOutHotel(Ocupacion ocupacion) {
+    public boolean realizarCheckOutHotel(Ocupacion ocupacion) throws ExcepcionPropia{
 
         if (ocupacion == null) {
-            System.out.println("La ocupación no existe.");
-            return;
+            throw new ExcepcionPropia("La ocupacion no existe");
         }
 
         if (!ocupacion.estaActiva()) {
-            System.out.println("Esta ocupación ya finalizó.");
-            return;
+            throw new ExcepcionPropia("Esta ocupacion ya finalizo");
         }
 
         ocupacion.realizarCheckOut(LocalDate.now());
 
-        System.out.println("Check-out realizado correctamente.");
+        ocupacion.getHabitacion().habilitar();
+
+        return true;
     }
 
     /// HABITACIONES

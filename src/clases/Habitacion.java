@@ -63,7 +63,7 @@ public class Habitacion {
     }
 
     public void ocupar() {
-        // No se que ponerle
+        this.estado = EEstadoHabitacion.OCUPADA;
     }
 
     public void habilitar() {
