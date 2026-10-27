@@ -121,7 +121,10 @@ public class Menu {
             switch (opcion) {
                 case 1:
                     r.realizarReservaRec(null);
-                    // falta crearReserva en clase Reserva
+                    System.out.println("introduzca dni del pasajero que desea reservar: ");
+                    String dni = sc.nextLine();
+                    Pasajero pasajero = hotel.buscarPasajero(dni);
+                    r.crearReserva(pasajero);
                     break;
                 case 2:
                     r.realizarCheckInRec(null);

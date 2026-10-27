@@ -48,4 +48,8 @@ public class Recepcionista extends Usuario {
     public void habilitarHabitacion(int numero) {
         super.getHotel().habilitarHabitacion(numero);
     }
+
+    public void crearReserva(Pasajero pasajero){
+        getHotel().crearReserva(pasajero);
+    }
 }

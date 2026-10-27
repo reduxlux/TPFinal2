@@ -5,6 +5,7 @@ import Enum.EEstadoReserva;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -101,24 +102,24 @@ public final class Hotel {
         return true;
     }
 
-    public void eliminarEstadia(){
+    public void eliminarEstadia() {
         int x = 1;
         Scanner sc = new Scanner(System.in);
         System.out.println("que estadia desea eliminar: 1: cancelar\n");
-        for(Reserva reserva: reservas){
-            if(reserva.getFechaEntrada().isAfter(LocalDate.now())) {
+        for (Reserva reserva : reservas) {
+            if (reserva.getFechaEntrada().isAfter(LocalDate.now())) {
                 System.out.println(x++ + ": " + reserva.toString());
             }
         }
 
         int eleccion = sc.nextInt();
         int contador = 1;
-        if(eleccion > 1){
+        if (eleccion > 1) {
             Iterator<Reserva> it = reservas.iterator();
-            while (it.hasNext()){
-                if(it.next().getFechaEntrada().isAfter(LocalDate.now())){
+            while (it.hasNext()) {
+                if (it.next().getFechaEntrada().isAfter(LocalDate.now())) {
                     contador++;
-                    if(contador == x){
+                    if (contador == x) {
                         it.remove();
                         System.out.println("estadia eliminada correctamente\n");
                         break;
@@ -147,15 +148,14 @@ public final class Hotel {
     }
 
 
-
-    public Ocupacion obtenerOcupacionActual(String dni){
-        if(dni == null){
+    public Ocupacion obtenerOcupacionActual(String dni) {
+        if (dni == null) {
             return null;
         }
 
-        for (Ocupacion ocupacion: ocupaciones){
-            if(ocupacion.getPasajero().getDni().equals(dni)
-                    && ocupacion.getFechaCheckOut() == null){
+        for (Ocupacion ocupacion : ocupaciones) {
+            if (ocupacion.getPasajero().getDni().equals(dni)
+                    && ocupacion.getFechaCheckOut() == null) {
                 return ocupacion;
             }
         }
@@ -163,11 +163,11 @@ public final class Hotel {
         return null;
     }
 
-    public void agregarOcupacion(Ocupacion ocupacion){
+    public void agregarOcupacion(Ocupacion ocupacion) {
         ocupaciones.agregar(ocupacion);
     }
 
-    ///ADMINISTRADORES
+    /// ADMINISTRADORES
 
     public boolean agregarAdministrador(Administrador nuevoAdministrador) {
 
@@ -180,15 +180,75 @@ public final class Hotel {
     }
 
 
-    public boolean eliminarRecepcionista(Integer id){
-        if(id == null || !recepcionistas.contiene(id)){
+    public boolean eliminarRecepcionista(Integer id) {
+        if (id == null || !recepcionistas.contiene(id)) {
             return false;
         }
         recepcionistas.eliminar(id);
         return true;
     }
 
+    /// RECEPCiONISTAS
+    public Pasajero buscarPasajero(String dni){
+        return pasajeros.obtener(dni);
+    }
+
     /// RESERVAS
+
+    public void crearReserva(Pasajero pasajero) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Introduzca el año de la estadía: ");
+        int anio = sc.nextInt();
+        if (anio < LocalDateTime.now().getYear()) {
+            throw new ExcepcionPropia("El año es invalido");
+        }
+        System.out.println("Introduzca el mes: ");
+        int mes = sc.nextInt();
+        if (mes < 1 || mes > 12) {
+            throw new ExcepcionPropia("El mes es invalido");
+        }
+        System.out.println("introduzca el día: ");
+        int dia = sc.nextInt();
+        if (dia < 0 || dia > (LocalDate.of(anio, mes, 1)).
+                lengthOfMonth()) {
+            throw new ExcepcionPropia("el dia es invalido");
+        }
+        System.out.println("introduzca el mes en el que finaliza la estadia: ");
+        int mesfin = sc.nextInt();
+        if (mesfin < 1 || mesfin > 12) {
+            throw new ExcepcionPropia("El mes es invalido");
+        }
+        System.out.println("introduzca el dia en el que finaliza su estadia: ");
+        int diafin = sc.nextInt();
+        int aniofin;
+        if (mesfin < mes) {
+            aniofin = anio + 1;
+        } else {
+            aniofin = anio;
+        }
+        if (dia < 0 || dia > (LocalDate.of(anio, mes, 1)).
+                lengthOfMonth()) {
+            throw new ExcepcionPropia("el dia es invalido");
+        }
+
+        LocalDate checkin = LocalDate.of(anio, mes, dia);
+        LocalDate checkout = LocalDate.of(aniofin, mesfin, diafin);
+
+
+        //despues hacer metodo para mostrarle las habitaciones disponibles en la fecha pedida
+
+        int nrohabitacion = sc.nextInt();
+
+        Habitacion habitacion = buscarHabitacion(nrohabitacion);
+
+        Reserva reserva = new Reserva(pasajero, habitacion, checkin, checkout);
+
+        agregarReservaHotel(reserva);
+
+        sc.close();
+    }
+
+
     public boolean agregarReservaHotel(Reserva r) {
         if (r == null
                 || reservas.contiene(r)
