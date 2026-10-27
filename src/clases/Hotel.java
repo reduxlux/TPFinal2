@@ -179,6 +179,14 @@ public final class Hotel {
         return true;
     }
 
+    public boolean agregarRecepcionista(Recepcionista nuevoRecepcionista) {
+        if (nuevoRecepcionista == null || recepcionistas.contiene(nuevoRecepcionista.getId())) {
+            return false;
+        }
+        recepcionistas.agregar(nuevoRecepcionista.getId(), nuevoRecepcionista);
+        return true;
+    }
+
 
     public boolean eliminarRecepcionista(Integer id) {
         if (id == null || !recepcionistas.contiene(id)) {
