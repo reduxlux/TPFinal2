@@ -156,12 +156,16 @@ public class Menu {
                     r.crearReserva(pasajero);
                     break;
                 case 2:
-                    r.realizarCheckInRec(null);
-                    // falta reserva?
+                    System.out.println("introduzca id de la reserva: ");
+                    int id = sc.nextInt();
+                    Reserva reserva = hotel.buscarReserva(id);
+                    r.realizarCheckInRec(reserva);
                     break;
                 case 3:
-                    r.realizarCheckOutRec(null);
-                    // falta reserva
+                    System.out.println("introduzca el id de la ocupacion: ");
+                    int idOcupacion = sc.nextInt();
+                    Ocupacion ocupacion = hotel.buscarOcupacion(idOcupacion);
+                    r.realizarCheckOutRec(ocupacion);
                     break;
                 case 4:
                     r.consultarHabitaciones();
