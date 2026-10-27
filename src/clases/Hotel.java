@@ -6,6 +6,8 @@ import Enum.EEstadoReserva;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Scanner;
 
 public final class Hotel {
 
@@ -99,6 +101,33 @@ public final class Hotel {
         return true;
     }
 
+    public void eliminarEstadia(){
+        int x = 1;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("que estadia desea eliminar: 1: cancelar\n");
+        for(Reserva reserva: reservas){
+            if(reserva.getFechaEntrada().isAfter(LocalDate.now())) {
+                System.out.println(x++ + ": " + reserva.toString());
+            }
+        }
+
+        int eleccion = sc.nextInt();
+        int contador = 1;
+        if(eleccion > 1){
+            Iterator<Reserva> it = reservas.iterator();
+            while (it.hasNext()){
+                if(it.next().getFechaEntrada().isAfter(LocalDate.now())){
+                    contador++;
+                    if(contador == x){
+                        it.remove();
+                        System.out.println("estadia eliminada correctamente\n");
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     public Habitacion obtenerHabitacionActual(String dni) {
 
         if (dni == null) {
@@ -116,6 +145,8 @@ public final class Hotel {
 
         return null;
     }
+
+
 
     public Ocupacion obtenerOcupacionActual(String dni){
         if(dni == null){
