@@ -72,12 +72,17 @@ public class Reserva {
         this.estado = estado;
     }
 
-    public void cancelar() {
-        estado = EEstadoReserva.CANCELADA;
+    public boolean cancelar() {
+        if(estado != EEstadoReserva.CONFIRMADA)
+        {
+            return false;
+        }
+        this.estado = EEstadoReserva.CANCELADA;
+        return true;
     }
 
     public boolean estaVigente() {
-        return estado == EEstadoReserva.CONFIRMADA;
+        return estado == EEstadoReserva.CONFIRMADA && fechaSalida.isAfter(LocalDate.now());
     }
 
 
