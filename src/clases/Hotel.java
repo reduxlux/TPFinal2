@@ -193,6 +193,15 @@ public final class Hotel {
         return pasajeros.obtener(dni);
     }
 
+    public Ocupacion buscarOcupacion(int id){
+        for(Ocupacion ocupacion: ocupaciones){
+            if(ocupacion.getId() == id){
+                return ocupacion;
+            }
+        }
+        return null;
+    }
+
     /// RESERVAS
 
     public void crearReserva(Pasajero pasajero) {
@@ -340,6 +349,15 @@ public final class Hotel {
         ocupacion.getHabitacion().habilitar();
 
         return true;
+    }
+
+    public Reserva buscarReserva(int id){
+        for(Reserva x: reservas){
+            if(x.getId() == id){
+                return x;
+            }
+        }
+        return null;
     }
 
     /// HABITACIONES
