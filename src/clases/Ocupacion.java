@@ -4,7 +4,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 /// INFORMACION DE HABITACION OCUPADA
 public class Ocupacion {
-
+    private static int contador = 0;
+    private int id;
     private Pasajero pasajero;
     private Habitacion habitacion;
     private LocalDate fechaCheckIn;
@@ -12,11 +13,15 @@ public class Ocupacion {
 
     public Ocupacion(Pasajero pasajero, Habitacion habitacion,
                      LocalDate fechaCheckIn, LocalDate fechaCheckOut) {
-
+        id = contador++;
         this.pasajero = pasajero;
         this.habitacion = habitacion;
         this.fechaCheckIn = fechaCheckIn;
         this.fechaCheckOut = fechaCheckOut;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Pasajero getPasajero() {
