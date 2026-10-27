@@ -180,6 +180,13 @@ public final class Hotel {
     }
 
 
+    public boolean eliminarRecepcionista(Integer id){
+        if(id == null || !recepcionistas.contiene(id)){
+            return false;
+        }
+        recepcionistas.eliminar(id);
+        return true;
+    }
 
     /// RESERVAS
     public boolean agregarReservaHotel(Reserva r) {

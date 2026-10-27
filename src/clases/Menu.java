@@ -73,7 +73,13 @@ public class Menu {
                     a.crearAdministrador();
                     break;
                 case 2:
-                    // eliminar usuario
+                    System.out.println("Introduzca el id del recepcionista: ");
+                    int id = sc.nextInt();
+                    if(a.eliminarRecepcionista(id)){
+                        System.out.println("recepcionista eliminado correctamente\n");
+                    } else {
+                        System.out.println("no se encontro el recepcionista\n");
+                    }
                     break;
                 case 3:
                     a.agregarHabitacion(null);
