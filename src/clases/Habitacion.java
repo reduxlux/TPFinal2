@@ -1,8 +1,11 @@
 package clases;
 import Enum.EEstadoHabitacion;
 import Enum.ETipoHabitacion;
+import java.util.Scanner;
 
 public class Habitacion {
+
+    Scanner sc = new Scanner(System.in);
 
     private int numero;
     private int piso;
