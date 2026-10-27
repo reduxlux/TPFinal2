@@ -13,9 +13,10 @@ public abstract class Usuario implements Autenticable {
     private String contrasenia;
     private String nombre;
     private boolean sesionIniciada;
-    private static Hotel hotel = Menu.getHotel();
+    private Hotel hotel;
 
-    public Usuario(String usuario, String contrasenia, String nombre) {
+    public Usuario(Hotel hotel, String usuario, String contrasenia, String nombre) {
+        this.hotel = hotel;
         this.usuario = usuario;
         this.contrasenia = contrasenia;
         this.nombre = nombre;
@@ -67,15 +68,16 @@ public abstract class Usuario implements Autenticable {
     //metodos
 
 
-    public boolean equals(Object object) {
-        if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
-        Usuario usuario = (Usuario) object;
-        return id == usuario.id;
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return getId() == usuario.getId();
     }
 
+    @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id);
+        return Objects.hashCode(getId());
     }
 
     @Override

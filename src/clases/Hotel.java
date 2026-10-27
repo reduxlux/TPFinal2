@@ -1,7 +1,7 @@
 package clases;
+
 import Excepciones.ExcepcionPropia;
 import Enum.EEstadoReserva;
-
 
 
 import java.time.LocalDate;
@@ -12,11 +12,17 @@ public final class Hotel {
     private String nombre;
 
     private HashMap<Integer, Habitacion> habitaciones;
+    // nroHabitacion, habitacion
     private RepoArr<Reserva> reservas;
+
     private RepoArr<Ocupacion> ocupaciones;
+
     private RepoMap<String, Pasajero> pasajeros;
+    // dni, pasajero
     private RepoMap<Integer, Administrador> administradores;
+    // id, admin
     private RepoMap<Integer, Recepcionista> recepcionistas;
+    // id, recep.
 
     public Hotel(String nombre) {
         this.nombre = nombre;
@@ -117,11 +123,11 @@ public final class Hotel {
         return null;
     }
 
-    public void agregarOcupacion(Ocupacion ocupacion){
+    public void agregarOcupacion(Ocupacion ocupacion) {
         ocupaciones.agregar(ocupacion);
     }
 
-    ///ADMINISTRADORES
+    /// ADMINISTRADORES
 
     public boolean agregarAdministrador(Administrador nuevoAdministrador) {
 
@@ -133,6 +139,13 @@ public final class Hotel {
         return true;
     }
 
+    public boolean agregarRecepcionista(Recepcionista nuevoRecepcionista) {
+        if (nuevoRecepcionista == null || recepcionistas.contiene(nuevoRecepcionista.getId())) {
+            return false;
+        }
+        recepcionistas.agregar(nuevoRecepcionista.getId(), nuevoRecepcionista);
+        return true;
+    }
 
 
     /// RESERVAS
@@ -142,8 +155,7 @@ public final class Hotel {
                 || r.getHabitacion() == null
                 || r.getPasajero() == null
                 || r.getFechaEntrada() == null
-                || r.getFechaSalida() == null)
-        {
+                || r.getFechaSalida() == null) {
             return false;
         }
 
@@ -168,8 +180,7 @@ public final class Hotel {
             throw new ExcepcionPropia("reserva no confirmada");
         }
 
-        if(reserva.getPasajero() == null)
-        {
+        if (reserva.getPasajero() == null) {
             throw new ExcepcionPropia("La reserva no tiene pasajero");
         }
 
@@ -212,7 +223,7 @@ public final class Hotel {
         return true;
     }
 
-    public boolean realizarCheckOutHotel(Ocupacion ocupacion) throws ExcepcionPropia{
+    public boolean realizarCheckOutHotel(Ocupacion ocupacion) throws ExcepcionPropia {
 
         if (ocupacion == null) {
             throw new ExcepcionPropia("La ocupacion no existe");
@@ -231,14 +242,17 @@ public final class Hotel {
 
     /// HABITACIONES
     public void agregarHabitacion(Habitacion habitacion) {
-        if (habitaciones.containsKey(habitacion.getNumero())) {
-            System.out.println("clases.Habitacion existente");
-        } else {
-            habitaciones.put(habitacion.getNumero(), habitacion);
-            System.out.println("clases.Habitacion agregada");
+        if (habitacion != null) {
+            if (habitaciones.containsKey(habitacion.getNumero())) {
+                System.out.println("Habitacion existente");
+            } else {
+                habitaciones.put(habitacion.getNumero(), habitacion);
+                System.out.println("Habitacion agregada");
+            }
         }
     }
 
+    // se puede eliminar una habitacion reservada y/o ocupada
     public boolean eliminarHabitacion(int numeroHabitacion) {
         if (habitaciones.containsKey(numeroHabitacion)) {
             habitaciones.remove(numeroHabitacion);
@@ -326,7 +340,7 @@ public final class Hotel {
     public boolean consultarDisponibilidad(int numero, LocalDate fechaEntrada, LocalDate fechaSalida) {
         Habitacion habitacion = buscarHabitacion(numero);
         if (habitacion == null) {
-            System.out.println("clases.Habitacion no encontrada");
+            System.out.println("Habitacion no encontrada");
             return false;
         }
         if (fechaEntrada == null || fechaSalida == null || !fechaEntrada.isBefore(fechaSalida)) {

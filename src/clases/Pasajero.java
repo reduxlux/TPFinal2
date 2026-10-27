@@ -2,6 +2,7 @@ package clases;
 
 import Excepciones.ExcepcionPropia;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,11 +14,12 @@ public class Pasajero {
     private String dni;
     private String origen;
     private String domicilioOrigen;
-    private static Hotel hotel = Menu.getHotel();
+    private Hotel hotel;
 
     private RepoArr<Ocupacion> historial;
 
-    public Pasajero(String nombre, String dni, String origen, String domicilioOrigen) {
+    public Pasajero(Hotel hotel, String nombre, String dni, String origen, String domicilioOrigen) {
+        this.hotel = hotel;
         this.nombre = nombre;
         this.dni = dni;
         this.origen = origen;
@@ -130,21 +132,27 @@ public class Pasajero {
         } else {
             aniofin = anio;
         }
-        if(dia < 0 || dia > (LocalDate.of(anio, mes, 1)).lengthOfMonth()){
+        if(dia > 0 || dia > (LocalDate.of(anio, mes, 1)).lengthOfMonth()){
             throw new ExcepcionPropia("el dia es invalido");
         }
         LocalDate checkin = LocalDate.of(anio, mes, dia);
         LocalDate checkout = LocalDate.of(aniofin, mesfin, diafin);
 
+        // puede que esto deba estar en otro lugar,
+        // lo dejo aca por las dudas
+        if(checkin.isAfter(checkout)){
+            throw new ExcepcionPropia("El dia de entrada no puede ser despues del dia de salida.");
+        }
+
 
         //despues hacer metodo para mostrarle las habitaciones disponibles en la fecha pedida
-
         int nrohabitacion = sc.nextInt();
 
         Habitacion habitacion = hotel.buscarHabitacion(nrohabitacion);
 
+        // segun entiendo la reserva la agrega el recepcionista
+        // pero ya me come la cabeza lo de ocupacion y reserva
         Reserva reserva = new Reserva(this, habitacion, checkin, checkout);
-
         hotel.agregarReservaHotel(reserva);
     }
 

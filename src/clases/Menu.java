@@ -1,15 +1,17 @@
 package clases;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Scanner;
+import Enum.ETipoHabitacion;
 
 public class Menu {
     private int opcion;
-    private static Hotel hotel;
     Scanner sc = new Scanner(System.in);
+    private Hotel hotel;
 
-    public static Hotel getHotel() {
-        return hotel;
+    public Menu (Hotel hotel) {
+        this.hotel = hotel;
     }
 
     /// GETTER Y SETTER?
@@ -27,7 +29,8 @@ public class Menu {
         String contrasenia;
         do {
             System.out.println("=== MENU PRINCIPAL ===");
-            System.out.println("1. Ingresar usuario");
+            System.out.println("1. Ingresar usuario.");
+            System.out.println("2. Ingresar pasajero.");
             System.out.println("0. Salir del programa.");
             opcion = Integer.parseInt(sc.nextLine());
 
@@ -48,6 +51,18 @@ public class Menu {
                         }
                     }
                     break;
+                case 2:
+                    // AGREGAR COMO LOGUEAR AL PASAJERO
+                    System.out.println("Ingresar nombre: ");
+                    String nombrePasajero = sc.nextLine();
+                    System.out.println("Ingresar DNI: ");
+                    String dniPasajero = sc.nextLine();
+                    if (hotel.getPasajeros().contiene(dniPasajero)
+                    && !nombrePasajero.isEmpty()) {
+                        Pasajero p;
+                        //menuPasajero(p);
+                    }
+                    break;
                 case 0:
                     System.out.println("Saliendo...");
                     break;
@@ -61,23 +76,38 @@ public class Menu {
         Scanner sc = new Scanner(System.in);
         do {
             System.out.println("=== MENU ADMIN ===");
-            System.out.println("1. Crear administrador.");
+            System.out.println("1. Crear usuario.");
             System.out.println("2. Eliminar usuario.");
-            System.out.println("3. Agregar habitacion.");
+            System.out.println("3. Crear y agregar habitacion.");
             System.out.println("4. Eliminar habitacion.");
-            System.out.println("0. Salir del programa.");
+            System.out.println("0. Cerrar sesion.");
             opcion = Integer.parseInt(sc.nextLine());
 
             switch (opcion) {
                 case 1:
-                    a.crearAdministrador();
+                    int opcion2;
+                    System.out.println("Ingrese el tipo de usuario: ");
+                    System.out.println("1. Administrador.");
+                    System.out.println("2. Recepcionista.");
+                    System.out.println("0. Volver.");
+                    opcion2 = Integer.parseInt(sc.nextLine());
+                    switch (opcion2) {
+                        case 1:
+                            a.agregarAdministrador(a.crearAdministrador());
+                            break;
+                        case 2:
+                            a.agregarRecepcionista(a.crearRecepcionista());
+                            break;
+                        case 0:
+                            System.out.println("Volviendo...");
+                            break;
+                    }
                     break;
                 case 2:
                     // eliminar usuario
                     break;
                 case 3:
-                    a.agregarHabitacion(null);
-                    // pasarle habitacion
+                    a.agregarHabitacion(a.crearHabitacion());
                     break;
                 case 4:
                     System.out.println("Ingresar numero habitacion a eliminar: ");
@@ -120,6 +150,7 @@ public class Menu {
                 case 2:
                     r.realizarCheckInRec(null);
                     // falta reserva?
+                    break;
                 case 3:
                     r.realizarCheckOutRec(null);
                     // falta reserva
@@ -137,7 +168,27 @@ public class Menu {
                     r.consultarHabitacionesOcupadar();
                     break;
                 case 8:
-                    r.consultarDisponibilidad(opcion, LocalDate.now(), LocalDate.now());
+                    System.out.println("Ingresar numero habitacion a consultar: ");
+                    int nroHabitacion = Integer.parseInt(sc.nextLine());
+                    System.out.println("Ingresar fecha de entrada: ");
+                    int anio1 = Integer.parseInt(sc.nextLine());
+                    System.out.println(" / ");
+                    int mes1 = Integer.parseInt(sc.nextLine());
+                    System.out.println(" / ");
+                    int dia1 = Integer.parseInt(sc.nextLine());
+
+                    LocalDate diaEntrada = LocalDate.of(anio1, mes1, dia1);
+
+                    System.out.println("Ingresar fecha de salida: ");
+                    int anio2 = Integer.parseInt(sc.nextLine());
+                    System.out.println(" / ");
+                    int mes2 = Integer.parseInt(sc.nextLine());
+                    System.out.println(" / ");
+                    int dia2 = Integer.parseInt(sc.nextLine());
+
+                    LocalDate diaSalida = LocalDate.of(anio2, mes2, dia2);
+
+                    r.consultarDisponibilidad(nroHabitacion, diaEntrada, diaSalida);
                     break;
                 case 9:
                     int nroHabitacion1;
@@ -186,7 +237,7 @@ public class Menu {
                     // crear metodo eliminarUltimaEstadia(Ocupacion)
                     break;
                 case 4:
-                    p.mostrarHistorial();
+                    System.out.println(p.mostrarHistorial());
                     break;
                 case 0:
                     System.out.println("Saliendo...");
