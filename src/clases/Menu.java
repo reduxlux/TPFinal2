@@ -104,7 +104,13 @@ public class Menu {
                     }
                     break;
                 case 2:
-                    // eliminar usuario
+                    System.out.println("Introduzca el id del recepcionista: ");
+                    int id = sc.nextInt();
+                    if(a.eliminarRecepcionista(id)){
+                        System.out.println("recepcionista eliminado correctamente\n");
+                    } else {
+                        System.out.println("no se encontro el recepcionista\n");
+                    }
                     break;
                 case 3:
                     a.agregarHabitacion(a.crearHabitacion());
@@ -145,7 +151,10 @@ public class Menu {
             switch (opcion) {
                 case 1:
                     r.realizarReservaRec(null);
-                    // falta crearReserva en clase Reserva
+                    System.out.println("introduzca dni del pasajero que desea reservar: ");
+                    String dni = sc.nextLine();
+                    Pasajero pasajero = hotel.buscarPasajero(dni);
+                    r.crearReserva(pasajero);
                     break;
                 case 2:
                     r.realizarCheckInRec(null);
@@ -231,10 +240,10 @@ public class Menu {
                     p.crearEstadia();
                     break;
                 case 2:
-                    // crear metodo mostrarEstadiaActual
+                    p.mostrarEstadiaActual();
                     break;
                 case 3:
-                    // crear metodo eliminarUltimaEstadia(Ocupacion)
+                    p.eliminarEstadia();
                     break;
                 case 4:
                     System.out.println(p.mostrarHistorial());

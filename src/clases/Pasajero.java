@@ -2,9 +2,9 @@ package clases;
 
 import Excepciones.ExcepcionPropia;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -14,12 +14,11 @@ public class Pasajero {
     private String dni;
     private String origen;
     private String domicilioOrigen;
-    private Hotel hotel;
+    private static Hotel hotel = Menu.getHotel();
 
     private RepoArr<Ocupacion> historial;
 
-    public Pasajero(Hotel hotel, String nombre, String dni, String origen, String domicilioOrigen) {
-        this.hotel = hotel;
+    public Pasajero(String nombre, String dni, String origen, String domicilioOrigen) {
         this.nombre = nombre;
         this.dni = dni;
         this.origen = origen;
@@ -103,57 +102,16 @@ public class Pasajero {
     }
 
     public void crearEstadia(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Introduzca el año de la estadía: ");
-        int anio = sc.nextInt();
-        if(anio < LocalDateTime.now().getYear()){
-            throw new ExcepcionPropia("El año es invalido");
-        }
-        System.out.println("Introduzca el mes: ");
-        int mes = sc.nextInt();
-        if(mes < 1 || mes > 12){
-            throw new ExcepcionPropia("El mes es invalido");
-        }
-        System.out.println("introduzca el día: ");
-        int dia = sc.nextInt();
-        if(dia < 0 || dia > (LocalDate.of(anio, mes, 1)).lengthOfMonth()){
-            throw new ExcepcionPropia("el dia es invalido");
-        }
-        System.out.println("introduzca el mes en el que finaliza su estadia: ");
-        int mesfin = sc.nextInt();
-        if(mesfin < 1 || mesfin > 12){
-            throw new ExcepcionPropia("El mes es invalido");
-        }
-        System.out.println("introduzca el dia en el que finaliza su estadia: ");
-        int diafin = sc.nextInt();
-        int aniofin;
-        if(mesfin < mes){
-            aniofin = anio + 1;
-        } else {
-            aniofin = anio;
-        }
-        if(dia > 0 || dia > (LocalDate.of(anio, mes, 1)).lengthOfMonth()){
-            throw new ExcepcionPropia("el dia es invalido");
-        }
-        LocalDate checkin = LocalDate.of(anio, mes, dia);
-        LocalDate checkout = LocalDate.of(aniofin, mesfin, diafin);
+        hotel.crearReserva(this);
+    }
 
-        // puede que esto deba estar en otro lugar,
-        // lo dejo aca por las dudas
-        if(checkin.isAfter(checkout)){
-            throw new ExcepcionPropia("El dia de entrada no puede ser despues del dia de salida.");
-        }
+    public void mostrarEstadiaActual(){
+         Ocupacion actual = hotel.obtenerOcupacionActual(dni);
+        System.out.println("su estadia actual es: " + actual.toString());
+    }
 
-
-        //despues hacer metodo para mostrarle las habitaciones disponibles en la fecha pedida
-        int nrohabitacion = sc.nextInt();
-
-        Habitacion habitacion = hotel.buscarHabitacion(nrohabitacion);
-
-        // segun entiendo la reserva la agrega el recepcionista
-        // pero ya me come la cabeza lo de ocupacion y reserva
-        Reserva reserva = new Reserva(this, habitacion, checkin, checkout);
-        hotel.agregarReservaHotel(reserva);
+    public void eliminarEstadia(){
+        hotel.eliminarEstadia();
     }
 
 

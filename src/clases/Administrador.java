@@ -49,6 +49,10 @@ public class Administrador extends Usuario {
         return recepcionista;
     }
 
+    public boolean eliminarRecepcionista(int id){
+        return getHotel().eliminarRecepcionista(id);
+    }
+
     public void realizarBackup() {
         // ...
     }
