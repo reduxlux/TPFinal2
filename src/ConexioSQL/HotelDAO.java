@@ -227,7 +227,7 @@ public class HotelDAO {
         cargarOcupaciones(hotel);
     }
 
-    // CARGAR PASAJEROS
+    //CARGAR PASAJEROS
     private static void cargarPasajeros(Hotel hotel)
             throws SQLException {
 
@@ -243,13 +243,15 @@ public class HotelDAO {
                         rs.getString("nombre"),
                         rs.getString("dni"),
                         rs.getString("origen"),
-                        rs.getString("domicilio_origen")
+                        rs.getString("domicilio_origen"),
+                        hotel
                 );
 
                 hotel.registrarPasajeroHotel(p);
             }
         }
     }
+
 
     // CARGAR HABITACIONES
     private static void cargarHabitaciones(Hotel hotel)
