@@ -2,6 +2,7 @@ package clases;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import Enum.ETipoHabitacion;
 
@@ -14,15 +15,6 @@ public class Menu {
         this.hotel = hotel;
     }
 
-    /// GETTER Y SETTER?
-    public int getOpcion() {
-        return opcion;
-    }
-
-    public void setOpcion(int opcion) {
-        this.opcion = opcion;
-    }
-
     /// MENU LOGIN
     public void menuPrincipal() {
         String usuario;
@@ -32,7 +24,13 @@ public class Menu {
             System.out.println("1. Ingresar usuario.");
             System.out.println("2. Ingresar pasajero.");
             System.out.println("0. Salir del programa.");
-            opcion = Integer.parseInt(sc.nextLine());
+            try {
+                opcion = sc.nextInt();
+            } catch (InputMismatchException e){
+                opcion = -1;
+            } finally {
+                sc.nextLine();
+            }
 
             switch (opcion) {
                 case 1:
@@ -66,6 +64,8 @@ public class Menu {
                 case 0:
                     System.out.println("Saliendo...");
                     break;
+                default:
+                    System.out.println("error, el dato introducido es invalido");
             }
         } while (opcion != 0);
     }
@@ -81,7 +81,13 @@ public class Menu {
             System.out.println("3. Crear y agregar habitacion.");
             System.out.println("4. Eliminar habitacion.");
             System.out.println("0. Cerrar sesion.");
-            opcion = Integer.parseInt(sc.nextLine());
+            try {
+                opcion = sc.nextInt();
+            } catch (InputMismatchException e){
+                opcion = -1;
+            } finally {
+                sc.nextLine();
+            }
 
             switch (opcion) {
                 case 1:
@@ -90,7 +96,13 @@ public class Menu {
                     System.out.println("1. Administrador.");
                     System.out.println("2. Recepcionista.");
                     System.out.println("0. Volver.");
-                    opcion2 = Integer.parseInt(sc.nextLine());
+                    try {
+                        opcion2 = sc.nextInt();
+                    } catch (InputMismatchException e){
+                        opcion2 = -1;
+                    } finally {
+                        sc.nextLine();
+                    }
                     switch (opcion2) {
                         case 1:
                             a.agregarAdministrador(a.crearAdministrador());
@@ -101,15 +113,23 @@ public class Menu {
                         case 0:
                             System.out.println("Volviendo...");
                             break;
+                        default:
+                            System.out.println("error, el dato es invalido");
                     }
                     break;
                 case 2:
                     System.out.println("Introduzca el id del recepcionista: ");
-                    int id = sc.nextInt();
-                    if(a.eliminarRecepcionista(id)){
-                        System.out.println("recepcionista eliminado correctamente\n");
-                    } else {
-                        System.out.println("no se encontro el recepcionista\n");
+                    try {
+                        int id = sc.nextInt();
+                        if (a.eliminarRecepcionista(id)) {
+                            System.out.println("recepcionista eliminado correctamente\n");
+                        } else {
+                            System.out.println("no se encontro el recepcionista\n");
+                        }
+                    }  catch (InputMismatchException e){
+                        System.out.println("error, el dato introducido es invalido");
+                    } finally {
+                        sc.nextLine();
                     }
                     break;
                 case 3:
@@ -117,14 +137,22 @@ public class Menu {
                     break;
                 case 4:
                     System.out.println("Ingresar numero habitacion a eliminar: ");
-                    int nroHabitacion = Integer.parseInt(sc.nextLine());
-                    a.eliminarHabitacion(nroHabitacion);
+                    try {
+                        int nroHabitacion = sc.nextInt();
+                        a.eliminarHabitacion(nroHabitacion);
+                    } catch (InputMismatchException e){
+                        System.out.println("error, dato invalido");
+                    } finally {
+                        sc.nextLine();
+                    }
                     break;
                 case 0:
                     a.cerrarSesion();
                     // falta implementar
                     System.out.println("Saliendo...");
                     break;
+                default:
+                    System.out.println("error, el dato es invalido");
             }
         } while (opcion != 0);
     }
@@ -146,7 +174,13 @@ public class Menu {
             System.out.println("9. Bloquear habitacion");
             System.out.println("10. Habilitar habitacion");
             System.out.println("0. Cerrar sesión");
-            opcion = Integer.parseInt(sc.nextLine());
+            try {
+                opcion = sc.nextInt();
+            } catch (InputMismatchException e){
+                opcion = -1;
+            } finally {
+                sc.nextLine();
+            }
 
             switch (opcion) {
                 case 1:
@@ -157,15 +191,27 @@ public class Menu {
                     break;
                 case 2:
                     System.out.println("introduzca id de la reserva: ");
-                    int id = sc.nextInt();
-                    Reserva reserva = hotel.buscarReserva(id);
-                    r.realizarCheckInRec(reserva);
+                    try {
+                        int id = sc.nextInt();
+                        Reserva reserva = hotel.buscarReserva(id);
+                        r.realizarCheckInRec(reserva);
+                    } catch (InputMismatchException e){
+                        System.out.println("error, dato invalido");
+                    } finally {
+                        sc.nextLine();
+                    }
                     break;
                 case 3:
                     System.out.println("introduzca el id de la ocupacion: ");
-                    int idOcupacion = sc.nextInt();
-                    Ocupacion ocupacion = hotel.buscarOcupacion(idOcupacion);
-                    r.realizarCheckOutRec(ocupacion);
+                    try {
+                        int idOcupacion = sc.nextInt();
+                        Ocupacion ocupacion = hotel.buscarOcupacion(idOcupacion);
+                        r.realizarCheckOutRec(ocupacion);
+                    } catch (InputMismatchException e){
+                        System.out.println("error, dato invalido");
+                    } finally {
+                        sc.nextLine();
+                    }
                     break;
                 case 4:
                     r.consultarHabitaciones();
@@ -181,46 +227,66 @@ public class Menu {
                     break;
                 case 8:
                     System.out.println("Ingresar numero habitacion a consultar: ");
-                    int nroHabitacion = Integer.parseInt(sc.nextLine());
-                    System.out.println("Ingresar fecha de entrada: ");
-                    int anio1 = Integer.parseInt(sc.nextLine());
-                    System.out.println(" / ");
-                    int mes1 = Integer.parseInt(sc.nextLine());
-                    System.out.println(" / ");
-                    int dia1 = Integer.parseInt(sc.nextLine());
+                    try {
+                        int nroHabitacion = sc.nextInt();
+                        System.out.println("Ingresar fecha de entrada: ");
+                        int anio1 = sc.nextInt();
+                        System.out.println(" / ");
+                        int mes1 = sc.nextInt();
+                        System.out.println(" / ");
+                        int dia1 = sc.nextInt();
 
-                    LocalDate diaEntrada = LocalDate.of(anio1, mes1, dia1);
 
-                    System.out.println("Ingresar fecha de salida: ");
-                    int anio2 = Integer.parseInt(sc.nextLine());
-                    System.out.println(" / ");
-                    int mes2 = Integer.parseInt(sc.nextLine());
-                    System.out.println(" / ");
-                    int dia2 = Integer.parseInt(sc.nextLine());
+                        LocalDate diaEntrada = LocalDate.of(anio1, mes1, dia1);
 
-                    LocalDate diaSalida = LocalDate.of(anio2, mes2, dia2);
+                        System.out.println("Ingresar fecha de salida: ");
+                        int anio2 = sc.nextInt();
+                        System.out.println(" / ");
+                        int mes2 = sc.nextInt();
+                        System.out.println(" / ");
+                        int dia2 = sc.nextInt();
 
-                    r.consultarDisponibilidad(nroHabitacion, diaEntrada, diaSalida);
+                        LocalDate diaSalida = LocalDate.of(anio2, mes2, dia2);
+
+                        r.consultarDisponibilidad(nroHabitacion, diaEntrada, diaSalida);
+                    } catch (InputMismatchException e){
+                        System.out.println("error, dato invalido");
+                    }
                     break;
                 case 9:
                     int nroHabitacion1;
                     String motivo;
                     System.out.println("Ingresar numero de habitacion a bloquear: ");
-                    nroHabitacion1 = Integer.parseInt(sc.nextLine());
-                    System.out.println("Ingresar motivo de bloqueo: ");
-                    motivo = sc.nextLine();
-                    r.bloquearHabitacion(nroHabitacion1, motivo);
+                    try {
+                        nroHabitacion1 = sc.nextInt();
+                        sc.nextLine();
+                        System.out.println("Ingresar motivo de bloqueo: ");
+                        motivo = sc.nextLine();
+                        r.bloquearHabitacion(nroHabitacion1, motivo);
+                    } catch (InputMismatchException e){
+                        System.out.println("error, dato invalido");
+                    } finally {
+                        sc.nextLine();
+                    }
                     break;
                 case 10:
                     int nroHabitacion2;
                     System.out.println("Ingresar numero de habitacion a habilitar: ");
-                    nroHabitacion2 = Integer.parseInt(sc.nextLine());
-                    r.habilitarHabitacion(nroHabitacion2);
+                    try {
+                        nroHabitacion2 = sc.nextInt();
+                        r.habilitarHabitacion(nroHabitacion2);
+                    } catch (InputMismatchException e){
+                        System.out.println("error, dato invalido");
+                    } finally {
+                        sc.nextLine();
+                    }
                     break;
                 case 0:
                     r.cerrarSesion();
                     System.out.println("Saliendo...");
                     break;
+                default:
+                    System.out.println("error, el dato es invalido");
             }
         } while (opcion != 0);
     }
@@ -236,7 +302,11 @@ public class Menu {
             System.out.println("3. Eliminar estadia.");
             System.out.println("4. Mostrar historial.");
             System.out.println("0. Salir.");
-            opcion = Integer.parseInt(sc.nextLine());
+            try {
+                opcion = sc.nextInt();
+            } catch (InputMismatchException e){
+                opcion = -1;
+            }
 
             switch (opcion) {
                 case 1:
