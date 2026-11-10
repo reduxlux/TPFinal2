@@ -12,15 +12,6 @@ public class Menu {
         this.hotel = hotel;
     }
 
-    /// GETTER Y SETTER?
-    public int getOpcion() {
-        return opcion;
-    }
-
-    public void setOpcion(int opcion) {
-        this.opcion = opcion;
-    }
-
     /// MENU LOGIN
     public void menuPrincipal() {
         String usuario;
@@ -71,7 +62,6 @@ public class Menu {
     /// MENU ADMIN
     public void menuAdmin(Administrador a) {
         int opcion;
-        Scanner sc = new Scanner(System.in);
         do {
             System.out.println("=== MENU ADMIN ===");
             System.out.println("1. Crear usuario.");
@@ -130,7 +120,6 @@ public class Menu {
     /// MENU RECEPCION
     public void menuRecepcion(Recepcionista r) {
         int opcion;
-        Scanner sc = new Scanner(System.in);
         do {
             System.out.println("\n=== MENÚ RECEPCIONISTA ===");
             System.out.println("1. Realizar reserva");
@@ -225,8 +214,6 @@ public class Menu {
 
     public void menuPasajero(Pasajero p) {
         int opcion;
-        Scanner sc = new Scanner(System.in);
-
         do {
             System.out.println("=== MENU PASAJEROS ===");
             System.out.println("1. Agregar estadia.");
