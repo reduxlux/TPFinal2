@@ -22,6 +22,15 @@ public abstract class Usuario implements Autenticable {
         this.sesionIniciada = false;
     }
 
+    public Usuario(int id, String usuario, String contrasenia, String nombre, Hotel hotel) {
+        this.id = id;
+        this.usuario = usuario;
+        this.contrasenia = contrasenia;
+        this.nombre = nombre;
+        this.sesionIniciada = false;
+        this.hotel = hotel;
+    }
+
     //getters
 
 

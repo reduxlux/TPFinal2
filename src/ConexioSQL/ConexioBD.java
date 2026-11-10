@@ -14,7 +14,7 @@ public class ConexioBD {
 
     public static void crearBaseDeDatos()
     {
-        String sql = "create database if not exists" + BD;
+        String sql = "create database if not exists " + BD;
 
         try(Connection conexion = DriverManager.getConnection(URL, USUARIO, PASSWORD);
         Statement st = conexion.createStatement()){
