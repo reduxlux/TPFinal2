@@ -85,6 +85,28 @@ public class HotelDAO {
 
             st.executeUpdate(sqlOcupaciones);
 
+            // Tabla administradores
+            String sqlAdministradores = """
+               CREATE TABLE IF NOT EXISTS administradores (
+               id INT PRIMARY KEY,
+               nombre VARCHAR(100) NOT NULL,
+               usuario VARCHAR(100) NOT NULL,
+               contrasenia VARCHAR(100) NOT NULL
+               )
+               """;
+
+            st.executeUpdate(sqlAdministradores);
+
+            // Tabla recepcionistas
+            String sqlRecepcionistas = """
+               CREATE TABLE IF NOT EXISTS recepcionistas (
+               id INT PRIMARY KEY,
+               nombre VARCHAR(100) NOT NULL,
+               usuario VARCHAR(100) NOT NULL,
+               contrasenia VARCHAR(100) NOT NULL
+               )
+               """;
+
             System.out.println("Tablas creadas correctamente");
         }
     }
@@ -212,6 +234,62 @@ public class HotelDAO {
                 ps.setDate(4,
                         Date.valueOf(o.getFechaCheckOut()));
             }
+
+            ps.executeUpdate();
+        }
+    }
+
+    // GUARDAR ADMINISTRADOR
+    public static void guardarAdministrador(Administrador a) throws SQLException{
+        String sql = """
+        INSERT INTO administradores 
+        (id, nombre, usuario, contrasenia)
+        VALUES (?, ?, ?, ?)
+        
+        ON DUPLICATE KEY UPDATE
+            nombre = VALUES(nombre),
+            usuario = VALUES(usuario),
+            contrasenia = VALUES(contrasenia)
+        """;
+
+        try (Connection cn = ConexioBD.conectar();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, a.getId());
+
+            ps.setString(2, a.getNombre());
+
+            ps.setString(3, a.getUsuario());
+
+            ps.setString(4, a.getContrasenia());
+
+            ps.executeUpdate();
+        }
+    }
+
+    // GUARDAR RECEPCIONISTA
+    public static void guardarRecepcionista(Recepcionista r) throws SQLException{
+        String sql = """
+        INSERT INTO recepcionistas 
+        (id, nombre, usuario, contrasenia)
+        VALUES (?, ?, ?, ?)
+        
+        ON DUPLICATE KEY UPDATE
+            nombre = VALUES(nombre),
+            usuario = VALUES(usuario),
+            contrasenia = VALUES(contrasenia)
+        """;
+
+        try (Connection cn = ConexioBD.conectar();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, r.getId());
+
+            ps.setString(2, r.getNombre());
+
+            ps.setString(3, r.getUsuario());
+
+            ps.setString(4, r.getContrasenia());
 
             ps.executeUpdate();
         }
