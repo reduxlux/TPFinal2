@@ -210,7 +210,6 @@ public final class Hotel {
         return null;
     }
 
-    /// RESERVAS
 
     public void crearReserva(Pasajero pasajero) {
         System.out.println("Introduzca el año de la estadía: ");

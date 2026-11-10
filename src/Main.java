@@ -1,19 +1,13 @@
+//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+void main() {
+  //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
+  // to see how IntelliJ IDEA suggests fixing it.
+  IO.println(String.format("Hello and welcome!"));
 
-import clases.*;
-
-public class Main {
-    public static void main(String[] args) {
-        Hotel hotel = new Hotel("SONUS");
-        Menu menu = new Menu(hotel);
-        Administrador administrador = new Administrador(hotel, "A", "123", "Carlos");
-        Recepcionista recepcionista = new Recepcionista(hotel, "R", "321", "Jenny");
-        Pasajero pasajero = new Pasajero("Pablo", "123", "321", "1231", hotel);
-        hotel.agregarAdministrador(administrador);
-        hotel.agregarRecepcionista(recepcionista);
-        hotel.registrarPasajeroHotel(pasajero);
-        // Falta conectar el hotel con el menú
-        // y registrar los usuarios iniciales.
-
-        menu.menuPrincipal();
-    }
+  for (int i = 1; i <= 5; i++) {
+    //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
+    // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
+    IO.println("i = " + i);
+  }
 }
