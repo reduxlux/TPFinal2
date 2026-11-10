@@ -11,6 +11,10 @@ public class Administrador extends Usuario {
         super(hotel, usuario, contrasenia, nombre);
     }
 
+    public Administrador(int id, String usuario, String contrasenia, String nombre, Hotel hotel) {
+        super(id, usuario, contrasenia, nombre, hotel);
+    }
+
     public boolean agregarAdministrador(Administrador nuevoAdministrador) {
         return super.getHotel().agregarAdministrador(nuevoAdministrador);
     }

@@ -442,5 +442,51 @@ public class HotelDAO {
             }
         }
     }
+
+    private static void cargarAdministradores(Hotel hotel)
+            throws SQLException{
+        String sql = "SELECT * FROM administradores ORDER BY id";
+        try (Connection cn = ConexioBD.conectar();
+             PreparedStatement ps = cn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()){
+                int id = rs.getInt("id");
+
+                String nombre = rs.getString("nombre");
+
+                String usuario = rs.getString("usuario");
+
+                String contrasenia = rs.getString("contrasenia");
+
+                Administrador a = new Administrador(id, usuario, contrasenia, nombre, hotel);
+
+                hotel.agregarAdministrador(a);
+            }
+        }
+    }
+
+    private static void cargarRecepcionistas(Hotel hotel)
+            throws SQLException{
+        String sql = "SELECT * FROM recepcionistas ORDER BY id";
+        try (Connection cn = ConexioBD.conectar();
+             PreparedStatement ps = cn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()){
+                int id = rs.getInt("id");
+
+                String nombre = rs.getString("nombre");
+
+                String usuario = rs.getString("usuario");
+
+                String contrasenia = rs.getString("contrasenia");
+
+                Recepcionista r = new Recepcionista(id, usuario, contrasenia, nombre, hotel);
+
+                hotel.agregarRecepcionista(r);
+            }
+        }
+    }
 }
 
