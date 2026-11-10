@@ -183,7 +183,7 @@ public class HotelDAO {
     }
 
     // GUARDAR OCUPACION
-    public static void guardarOcupacion(Ocupacion o)
+    public static void guardarOcupacion(Estadia o)
             throws SQLException {
 
         String sql = """
@@ -350,7 +350,7 @@ public class HotelDAO {
 
                 Date salida = rs.getDate("fecha_check_out");
 
-                Ocupacion o = new Ocupacion(
+                Estadia o = new Estadia(
                         p,
                         h,
                         rs.getDate("fecha_check_in").toLocalDate(),
@@ -359,7 +359,7 @@ public class HotelDAO {
                                 : salida.toLocalDate()
                 );
 
-                hotel.agregarOcupacion(o);
+                hotel.agregarEstadia(o);
                 p.agregarEstadia(o);
             }
         }

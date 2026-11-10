@@ -1,9 +1,7 @@
 package clases;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.Scanner;
-import Enum.ETipoHabitacion;
 
 public class Menu {
     private int opcion;
@@ -164,8 +162,8 @@ public class Menu {
                 case 3:
                     System.out.println("introduzca el id de la ocupacion: ");
                     int idOcupacion = sc.nextInt();
-                    Ocupacion ocupacion = hotel.buscarOcupacion(idOcupacion);
-                    r.realizarCheckOutRec(ocupacion);
+                    Estadia estadia = hotel.buscarEstadia(idOcupacion);
+                    r.realizarCheckOutRec(estadia);
                     break;
                 case 4:
                     r.consultarHabitaciones();

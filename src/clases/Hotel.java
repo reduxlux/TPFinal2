@@ -16,7 +16,7 @@ public final class Hotel {
 
     private HashMap<Integer, Habitacion> habitaciones;
     private RepoArr<Reserva> reservas;
-    private RepoArr<Ocupacion> ocupaciones;
+    private RepoArr<Estadia> estadias;
     private RepoMap<String, Pasajero> pasajeros;
     private RepoMap<Integer, Administrador> administradores;
     private RepoMap<Integer, Recepcionista> recepcionistas;
@@ -26,7 +26,7 @@ public final class Hotel {
 
         this.habitaciones = new HashMap<>();
         this.reservas = new RepoArr<>();
-        this.ocupaciones = new RepoArr<>();
+        this.estadias = new RepoArr<>();
         this.administradores = new RepoMap<>();
         this.recepcionistas = new RepoMap<>();
         this.pasajeros = new RepoMap<>();
@@ -46,8 +46,8 @@ public final class Hotel {
         return reservas;
     }
 
-    public RepoArr<Ocupacion> getOcupaciones() {
-        return ocupaciones;
+    public RepoArr<Estadia> getEstadias() {
+        return estadias;
     }
 
     public RepoMap<String, Pasajero> getPasajeros() {
@@ -76,8 +76,8 @@ public final class Hotel {
         this.reservas = reservas;
     }
 
-    public void setOcupaciones(RepoArr<Ocupacion> ocupaciones) {
-        this.ocupaciones = ocupaciones;
+    public void setEstadias(RepoArr<Estadia> estadias) {
+        this.estadias = estadias;
     }
 
     public void setPasajeros(RepoMap<String, Pasajero> pasajeros) {
@@ -105,7 +105,7 @@ public final class Hotel {
     public void eliminarEstadia() {
         int x = 1;
         Scanner sc = new Scanner(System.in);
-        System.out.println("que estadia desea eliminar: 1: cancelar\n");
+        System.out.println("que estadia desea eliminar: 0: cancelar\n");
         for (Reserva reserva : reservas) {
             if (reserva.getFechaEntrada().isAfter(LocalDate.now())) {
                 System.out.println(x++ + ": " + reserva.toString());
@@ -119,7 +119,7 @@ public final class Hotel {
             while (it.hasNext()) {
                 if (it.next().getFechaEntrada().isAfter(LocalDate.now())) {
                     contador++;
-                    if (contador == x) {
+                    if (contador == eleccion) {
                         it.remove();
                         System.out.println("estadia eliminada correctamente\n");
                         break;
@@ -129,18 +129,18 @@ public final class Hotel {
         }
     }
 
-    public Habitacion obtenerHabitacionActual(String dni) {
+    public Habitacion obtenerHabitacionActualDelPasajero(String dni) {
 
         if (dni == null) {
             return null;
         }
 
-        for (Ocupacion ocupacion : ocupaciones) {
+        for (Estadia estadia : estadias) {
 
-            if (ocupacion.getPasajero().getDni().equals(dni)
-                    && ocupacion.getFechaCheckOut() == null) {
+            if (estadia.getPasajero().getDni().equals(dni)
+                    && estadia.getFechaCheckOut() == null) {
 
-                return ocupacion.getHabitacion();
+                return estadia.getHabitacion();
             }
         }
 
@@ -148,23 +148,23 @@ public final class Hotel {
     }
 
 
-    public Ocupacion obtenerOcupacionActual(String dni) {
+    public Estadia obtenerEstadiaActual(String dni) {
         if (dni == null) {
             return null;
         }
 
-        for (Ocupacion ocupacion : ocupaciones) {
-            if (ocupacion.getPasajero().getDni().equals(dni)
-                    && ocupacion.getFechaCheckOut() == null) {
-                return ocupacion;
+        for (Estadia estadia : estadias) {
+            if (estadia.getPasajero().getDni().equals(dni)
+                    && estadia.getFechaCheckOut() == null) {
+                return estadia;
             }
         }
 
         return null;
     }
 
-    public void agregarOcupacion(Ocupacion ocupacion) {
-        ocupaciones.agregar(ocupacion);
+    public void agregarEstadia(Estadia estadia) {
+        estadias.agregar(estadia);
     }
 
     /// ADMINISTRADORES
@@ -201,10 +201,10 @@ public final class Hotel {
         return pasajeros.obtener(dni);
     }
 
-    public Ocupacion buscarOcupacion(int id){
-        for(Ocupacion ocupacion: ocupaciones){
-            if(ocupacion.getId() == id){
-                return ocupacion;
+    public Estadia buscarEstadia(int id){
+        for(Estadia estadia : estadias){
+            if(estadia.getId() == id){
+                return estadia;
             }
         }
         return null;
@@ -314,15 +314,15 @@ public final class Hotel {
         }
 
 
-        for (Ocupacion ocupacion : ocupaciones) {
-            if (ocupacion.estaActiva()
-                    && ocupacion.getHabitacion().getNumero()
+        for (Estadia estadia : estadias) {
+            if (estadia.estaActiva()
+                    && estadia.getHabitacion().getNumero()
                     == habitacion.getNumero()) {
                 throw new ExcepcionPropia("la habitacion ya esta ocupada");
             }
         }
 
-        Ocupacion nuevaOcupacion = new Ocupacion(
+        Estadia nuevaEstadia = new Estadia(
                 reserva.getPasajero(),
                 habitacion,
                 LocalDate.now(),
@@ -330,31 +330,31 @@ public final class Hotel {
         );
 
         //guardamos la ocupacion al historial del pasajero
-        if (!reserva.getPasajero().agregarEstadia(nuevaOcupacion)) {
+        if (!reserva.getPasajero().agregarEstadia(nuevaEstadia)) {
             throw new ExcepcionPropia("No se pudo registrar la estadía");
         }
 
         //agregamos la ocupacion al repositorio del hotel
-        ocupaciones.agregar(nuevaOcupacion);
+        estadias.agregar(nuevaEstadia);
 
         habitacion.ocupar();
 
         return true;
     }
 
-    public boolean realizarCheckOutHotel(Ocupacion ocupacion) throws ExcepcionPropia{
+    public boolean realizarCheckOutHotel(Estadia estadia) throws ExcepcionPropia{
 
-        if (ocupacion == null) {
+        if (estadia == null) {
             throw new ExcepcionPropia("La ocupacion no existe");
         }
 
-        if (!ocupacion.estaActiva()) {
+        if (!estadia.estaActiva()) {
             throw new ExcepcionPropia("Esta ocupacion ya finalizo");
         }
 
-        ocupacion.realizarCheckOut(LocalDate.now());
+        estadia.realizarCheckOut(LocalDate.now());
 
-        ocupacion.getHabitacion().habilitar();
+        estadia.getHabitacion().habilitar();
 
         return true;
     }
@@ -432,13 +432,13 @@ public final class Hotel {
 
     public void listarHabitacionesOcupadas() {
         System.out.println("\nHabitaciones ocupadas:");
-        for (Ocupacion ocupacion : ocupaciones) {
-            if (ocupacion.estaActiva()) {
+        for (Estadia estadia : estadias) {
+            if (estadia.estaActiva()) {
                 System.out.println("clases.Habitacion: " +
-                        ocupacion.getHabitacion().getNumero());
+                        estadia.getHabitacion().getNumero());
                 System.out.println("clases.Pasajero: " +
-                        ocupacion.getPasajero().getNombre());
-                System.out.println("Check-in: " + ocupacion.getFechaCheckIn());
+                        estadia.getPasajero().getNombre());
+                System.out.println("Check-in: " + estadia.getFechaCheckIn());
                 System.out.println("---");
             }
         }

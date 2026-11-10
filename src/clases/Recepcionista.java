@@ -18,8 +18,8 @@ public class Recepcionista extends Usuario {
         super.getHotel().realizarCheckInHotel(reserva);
     }
 
-    public void realizarCheckOutRec(Ocupacion ocupacion) {
-        super.getHotel().realizarCheckOutHotel(ocupacion);
+    public void realizarCheckOutRec(Estadia estadia) {
+        super.getHotel().realizarCheckOutHotel(estadia);
     }
 
     public void consultarHabitaciones() {

@@ -3,7 +3,7 @@ package clases;
 import java.time.LocalDate;
 import java.util.Objects;
 /// INFORMACION DE HABITACION OCUPADA
-public class Ocupacion {
+public class Estadia {
     private static int contador = 0;
     private int id;
     private Pasajero pasajero;
@@ -11,8 +11,8 @@ public class Ocupacion {
     private LocalDate fechaCheckIn;
     private LocalDate fechaCheckOut;
 
-    public Ocupacion(Pasajero pasajero, Habitacion habitacion,
-                     LocalDate fechaCheckIn, LocalDate fechaCheckOut) {
+    public Estadia(Pasajero pasajero, Habitacion habitacion,
+                   LocalDate fechaCheckIn, LocalDate fechaCheckOut) {
         id = contador++;
         this.pasajero = pasajero;
         this.habitacion = habitacion;
@@ -69,12 +69,24 @@ public class Ocupacion {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Ocupacion ocupacion = (Ocupacion) o;
-        return Objects.equals(pasajero, ocupacion.pasajero) && Objects.equals(habitacion, ocupacion.habitacion) && Objects.equals(fechaCheckIn, ocupacion.fechaCheckIn);
+        Estadia estadia = (Estadia) o;
+        return Objects.equals(pasajero, estadia.pasajero) && Objects.equals(habitacion, estadia.habitacion) && Objects.equals(fechaCheckIn, estadia.fechaCheckIn);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(pasajero, habitacion, fechaCheckIn);
+    }
+
+    ///toString
+    @Override
+    public String toString() {
+        return "Ocupacion{" +
+                "id=" + id +
+                ", pasajero=" + pasajero +
+                ", habitacion=" + habitacion +
+                ", fechaCheckIn=" + fechaCheckIn +
+                ", fechaCheckOut=" + fechaCheckOut +
+                '}';
     }
 }

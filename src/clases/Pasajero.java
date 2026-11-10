@@ -1,12 +1,6 @@
 package clases;
 
-import Excepciones.ExcepcionPropia;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Iterator;
 import java.util.Objects;
-import java.util.Scanner;
 
 public class Pasajero {
 
@@ -16,7 +10,7 @@ public class Pasajero {
     private String domicilioOrigen;
     private Hotel hotel;
 
-    private RepoArr<Ocupacion> historial;
+    private RepoArr<Estadia> historial;
 
     public Pasajero(String nombre, String dni, String origen, String domicilioOrigen, Hotel hotel) {
         this.nombre = nombre;
@@ -61,26 +55,26 @@ public class Pasajero {
         this.domicilioOrigen = domicilioOrigen;
     }
 
-    public RepoArr<Ocupacion> getHistorial() {
+    public RepoArr<Estadia> getHistorial() {
         return historial;
     }
 
-    public void setHistorial(RepoArr<Ocupacion> historial) {
+    public void setHistorial(RepoArr<Estadia> historial) {
         this.historial = historial;
     }
 
     /// METODOS
 
-    public boolean agregarEstadia(Ocupacion ocupacion) {
-        if (ocupacion == null || historial.contiene(ocupacion)) {
+    public boolean agregarEstadia(Estadia estadia) {
+        if (estadia == null || historial.contiene(estadia)) {
             return false;
         }
 
-        if (!this.equals(ocupacion.getPasajero())) {
+        if (!this.equals(estadia.getPasajero())) {
             return false;
         }
 
-        historial.agregar(ocupacion);
+        historial.agregar(estadia);
         return true;
     }
 
@@ -91,8 +85,8 @@ public class Pasajero {
         if (historial.estaVacio()) {
             return "El pasajero no tiene estadias registradas";
         }
-        for (Ocupacion ocupacion : historial) {
-            mensaje.append(ocupacion).append("\n");
+        for (Estadia estadia : historial) {
+            mensaje.append(estadia).append("\n");
         }
 
         return mensaje.toString();
@@ -107,7 +101,7 @@ public class Pasajero {
     }
 
     public void mostrarEstadiaActual(){
-         Ocupacion actual = hotel.obtenerOcupacionActual(dni);
+         Estadia actual = hotel.obtenerEstadiaActual(dni);
         System.out.println("su estadia actual es: " + actual.toString());
     }
 
@@ -116,16 +110,16 @@ public class Pasajero {
     }
 
 
-    public Ocupacion obtenerUltimaEstadia() {
+    public Estadia obtenerUltimaEstadia() {
 
-        Ocupacion ultima = null;
+        Estadia ultima = null;
 
-        for (Ocupacion ocupacion : historial) {
+        for (Estadia estadia : historial) {
 
             if (ultima == null ||
-                    ocupacion.getFechaCheckIn().isAfter(ultima.getFechaCheckIn())) {
+                    estadia.getFechaCheckIn().isAfter(ultima.getFechaCheckIn())) {
 
-                ultima = ocupacion;
+                ultima = estadia;
             }
         }
 

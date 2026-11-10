@@ -100,5 +100,16 @@ public class Reserva {
         return Objects.hashCode(id);
     }
 
-
+    ///toString
+    @Override
+    public String toString() {
+        return "Reserva{" +
+                "id=" + id +
+                ", pasajero=" + pasajero +
+                ", habitacion=" + habitacion +
+                ", fechaEntrada=" + fechaEntrada +
+                ", fechaSalida=" + fechaSalida +
+                ", estado=" + estado +
+                '}';
+    }
 }
