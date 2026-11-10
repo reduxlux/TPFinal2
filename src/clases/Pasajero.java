@@ -21,6 +21,11 @@ public class Pasajero {
         this.hotel = hotel;
     }
 
+    public Pasajero(String nombre, String dni) {
+        this.nombre = nombre;
+        this.dni = dni;
+    }
+
     /// GETTERS Y SETTERS
 
     public String getNombre() {
@@ -96,17 +101,13 @@ public class Pasajero {
         return historial.cantidad();
     }
 
-    public void crearEstadia(){
-        hotel.crearReserva(this);
-    }
-
-    public void mostrarEstadiaActual(){
-         Estadia actual = hotel.obtenerEstadiaActual(dni);
+    public void mostrarEstadiaActual() {
+        Estadia actual = hotel.obtenerEstadiaActual(dni);
         System.out.println("su estadia actual es: " + actual.toString());
     }
 
-    public void eliminarEstadia(){
-        hotel.eliminarEstadia();
+    public void eliminarEstadia() {
+        hotel.eliminarReserva();
     }
 
 

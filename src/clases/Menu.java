@@ -8,7 +8,7 @@ public class Menu {
     Scanner sc = new Scanner(System.in);
     private Hotel hotel;
 
-    public Menu (Hotel hotel) {
+    public Menu(Hotel hotel) {
         this.hotel = hotel;
     }
 
@@ -17,7 +17,7 @@ public class Menu {
         String usuario;
         String contrasenia;
         do {
-            System.out.println("=== MENU PRINCIPAL ===");
+            System.out.println("=== MENU PRINCIPAL ===" + " HOTEL " + hotel.getNombre());
             System.out.println("1. Ingresar usuario.");
             System.out.println("2. Ingresar pasajero.");
             System.out.println("0. Salir del programa.");
@@ -46,10 +46,10 @@ public class Menu {
                     String nombrePasajero = sc.nextLine();
                     System.out.println("Ingresar DNI: ");
                     String dniPasajero = sc.nextLine();
-                    if (hotel.getPasajeros().contiene(dniPasajero)
-                    && !nombrePasajero.isEmpty()) {
-                        Pasajero p;
-                        //menuPasajero(p);
+                    if (!nombrePasajero.isBlank() && !dniPasajero.isBlank()) {
+                        Pasajero p = hotel.buscarPasajero(dniPasajero);
+                        System.out.println("123213");
+                        menuPasajero(p);
                     }
                     break;
                 case 0:
@@ -93,8 +93,8 @@ public class Menu {
                     break;
                 case 2:
                     System.out.println("Introduzca el id del recepcionista: ");
-                    int id = sc.nextInt();
-                    if(a.eliminarRecepcionista(id)){
+                    int id = Integer.parseInt(sc.nextLine());
+                    if (a.eliminarRecepcionista(id)) {
                         System.out.println("recepcionista eliminado correctamente\n");
                     } else {
                         System.out.println("no se encontro el recepcionista\n");
@@ -151,7 +151,7 @@ public class Menu {
                 case 3:
                     System.out.println("introduzca el id de la ocupacion: ");
                     int idOcupacion = sc.nextInt();
-                    Estadia estadia = hotel.buscarEstadia(idOcupacion);
+                    Estadia estadia = hotel.buscarEstadiaPasajero(idOcupacion);
                     r.realizarCheckOutRec(estadia);
                     break;
                 case 4:
@@ -169,20 +169,21 @@ public class Menu {
                 case 8:
                     System.out.println("Ingresar numero habitacion a consultar: ");
                     int nroHabitacion = Integer.parseInt(sc.nextLine());
+                    System.out.println("ANIO / MES / DIA");
                     System.out.println("Ingresar fecha de entrada: ");
                     int anio1 = Integer.parseInt(sc.nextLine());
-                    System.out.println(" / ");
+                    System.out.print(" / ");
                     int mes1 = Integer.parseInt(sc.nextLine());
-                    System.out.println(" / ");
+                    System.out.print(" / ");
                     int dia1 = Integer.parseInt(sc.nextLine());
 
                     LocalDate diaEntrada = LocalDate.of(anio1, mes1, dia1);
 
                     System.out.println("Ingresar fecha de salida: ");
                     int anio2 = Integer.parseInt(sc.nextLine());
-                    System.out.println(" / ");
+                    System.out.print(" / ");
                     int mes2 = Integer.parseInt(sc.nextLine());
-                    System.out.println(" / ");
+                    System.out.print(" / ");
                     int dia2 = Integer.parseInt(sc.nextLine());
 
                     LocalDate diaSalida = LocalDate.of(anio2, mes2, dia2);
@@ -216,25 +217,35 @@ public class Menu {
         int opcion;
         do {
             System.out.println("=== MENU PASAJEROS ===");
-            System.out.println("1. Agregar estadia.");
+            System.out.println("1. Agregar reserva.");
             System.out.println("2. Mostrar estadia.");
-            System.out.println("3. Eliminar estadia.");
+            System.out.println("3. Eliminar reserva.");
             System.out.println("4. Mostrar historial.");
+            System.out.println("5. Realizar check-in.");
+            System.out.println("6. Realizar check-out");
             System.out.println("0. Salir.");
             opcion = Integer.parseInt(sc.nextLine());
 
             switch (opcion) {
                 case 1:
-                    p.crearEstadia();
+                    hotel.crearReserva(p);
                     break;
                 case 2:
                     p.mostrarEstadiaActual();
                     break;
                 case 3:
-                    p.eliminarEstadia();
+                    hotel.eliminarReserva();
                     break;
                 case 4:
                     System.out.println(p.mostrarHistorial());
+                    break;
+                case 5:
+                    Reserva r = hotel.buscarReservaPasajero(p.getDni());
+                    hotel.realizarCheckInHotel(r);
+                    break;
+                case 6:
+                    Estadia e = hotel.buscarEstadiaPasajero(p.getDni());
+                    hotel.realizarCheckOutHotel(e);
                     break;
                 case 0:
                     System.out.println("Saliendo...");

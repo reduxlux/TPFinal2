@@ -13,6 +13,7 @@ import java.util.Scanner;
 public final class Hotel {
 
     private String nombre;
+    Scanner sc = new Scanner(System.in);
 
     private HashMap<Integer, Habitacion> habitaciones;
     private RepoArr<Reserva> reservas;
@@ -102,9 +103,8 @@ public final class Hotel {
         return true;
     }
 
-    public void eliminarEstadia() {
+    public void eliminarReserva() {
         int x = 1;
-        Scanner sc = new Scanner(System.in);
         System.out.println("que estadia desea eliminar: 0: cancelar\n");
         for (Reserva reserva : reservas) {
             if (reserva.getFechaEntrada().isAfter(LocalDate.now())) {
@@ -201,7 +201,7 @@ public final class Hotel {
         return pasajeros.obtener(dni);
     }
 
-    public Estadia buscarEstadia(int id){
+    public Estadia buscarEstadiaPasajero(int id){
         for(Estadia estadia : estadias){
             if(estadia.getId() == id){
                 return estadia;
@@ -213,7 +213,6 @@ public final class Hotel {
     /// RESERVAS
 
     public void crearReserva(Pasajero pasajero) {
-        Scanner sc = new Scanner(System.in);
         System.out.println("Introduzca el año de la estadía: ");
         int anio = sc.nextInt();
         if (anio < LocalDateTime.now().getYear()) {
@@ -345,11 +344,11 @@ public final class Hotel {
     public boolean realizarCheckOutHotel(Estadia estadia) throws ExcepcionPropia{
 
         if (estadia == null) {
-            throw new ExcepcionPropia("La ocupacion no existe");
+            throw new ExcepcionPropia("La estadia no existe");
         }
 
         if (!estadia.estaActiva()) {
-            throw new ExcepcionPropia("Esta ocupacion ya finalizo");
+            throw new ExcepcionPropia("Esta estadia ya finalizo");
         }
 
         estadia.realizarCheckOut(LocalDate.now());
@@ -359,9 +358,27 @@ public final class Hotel {
         return true;
     }
 
+    public Estadia buscarEstadiaPasajero(String dni) {
+        for(Estadia estadia : estadias) {
+            if(estadia.getPasajero().getDni().equals(dni)) {
+                return estadia;
+            }
+        }
+        return null;
+    }
+
     public Reserva buscarReserva(int id){
         for(Reserva x: reservas){
             if(x.getId() == id){
+                return x;
+            }
+        }
+        return null;
+    }
+
+    public Reserva buscarReservaPasajero(String dni) {
+        for(Reserva x: reservas){
+            if (x.getPasajero().getDni().equals(dni)) {
                 return x;
             }
         }
@@ -465,7 +482,7 @@ public final class Hotel {
     public boolean consultarDisponibilidad(int numero, LocalDate fechaEntrada, LocalDate fechaSalida) {
         Habitacion habitacion = buscarHabitacion(numero);
         if (habitacion == null) {
-            System.out.println("clases.Habitacion no encontrada");
+            System.out.println("Habitacion no encontrada");
             return false;
         }
         if (fechaEntrada == null || fechaSalida == null || !fechaEntrada.isBefore(fechaSalida)) {
@@ -473,7 +490,7 @@ public final class Hotel {
             return false;
         }
         if (!habitacion.estaDisponible()) {
-            System.out.println("clases.Habitacion no disponible");
+            System.out.println("Habitacion no disponible");
             return false;
         }
         for (Reserva reserva : reservas) {
@@ -487,6 +504,7 @@ public final class Hotel {
                 }
             }
         }
+        System.out.println("Habitacion disponible en esas fechas");
         return true;
     }
 
