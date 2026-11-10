@@ -202,10 +202,10 @@ public class Menu {
                     }
                     break;
                 case 3:
-                    System.out.println("introduzca el id de la ocupacion: ");
+                    System.out.println("introduzca el id de la estadia: ");
                     try {
-                        int idOcupacion = sc.nextInt();
-                        Estadia estadia = hotel.buscarEstadiaPasajero(idOcupacion);
+                        int idEstadia = sc.nextInt();
+                        Estadia estadia = hotel.buscarEstadiaPorId(idEstadia);
                         r.realizarCheckOutRec(estadia);
                     } catch (InputMismatchException e){
                         System.out.println("error, dato invalido");
@@ -290,6 +290,7 @@ public class Menu {
             }
         } while (opcion != 0);
     }
+
 
     public void menuPasajero(Pasajero p) {
         int opcion;

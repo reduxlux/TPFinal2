@@ -201,16 +201,6 @@ public final class Hotel {
         return pasajeros.obtener(dni);
     }
 
-    public Estadia buscarEstadiaPasajero(int id){
-        for(Estadia estadia : estadias){
-            if(estadia.getId() == id){
-                return estadia;
-            }
-        }
-        return null;
-    }
-
-
     public void crearReserva(Pasajero pasajero) {
         System.out.println("Introduzca el año de la estadía: ");
         int anio = sc.nextInt();
@@ -379,6 +369,18 @@ public final class Hotel {
         for(Reserva x: reservas){
             if (x.getPasajero().getDni().equals(dni)) {
                 return x;
+            }
+        }
+        return null;
+    }
+
+    public Estadia buscarEstadiaPorId(int id)
+    {
+        for(Estadia estadia : estadias)
+        {
+            if(estadia.getId() == id)
+            {
+                return estadia;
             }
         }
         return null;
