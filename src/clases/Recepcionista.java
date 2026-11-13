@@ -1,5 +1,7 @@
 package clases;
 
+import Excepciones.FechaInvalidaException;
+
 import java.time.LocalDate;
 
 public class Recepcionista extends Usuario {
@@ -16,11 +18,11 @@ public class Recepcionista extends Usuario {
         super.getHotel().agregarReservaHotel(reserva);
     }
 
-    public void realizarCheckInRec(Reserva reserva) {
+    public void realizarCheckInRec(Reserva reserva) throws FechaInvalidaException{
         super.getHotel().realizarCheckInHotel(reserva);
     }
 
-    public void realizarCheckOutRec(Estadia estadia) {
+    public void realizarCheckOutRec(Estadia estadia) throws FechaInvalidaException{
         super.getHotel().realizarCheckOutHotel(estadia);
     }
 
@@ -52,7 +54,7 @@ public class Recepcionista extends Usuario {
         super.getHotel().habilitarHabitacion(numero);
     }
 
-    public void crearReserva(Pasajero pasajero){
+    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException {
         getHotel().crearReserva(pasajero);
     }
 }

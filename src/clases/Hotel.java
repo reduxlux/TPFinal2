@@ -1,5 +1,5 @@
 package clases;
-import Excepciones.ExcepcionPropia;
+import Excepciones.FechaInvalidaException;
 import Enum.EEstadoReserva;
 
 
@@ -201,27 +201,27 @@ public final class Hotel {
         return pasajeros.obtener(dni);
     }
 
-    public void crearReserva(Pasajero pasajero) {
+    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException{
         System.out.println("Introduzca el año de la estadía: ");
         int anio = sc.nextInt();
         if (anio < LocalDateTime.now().getYear()) {
-            throw new ExcepcionPropia("El año es invalido");
+            throw new FechaInvalidaException("El año es invalido");
         }
         System.out.println("Introduzca el mes: ");
         int mes = sc.nextInt();
         if (mes < 1 || mes > 12) {
-            throw new ExcepcionPropia("El mes es invalido");
+            throw new FechaInvalidaException("El mes es invalido");
         }
         System.out.println("introduzca el día: ");
         int dia = sc.nextInt();
         if (dia < 0 || dia > (LocalDate.of(anio, mes, 1)).
                 lengthOfMonth()) {
-            throw new ExcepcionPropia("el dia es invalido");
+            throw new FechaInvalidaException("el dia es invalido");
         }
         System.out.println("introduzca el mes en el que finaliza la estadia: ");
         int mesfin = sc.nextInt();
         if (mesfin < 1 || mesfin > 12) {
-            throw new ExcepcionPropia("El mes es invalido");
+            throw new FechaInvalidaException("El mes es invalido");
         }
         System.out.println("introduzca el dia en el que finaliza su estadia: ");
         int diafin = sc.nextInt();
@@ -233,7 +233,7 @@ public final class Hotel {
         }
         if (dia < 0 || dia > (LocalDate.of(anio, mes, 1)).
                 lengthOfMonth()) {
-            throw new ExcepcionPropia("el dia es invalido");
+            throw new FechaInvalidaException("el dia es invalido");
         }
 
         LocalDate checkin = LocalDate.of(anio, mes, dia);
@@ -276,29 +276,29 @@ public final class Hotel {
         return true;
     }
 
-    public boolean realizarCheckInHotel(Reserva reserva) throws ExcepcionPropia {
+    public boolean realizarCheckInHotel(Reserva reserva) throws FechaInvalidaException {
 
         if (reserva == null) {
-            throw new ExcepcionPropia("reseva no encontrada");
+            throw new FechaInvalidaException("reseva no encontrada");
         }
 
         if (reserva.getEstado() != EEstadoReserva.CONFIRMADA) {
-            throw new ExcepcionPropia("reserva no confirmada");
+            throw new FechaInvalidaException("reserva no confirmada");
         }
 
         if(reserva.getPasajero() == null)
         {
-            throw new ExcepcionPropia("La reserva no tiene pasajero");
+            throw new FechaInvalidaException("La reserva no tiene pasajero");
         }
 
         Habitacion habitacion = reserva.getHabitacion();
 
         if (habitacion == null) {
-            throw new ExcepcionPropia("La reserva no tiene habitación");
+            throw new FechaInvalidaException("La reserva no tiene habitación");
         }
 
         if (!habitacion.estaDisponible()) {
-            throw new ExcepcionPropia("habitacion no disponible");
+            throw new FechaInvalidaException("habitacion no disponible");
         }
 
 
@@ -306,7 +306,7 @@ public final class Hotel {
             if (estadia.estaActiva()
                     && estadia.getHabitacion().getNumero()
                     == habitacion.getNumero()) {
-                throw new ExcepcionPropia("la habitacion ya esta ocupada");
+                throw new FechaInvalidaException("la habitacion ya esta ocupada");
             }
         }
 
@@ -319,7 +319,7 @@ public final class Hotel {
 
         //guardamos la ocupacion al historial del pasajero
         if (!reserva.getPasajero().agregarEstadia(nuevaEstadia)) {
-            throw new ExcepcionPropia("No se pudo registrar la estadía");
+            throw new FechaInvalidaException("No se pudo registrar la estadía");
         }
 
         //agregamos la ocupacion al repositorio del hotel
@@ -330,14 +330,14 @@ public final class Hotel {
         return true;
     }
 
-    public boolean realizarCheckOutHotel(Estadia estadia) throws ExcepcionPropia{
+    public boolean realizarCheckOutHotel(Estadia estadia) throws FechaInvalidaException {
 
         if (estadia == null) {
-            throw new ExcepcionPropia("La estadia no existe");
+            throw new FechaInvalidaException("La estadia no existe");
         }
 
         if (!estadia.estaActiva()) {
-            throw new ExcepcionPropia("Esta estadia ya finalizo");
+            throw new FechaInvalidaException("Esta estadia ya finalizo");
         }
 
         estadia.realizarCheckOut(LocalDate.now());

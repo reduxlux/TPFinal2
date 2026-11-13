@@ -5,6 +5,7 @@ import java.time.Month;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import Enum.ETipoHabitacion;
+import Excepciones.FechaInvalidaException;
 
 public class Menu {
     private int opcion;
@@ -187,7 +188,11 @@ public class Menu {
                     System.out.println("introduzca dni del pasajero que desea reservar: ");
                     String dni = sc.nextLine();
                     Pasajero pasajero = hotel.buscarPasajero(dni);
-                    r.crearReserva(pasajero);
+                    try {
+                        r.crearReserva(pasajero);
+                    } catch (FechaInvalidaException e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
                 case 2:
                     System.out.println("introduzca id de la reserva: ");
@@ -197,6 +202,8 @@ public class Menu {
                         r.realizarCheckInRec(reserva);
                     } catch (InputMismatchException e){
                         System.out.println("error, dato invalido");
+                    } catch (FechaInvalidaException e) {
+                        throw new RuntimeException(e);
                     } finally {
                         sc.nextLine();
                     }
@@ -209,6 +216,8 @@ public class Menu {
                         r.realizarCheckOutRec(estadia);
                     } catch (InputMismatchException e){
                         System.out.println("error, dato invalido");
+                    } catch (FechaInvalidaException e) {
+                        throw new RuntimeException(e);
                     } finally {
                         sc.nextLine();
                     }
@@ -307,7 +316,11 @@ public class Menu {
 
             switch (opcion) {
                 case 1:
-                    hotel.crearReserva(p);
+                    try {
+                        hotel.crearReserva(p);
+                    } catch (FechaInvalidaException e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
                 case 2:
                     p.mostrarEstadiaActual();
@@ -320,11 +333,19 @@ public class Menu {
                     break;
                 case 5:
                     Reserva r = hotel.buscarReservaPasajero(p.getDni());
-                    hotel.realizarCheckInHotel(r);
+                    try {
+                        hotel.realizarCheckInHotel(r);
+                    } catch (FechaInvalidaException e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
                 case 6:
                     Estadia e = hotel.buscarEstadiaPasajero(p.getDni());
-                    hotel.realizarCheckOutHotel(e);
+                    try {
+                        hotel.realizarCheckOutHotel(e);
+                    } catch (FechaInvalidaException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     break;
                 case 0:
                     System.out.println("Saliendo...");
