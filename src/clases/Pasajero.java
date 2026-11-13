@@ -90,6 +90,7 @@ public class Pasajero {
         if (historial.estaVacio()) {
             return "El pasajero no tiene estadias registradas";
         }
+
         for (Estadia estadia : historial) {
             mensaje.append(estadia).append("\n");
         }

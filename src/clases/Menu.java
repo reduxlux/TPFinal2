@@ -26,7 +26,7 @@ public class Menu {
             System.out.println("2. Ingresar pasajero.");
             System.out.println("0. Salir del programa.");
             try {
-                opcion = sc.nextInt();
+                opcion = Integer.parseInt(sc.nextLine());
             } catch (InputMismatchException e){
                 opcion = -1;
             } finally {
@@ -67,6 +67,7 @@ public class Menu {
                     break;
                 default:
                     System.out.println("error, el dato introducido es invalido");
+
             }
         } while (opcion != 0);
     }
@@ -83,7 +84,7 @@ public class Menu {
             System.out.println("4. Eliminar habitacion.");
             System.out.println("0. Cerrar sesion.");
             try {
-                opcion = sc.nextInt();
+                opcion = Integer.parseInt(sc.nextLine());
             } catch (InputMismatchException e){
                 opcion = -1;
             } finally {

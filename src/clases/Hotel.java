@@ -1,9 +1,6 @@
 package clases;
 import Excepciones.FechaInvalidaException;
 import Enum.EEstadoReserva;
-
-
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -104,29 +101,28 @@ public final class Hotel {
     }
 
     public void eliminarReserva() {
-        int x = 1;
-        System.out.println("que estadia desea eliminar: 0: cancelar\n");
-        for (Reserva reserva : reservas) {
-            if (reserva.getFechaEntrada().isAfter(LocalDate.now())) {
-                System.out.println(x++ + ": " + reserva.toString());
+        IO.println("Ingrese el DNI:");
+        String dni = sc.nextLine();
+
+        IO.println(mostrarReservasPorPasajero(dni));
+
+        IO.println("Ingrese la reserva que desea eliminar:");
+        int opcion = Integer.parseInt(sc.nextLine());
+
+        int contador = 1;
+
+        for (Reserva r : reservas) {
+            if (r.getPasajero().getDni().equalsIgnoreCase(dni)) {
+                if (contador == opcion) {
+                    reservas.eliminar(r);
+                    IO.println("Reserva eliminada correctamente");
+                    return;
+                }
+                contador++;
             }
         }
 
-        int eleccion = sc.nextInt();
-        int contador = 1;
-        if (eleccion > 1) {
-            Iterator<Reserva> it = reservas.iterator();
-            while (it.hasNext()) {
-                if (it.next().getFechaEntrada().isAfter(LocalDate.now())) {
-                    contador++;
-                    if (contador == eleccion) {
-                        it.remove();
-                        System.out.println("estadia eliminada correctamente\n");
-                        break;
-                    }
-                }
-            }
-        }
+        IO.println("No se encontró la reserva");
     }
 
     public Habitacion obtenerHabitacionActualDelPasajero(String dni) {
@@ -165,6 +161,22 @@ public final class Hotel {
 
     public void agregarEstadia(Estadia estadia) {
         estadias.agregar(estadia);
+    }
+
+    public String mostrarReservasPorPasajero(String dni) {
+        StringBuilder mensaje = new StringBuilder();
+        int contador = 1;
+
+        for (Reserva r : reservas) {
+            if (r.getPasajero().getDni().equalsIgnoreCase(dni)) {
+                mensaje.append(contador++)
+                        .append("- ")
+                        .append(r)
+                        .append("\n");
+            }
+        }
+
+        return mensaje.toString();
     }
 
     /// ADMINISTRADORES
