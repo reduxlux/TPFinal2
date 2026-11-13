@@ -82,6 +82,8 @@ public class Menu {
             System.out.println("2. Eliminar usuario.");
             System.out.println("3. Crear y agregar habitacion.");
             System.out.println("4. Eliminar habitacion.");
+            System.out.println("5. Realizar backup del hotel a hotel_backup.");
+            System.out.println("6. Restaurar backup del hotel_backup a hotel.");
             System.out.println("0. Cerrar sesion.");
             try {
                 opcion = Integer.parseInt(sc.nextLine());
@@ -147,6 +149,12 @@ public class Menu {
                     } finally {
                         sc.nextLine();
                     }
+                    break;
+                case 5:
+                    a.realizarBackup();
+                    break;
+                case 6:
+                    a.restaurarBackup();
                     break;
                 case 0:
                     a.cerrarSesion();

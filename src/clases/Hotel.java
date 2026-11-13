@@ -1,6 +1,11 @@
 package clases;
-import Excepciones.FechaInvalidaException;
+
+import ConexioSQL.HotelDAO;
+import Excepciones.ExcepcionPropia;
 import Enum.EEstadoReserva;
+
+
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -209,31 +214,31 @@ public final class Hotel {
     }
 
     /// RECEPCiONISTAS
-    public Pasajero buscarPasajero(String dni){
+    public Pasajero buscarPasajero(String dni) {
         return pasajeros.obtener(dni);
     }
 
-    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException{
+    public void crearReserva(Pasajero pasajero) {
         System.out.println("Introduzca el año de la estadía: ");
         int anio = sc.nextInt();
         if (anio < LocalDateTime.now().getYear()) {
-            throw new FechaInvalidaException("El año es invalido");
+            throw new ExcepcionPropia("El año es invalido");
         }
         System.out.println("Introduzca el mes: ");
         int mes = sc.nextInt();
         if (mes < 1 || mes > 12) {
-            throw new FechaInvalidaException("El mes es invalido");
+            throw new ExcepcionPropia("El mes es invalido");
         }
         System.out.println("introduzca el día: ");
         int dia = sc.nextInt();
         if (dia < 0 || dia > (LocalDate.of(anio, mes, 1)).
                 lengthOfMonth()) {
-            throw new FechaInvalidaException("el dia es invalido");
+            throw new ExcepcionPropia("el dia es invalido");
         }
         System.out.println("introduzca el mes en el que finaliza la estadia: ");
         int mesfin = sc.nextInt();
         if (mesfin < 1 || mesfin > 12) {
-            throw new FechaInvalidaException("El mes es invalido");
+            throw new ExcepcionPropia("El mes es invalido");
         }
         System.out.println("introduzca el dia en el que finaliza su estadia: ");
         int diafin = sc.nextInt();
@@ -245,7 +250,7 @@ public final class Hotel {
         }
         if (dia < 0 || dia > (LocalDate.of(anio, mes, 1)).
                 lengthOfMonth()) {
-            throw new FechaInvalidaException("el dia es invalido");
+            throw new ExcepcionPropia("el dia es invalido");
         }
 
         LocalDate checkin = LocalDate.of(anio, mes, dia);
@@ -272,8 +277,7 @@ public final class Hotel {
                 || r.getHabitacion() == null
                 || r.getPasajero() == null
                 || r.getFechaEntrada() == null
-                || r.getFechaSalida() == null)
-        {
+                || r.getFechaSalida() == null) {
             return false;
         }
 
@@ -288,29 +292,28 @@ public final class Hotel {
         return true;
     }
 
-    public boolean realizarCheckInHotel(Reserva reserva) throws FechaInvalidaException {
+    public boolean realizarCheckInHotel(Reserva reserva) throws ExcepcionPropia {
 
         if (reserva == null) {
-            throw new FechaInvalidaException("reseva no encontrada");
+            throw new ExcepcionPropia("reseva no encontrada");
         }
 
         if (reserva.getEstado() != EEstadoReserva.CONFIRMADA) {
-            throw new FechaInvalidaException("reserva no confirmada");
+            throw new ExcepcionPropia("reserva no confirmada");
         }
 
-        if(reserva.getPasajero() == null)
-        {
-            throw new FechaInvalidaException("La reserva no tiene pasajero");
+        if (reserva.getPasajero() == null) {
+            throw new ExcepcionPropia("La reserva no tiene pasajero");
         }
 
         Habitacion habitacion = reserva.getHabitacion();
 
         if (habitacion == null) {
-            throw new FechaInvalidaException("La reserva no tiene habitación");
+            throw new ExcepcionPropia("La reserva no tiene habitación");
         }
 
         if (!habitacion.estaDisponible()) {
-            throw new FechaInvalidaException("habitacion no disponible");
+            throw new ExcepcionPropia("habitacion no disponible");
         }
 
 
@@ -318,7 +321,7 @@ public final class Hotel {
             if (estadia.estaActiva()
                     && estadia.getHabitacion().getNumero()
                     == habitacion.getNumero()) {
-                throw new FechaInvalidaException("la habitacion ya esta ocupada");
+                throw new ExcepcionPropia("la habitacion ya esta ocupada");
             }
         }
 
@@ -331,7 +334,7 @@ public final class Hotel {
 
         //guardamos la ocupacion al historial del pasajero
         if (!reserva.getPasajero().agregarEstadia(nuevaEstadia)) {
-            throw new FechaInvalidaException("No se pudo registrar la estadía");
+            throw new ExcepcionPropia("No se pudo registrar la estadía");
         }
 
         //agregamos la ocupacion al repositorio del hotel
@@ -342,14 +345,14 @@ public final class Hotel {
         return true;
     }
 
-    public boolean realizarCheckOutHotel(Estadia estadia) throws FechaInvalidaException {
+    public boolean realizarCheckOutHotel(Estadia estadia) throws ExcepcionPropia {
 
         if (estadia == null) {
-            throw new FechaInvalidaException("La estadia no existe");
+            throw new ExcepcionPropia("La estadia no existe");
         }
 
         if (!estadia.estaActiva()) {
-            throw new FechaInvalidaException("Esta estadia ya finalizo");
+            throw new ExcepcionPropia("Esta estadia ya finalizo");
         }
 
         estadia.realizarCheckOut(LocalDate.now());
@@ -360,17 +363,17 @@ public final class Hotel {
     }
 
     public Estadia buscarEstadiaPasajero(String dni) {
-        for(Estadia estadia : estadias) {
-            if(estadia.getPasajero().getDni().equals(dni)) {
+        for (Estadia estadia : estadias) {
+            if (estadia.getPasajero().getDni().equals(dni)) {
                 return estadia;
             }
         }
         return null;
     }
 
-    public Reserva buscarReserva(int id){
-        for(Reserva x: reservas){
-            if(x.getId() == id){
+    public Reserva buscarReserva(int id) {
+        for (Reserva x : reservas) {
+            if (x.getId() == id) {
                 return x;
             }
         }
@@ -378,7 +381,7 @@ public final class Hotel {
     }
 
     public Reserva buscarReservaPasajero(String dni) {
-        for(Reserva x: reservas){
+        for (Reserva x : reservas) {
             if (x.getPasajero().getDni().equals(dni)) {
                 return x;
             }
@@ -386,12 +389,9 @@ public final class Hotel {
         return null;
     }
 
-    public Estadia buscarEstadiaPorId(int id)
-    {
-        for(Estadia estadia : estadias)
-        {
-            if(estadia.getId() == id)
-            {
+    public Estadia buscarEstadiaPorId(int id) {
+        for (Estadia estadia : estadias) {
+            if (estadia.getId() == id) {
                 return estadia;
             }
         }
@@ -521,6 +521,105 @@ public final class Hotel {
         return true;
     }
 
+    /// PERSISTENCIA SQL
+    // HABITACION
+    public boolean agregarHabitacionSQL(Habitacion habitacion) {
+        try {
+            HotelDAO.guardarHabitacion(habitacion);
+            System.out.println("Habitación agregada correctamente.");
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error al guardar la habitación: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean eliminarHabitacionSQL(int numeroHabitacion) {
+        try {
+            HotelDAO.eliminarHabitacion(numeroHabitacion);
+            System.out.println("Habitación eliminada.");
+            return true;
+        } catch (SQLException e) {
+            System.out.println("No se pudo eliminar la habitación: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // RESERVA
+    public boolean agregarReservaSQL(Reserva r) {
+        try {
+            HotelDAO.guardarReserva(r);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error al guardar reserva: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean eliminarReservaSQL(int id) {
+        try {
+            HotelDAO.eliminarReserva(id);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar reserva: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // ESTADIA
+    public boolean agregarEstadiaSQL(Estadia estadia) {
+        try {
+            HotelDAO.guardarOcupacion(estadia);
+            estadias.agregar(estadia);
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("Error al guardar ocupación: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // PASAJERO
+    public boolean agregarPasajeroSQL(Pasajero p) {
+        try {
+            HotelDAO.guardarPasajero(p);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error al guardar pasajero: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // USUARIO
+    public boolean agregarAdministradorSQL(Administrador a) {
+        try {
+            HotelDAO.guardarAdministrador(a);
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+    public boolean agregarRecepcionistaSQL(Recepcionista r) {
+        try {
+            HotelDAO.guardarRecepcionista(r);
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+    public boolean eliminarRecepcionistaSQL(int id) {
+        try {
+            HotelDAO.eliminarRecepcionista(id);
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    /// USUARIO
     public Usuario buscarUsuario(String usuario, String contrasenia) {
         for (Administrador a : administradores.getPersonas().values()) {
             if (a.getUsuario().equals(usuario) &&
