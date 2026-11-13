@@ -11,8 +11,12 @@ public class HotelDAO {
 
     // CREAR TODAS LAS TABLAS
     public static void crearTablas() throws SQLException {
+        crearTablas("Hotel");
+    }
 
-        try (Connection cn = ConexioBD.conectar();
+    public static void crearTablas(String nombreBD) throws SQLException {
+
+        try (Connection cn = ConexioBD.conectar(nombreBD);
              Statement st = cn.createStatement()) {
 
             // Tabla pasajeros
@@ -106,6 +110,8 @@ public class HotelDAO {
                contrasenia VARCHAR(100) NOT NULL
                )
                """;
+
+            st.executeUpdate(sqlRecepcionistas);
 
             System.out.println("Tablas creadas correctamente");
         }
@@ -303,6 +309,8 @@ public class HotelDAO {
         cargarHabitaciones(hotel);
         cargarReservas(hotel);
         cargarOcupaciones(hotel);
+        cargarAdministradores(hotel);
+        cargarRecepcionistas(hotel);
     }
 
     //CARGAR PASAJEROS
@@ -486,6 +494,37 @@ public class HotelDAO {
 
                 hotel.agregarRecepcionista(r);
             }
+        }
+    }
+
+    // ELIMINACION
+    public static void eliminarHabitacion(int numero) throws SQLException {
+        String sql = "DELETE FROM habitaciones WHERE numero = ?";
+        try (Connection cn = ConexioBD.conectar();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, numero);
+            ps.executeUpdate();
+        }
+    }
+
+    public static void eliminarReserva(int id) throws SQLException {
+        String sql = "DELETE FROM reservas WHERE id = ?";
+        try (Connection cn = ConexioBD.conectar();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+
+    public static void eliminarRecepcionista(int id) throws SQLException {
+        String sql = "DELETE FROM recepcionistas WHERE id = ?";
+        try (Connection cn = ConexioBD.conectar();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
         }
     }
 }
