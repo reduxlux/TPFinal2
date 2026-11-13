@@ -1,6 +1,9 @@
 package clases;
 
+import java.sql.SQLException;
 import java.util.Scanner;
+
+import ConexioSQL.HotelBackup;
 import Enum.ETipoHabitacion;
 
 public class Administrador extends Usuario {
@@ -58,7 +61,19 @@ public class Administrador extends Usuario {
     }
 
     public void realizarBackup() {
-        // ...
+        try {
+            HotelBackup.realizarBackup();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void restaurarBackup() {
+        try {
+            HotelBackup.restaurarBackup();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void asignarPermisos() {
