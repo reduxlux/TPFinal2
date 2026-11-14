@@ -6,7 +6,7 @@ import java.util.Objects;
 public abstract class Usuario implements Autenticable {
 
     private final int id;
-    private static int contador = 0;
+    private static int contador = 1;
     private String usuario;
     private String contrasenia;
     private String nombre;
@@ -29,6 +29,8 @@ public abstract class Usuario implements Autenticable {
         this.nombre = nombre;
         this.sesionIniciada = false;
         this.hotel = hotel;
+
+        contador = Math.max(contador, id + 1);
     }
 
     //getters
