@@ -79,14 +79,16 @@ public class Habitacion {
         this.motivoNoDisponible = motivo;
     }
 
-    public void mostrarInformacion() {
-        System.out.println("clases.Habitacion: " + this.numero);
-        System.out.println("Piso: " + this.piso);
-        System.out.println("Tipo: " + this.tipo);
-        System.out.println("Estado: " + this.estado);
+    public String mostrarInformacion() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("clases.Habitacion: " + this.numero);
+        sb.append("Piso: " + this.piso);
+        sb.append("Tipo: " + this.tipo);
+        sb.append("Estado: " + this.estado);
         if (!estaDisponible()) {
-            System.out.println("Motivo: " + motivoNoDisponible);
+            sb.append("Motivo: " + motivoNoDisponible);
         }
+        return sb.toString();
     }
 
     @Override

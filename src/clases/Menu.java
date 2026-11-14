@@ -5,7 +5,10 @@ import java.time.Month;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import Enum.ETipoHabitacion;
+import Excepciones.ColeccionVaciaException;
 import Excepciones.FechaInvalidaException;
+import Excepciones.IDNoEncontradoException;
+import Excepciones.PasajeroNoEncontradoException;
 
 public class Menu {
     private int opcion;
@@ -52,14 +55,13 @@ public class Menu {
                     break;
                 case 2:
                     // AGREGAR COMO LOGUEAR AL PASAJERO
-                    System.out.println("Ingresar nombre: ");
-                    String nombrePasajero = sc.nextLine();
-                    System.out.println("Ingresar DNI: ");
-                    String dniPasajero = sc.nextLine();
-                    if (hotel.getPasajeros().contiene(dniPasajero)
-                            && !nombrePasajero.isEmpty()) {
-                        Pasajero p;
-                        //menuPasajero(p);
+                    try {
+                        System.out.println("Ingresar DNI: ");
+                        String dniPasajero = sc.nextLine();
+                        Pasajero p = hotel.buscarPasajero(dniPasajero);
+                        menuPasajero(p);
+                    } catch (PasajeroNoEncontradoException e){
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case 0:
@@ -125,15 +127,13 @@ public class Menu {
                     System.out.println("Introduzca el id del recepcionista: ");
                     try {
                         int id = sc.nextInt();
-                        if (a.eliminarRecepcionista(id)) {
-                            System.out.println("recepcionista eliminado correctamente\n");
-                        } else {
-                            System.out.println("no se encontro el recepcionista\n");
-                        }
+                        sc.nextLine();
+                        a.eliminarRecepcionista(id);
                     }  catch (InputMismatchException e){
                         System.out.println("error, el dato introducido es invalido");
-                    } finally {
                         sc.nextLine();
+                    } catch (IDNoEncontradoException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case 3:
@@ -143,10 +143,10 @@ public class Menu {
                     System.out.println("Ingresar numero habitacion a eliminar: ");
                     try {
                         int nroHabitacion = sc.nextInt();
+                        sc.nextLine();
                         a.eliminarHabitacion(nroHabitacion);
                     } catch (InputMismatchException e){
                         System.out.println("error, dato invalido");
-                    } finally {
                         sc.nextLine();
                     }
                     break;
@@ -196,11 +196,13 @@ public class Menu {
                 case 1:
                     System.out.println("introduzca dni del pasajero que desea reservar: ");
                     String dni = sc.nextLine();
-                    Pasajero pasajero = hotel.buscarPasajero(dni);
                     try {
+                        Pasajero pasajero = hotel.buscarPasajero(dni);
                         r.crearReserva(pasajero);
-                    } catch (FechaInvalidaException e) {
-                        throw new RuntimeException(e);
+                    } catch (PasajeroNoEncontradoException e) {
+                        System.out.println(e.getMessage());
+                    }catch (FechaInvalidaException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case 2:
@@ -211,9 +213,11 @@ public class Menu {
                         r.realizarCheckInRec(reserva);
                     } catch (InputMismatchException e){
                         System.out.println("error, dato invalido");
+                    } catch (IDNoEncontradoException e) {
+                        System.out.println(e.getMessage());
                     } catch (FechaInvalidaException e) {
-                        throw new RuntimeException(e);
-                    } finally {
+                        System.out.println(e.getMessage());
+                    }finally {
                         sc.nextLine();
                     }
                     break;
@@ -221,27 +225,45 @@ public class Menu {
                     System.out.println("introduzca el id de la estadia: ");
                     try {
                         int idEstadia = sc.nextInt();
+                        sc.nextLine();
                         Estadia estadia = hotel.buscarEstadiaPorId(idEstadia);
                         r.realizarCheckOutRec(estadia);
                     } catch (InputMismatchException e){
                         System.out.println("error, dato invalido");
-                    } catch (FechaInvalidaException e) {
-                        throw new RuntimeException(e);
-                    } finally {
                         sc.nextLine();
+                    } catch (IDNoEncontradoException e){
+                        System.out.println(e.getMessage());
+                    } catch (FechaInvalidaException e){
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case 4:
-                    r.consultarHabitaciones();
+                    try {
+                        r.consultarHabitaciones();
+                    } catch (ColeccionVaciaException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 5:
-                    r.consultarHabitacionesDisponibles();
+                    try {
+                        r.consultarHabitacionesDisponibles();
+                    } catch (ColeccionVaciaException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 6:
-                    r.consultarHabitacionesNoDisponibles();
+                    try {
+                        r.consultarHabitacionesNoDisponibles();
+                    } catch (ColeccionVaciaException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 7:
-                    r.consultarHabitacionesOcupadar();
+                    try {
+                        r.consultarHabitacionesOcupadar();
+                    } catch (ColeccionVaciaException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 8:
                     System.out.println("Ingresar numero habitacion a consultar: ");
@@ -328,7 +350,9 @@ public class Menu {
                     try {
                         hotel.crearReserva(p);
                     } catch (FechaInvalidaException e) {
-                        throw new RuntimeException(e);
+                        System.out.println(e.getMessage());
+                    } catch (InputMismatchException e){
+                        System.out.println("error, el dato es invalido");
                     }
                     break;
                 case 2:
@@ -338,14 +362,22 @@ public class Menu {
                     hotel.eliminarReserva();
                     break;
                 case 4:
-                    System.out.println(p.mostrarHistorial());
+                    try {
+                        System.out.println(p.mostrarHistorial());
+                    } catch (ColeccionVaciaException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 5:
                     Reserva r = hotel.buscarReservaPasajero(p.getDni());
-                    try {
-                        hotel.realizarCheckInHotel(r);
-                    } catch (FechaInvalidaException e) {
-                        throw new RuntimeException(e);
+                    if(r == null){
+                        System.out.println("error, no tiene reservas realizadas");
+                    } else {
+                        try {
+                            hotel.realizarCheckInHotel(r);
+                        } catch (FechaInvalidaException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     break;
                 case 6:
@@ -353,7 +385,7 @@ public class Menu {
                     try {
                         hotel.realizarCheckOutHotel(e);
                     } catch (FechaInvalidaException ex) {
-                        throw new RuntimeException(ex);
+                        System.out.println(ex.getMessage());
                     }
                     break;
                 case 0:

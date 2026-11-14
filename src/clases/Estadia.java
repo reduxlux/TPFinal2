@@ -20,6 +20,10 @@ public class Estadia {
         this.fechaCheckOut = fechaCheckOut;
     }
 
+    public Estadia(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

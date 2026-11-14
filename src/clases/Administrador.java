@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import ConexioSQL.HotelBackup;
 import Enum.ETipoHabitacion;
+import Excepciones.IDNoEncontradoException;
 
 public class Administrador extends Usuario {
 
@@ -56,8 +57,8 @@ public class Administrador extends Usuario {
         return recepcionista;
     }
 
-    public boolean eliminarRecepcionista(int id){
-        return getHotel().eliminarRecepcionista(id);
+    public void eliminarRecepcionista(int id) throws IDNoEncontradoException {
+        getHotel().eliminarRecepcionista(id);
     }
 
     public void realizarBackup() {

@@ -24,6 +24,10 @@ public class Reserva {
         this.estado = EEstadoReserva.CONFIRMADA;
     }
 
+    public Reserva(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

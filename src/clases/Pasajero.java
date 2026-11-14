@@ -1,5 +1,7 @@
 package clases;
 
+import Excepciones.ColeccionVaciaException;
+
 import java.util.Objects;
 
 public class Pasajero {
@@ -83,18 +85,17 @@ public class Pasajero {
         return true;
     }
 
-    public String mostrarHistorial() {
+    public String mostrarHistorial()
+            throws ColeccionVaciaException{
 
         StringBuilder mensaje = new StringBuilder();
 
         if (historial.estaVacio()) {
-            return "El pasajero no tiene estadias registradas";
+            throw new ColeccionVaciaException(Estadia.class, " ");
         }
-
         for (Estadia estadia : historial) {
             mensaje.append(estadia).append("\n");
         }
-
         return mensaje.toString();
     }
 

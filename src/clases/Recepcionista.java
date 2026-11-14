@@ -1,5 +1,6 @@
 package clases;
 
+import Excepciones.ColeccionVaciaException;
 import Excepciones.FechaInvalidaException;
 
 import java.time.LocalDate;
@@ -26,19 +27,19 @@ public class Recepcionista extends Usuario {
         super.getHotel().realizarCheckOutHotel(estadia);
     }
 
-    public void consultarHabitaciones() {
+    public void consultarHabitaciones() throws ColeccionVaciaException {
         super.getHotel().listarHabitaciones();
     }
 
-    public void consultarHabitacionesDisponibles() {
+    public void consultarHabitacionesDisponibles() throws ColeccionVaciaException{
         super.getHotel().listarHabitacionesDisponibles();
     }
 
-    public void consultarHabitacionesNoDisponibles() {
+    public void consultarHabitacionesNoDisponibles() throws ColeccionVaciaException{
         super.getHotel().listarHabitacionesNoDisponibles();
     }
 
-    public void consultarHabitacionesOcupadar() {
+    public void consultarHabitacionesOcupadar() throws ColeccionVaciaException{
         super.getHotel().listarHabitacionesOcupadas();
     }
 
