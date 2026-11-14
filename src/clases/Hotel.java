@@ -225,7 +225,13 @@ public final class Hotel {
         if(!recepcionistas.contiene(id)){
             throw new IDNoEncontradoException(Recepcionista.class, id);
         }
-        recepcionistas.eliminar(id);
+
+        if (eliminarRecepcionistaSQL(id)) {
+            recepcionistas.eliminar(id);
+            System.out.println("Recepcionista eliminado correctamente");
+        } else {
+            System.out.println("No se pudo eliminar el recepcionista");
+        }
     }
 
     /// RECEPCiONISTAS
@@ -449,15 +455,20 @@ public final class Hotel {
         }
     }
 
-    public boolean eliminarHabitacion(int numeroHabitacion) {
-        if (habitaciones.containsKey(numeroHabitacion)) {
-            habitaciones.remove(numeroHabitacion);
-            System.out.println("clases.Habitacion eliminada.");
-            return true;
-        } else {
-            System.out.println("clases.Habitacion no existente");
+    public boolean eliminarHabitacion(int numero) {
+        if (!habitaciones.containsKey(numero)) {
+            System.out.println("Habitacion no encontrada");
             return false;
         }
+
+        if (eliminarHabitacionSQL(numero)) {
+            habitaciones.remove(numero);
+            System.out.println("Habitacion eliminada correctamente");
+            return true;
+        }
+
+        System.out.println("No se pudo eliminar la habitacion");
+        return false;
     }
 
     public Habitacion buscarHabitacion(int numero) {
@@ -514,7 +525,7 @@ public final class Hotel {
         sb.append("habitaciones no disponibles: \n");
         boolean b = false;
         for(Habitacion x: habitaciones.values()){
-            if(x.getEstado() == EEstadoHabitacion.OCUPADA){
+            if(x.getEstado() == EEstadoHabitacion.NO_DISPONIBLE){
                 sb.append(x.mostrarInformacion());
                 b = true;
             }

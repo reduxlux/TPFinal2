@@ -25,7 +25,6 @@ public class MenuAdmin {
             System.out.println("4. Eliminar habitacion.");
             System.out.println("5. Realizar backup del hotel a hotel_backup.");
             System.out.println("6. Restaurar backup del hotel_backup a hotel.");
-            System.out.println("7. Mostrar Administradores y ");
             System.out.println("0. Cerrar sesion.");
 
             try {
