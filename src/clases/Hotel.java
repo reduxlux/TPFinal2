@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -242,7 +243,7 @@ public final class Hotel {
         return pasajeros.obtener(dni);
     }
 
-    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException {
+    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException, SQLException {
 
         System.out.println("Introduzca el año de la estadía:");
         int anio = Integer.parseInt(sc.nextLine());
