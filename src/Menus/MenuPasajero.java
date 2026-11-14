@@ -4,6 +4,7 @@ import clases.*;
 import Excepciones.ColeccionVaciaException;
 import Excepciones.FechaInvalidaException;
 
+import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -26,8 +27,6 @@ public class MenuPasajero {
             System.out.println("2. Mostrar estadia.");
             System.out.println("3. Eliminar reserva.");
             System.out.println("4. Mostrar historial.");
-            System.out.println("5. Realizar check-in.");
-            System.out.println("6. Realizar check-out.");
             System.out.println("0. Salir.");
 
             try {
@@ -47,6 +46,8 @@ public class MenuPasajero {
 
                     } catch (InputMismatchException e) {
                         System.out.println("Error, el dato es invalido");
+                    } catch (SQLException e){
+                        System.out.println("no se pudo agregar la reserva");
                     }
                     break;
 
@@ -64,36 +65,6 @@ public class MenuPasajero {
 
                     } catch (ColeccionVaciaException e) {
                         System.out.println(e.getMessage());
-                    }
-                    break;
-
-                case 5:
-                    Reserva r =
-                            hotel.buscarReservaPasajero(p.getDni());
-
-                    if (r == null) {
-                        System.out.println(
-                                "Error, no tiene reservas realizadas");
-
-                    } else {
-                        try {
-                            hotel.realizarCheckInHotel(r);
-
-                        } catch (FechaInvalidaException e) {
-                            System.out.println(e.getMessage());
-                        }
-                    }
-                    break;
-
-                case 6:
-                    Estadia e =
-                            hotel.buscarEstadiaPasajero(p.getDni());
-
-                    try {
-                        hotel.realizarCheckOutHotel(e);
-
-                    } catch (FechaInvalidaException ex) {
-                        System.out.println(ex.getMessage());
                     }
                     break;
 
