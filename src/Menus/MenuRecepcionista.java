@@ -47,20 +47,21 @@ public class MenuRecepcionista {
 
             switch (opcion) {
 
-                case 1:
-                    System.out.println("Introduzca DNI del pasajero que desea reservar: ");
-                    String dni = sc.nextLine();
-                    try {
-                        Pasajero pasajero = hotel.buscarPasajero(dni);
-                        r.crearReserva(pasajero);
-                    } catch (PasajeroNoEncontradoException e) {
-                        System.out.println(e.getMessage());
-                    } catch (FechaInvalidaException e) {
-                        System.out.println(e.getMessage());
-                    } catch (SQLException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    break;
+                    case 1:
+                        IO.println("ingrese dni del pasajero: ");
+                        String dni = sc.nextLine();
+                        try {
+                            Pasajero p = hotel.buscarPasajero(dni);
+                                hotel.crearReserva(p);
+                        } catch (SQLException | FechaInvalidaException e) {
+                            IO.println(e.getMessage());
+                        }catch (PasajeroNoEncontradoException e)
+                        {
+                            IO.println(e.getMessage());
+                            Pasajero p = hotel.crearPasajero();
+                    //        hotel.crearReserva(p);
+                        }
+                        break;
                 case 2:
                     hotel.eliminarReserva();
                     break;

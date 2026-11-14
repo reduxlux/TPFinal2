@@ -98,11 +98,40 @@ public final class Hotel {
     }
 
     /// PASAJEROS
-    public boolean registrarPasajeroHotel(Pasajero p) {
+
+    public Pasajero crearPasajero() {
+        System.out.println("Introduzca su DNI: ");
+        String dni = sc.nextLine();
+
+        if (pasajeros.contiene(dni)) {
+            System.out.println(
+                    "Error, ya hay un pasajero con ese DNI");
+
+        } else {
+
+            System.out.println("Introduzca su nombre: ");
+            String nombre = sc.nextLine();
+
+            System.out.println("Introduzca ciudad de origen: ");
+            String ciudad = sc.nextLine();
+
+            System.out.println("Introduzca su domicilio: ");
+            String domicilio = sc.nextLine();
+
+            Pasajero p = new Pasajero(
+                    nombre, dni, ciudad, domicilio, this);
+
+            return p;
+        }
+
+        return null;
+    }
+    public boolean registrarPasajeroHotel(Pasajero p) throws SQLException {
         if (p.getDni() == null || pasajeros.contiene(p.getDni())) {
             return false;
         }
 
+        HotelDAO.guardarPasajero(p);
         pasajeros.agregar(p.getDni(), p);
         return true;
     }
