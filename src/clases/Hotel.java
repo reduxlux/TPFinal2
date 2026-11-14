@@ -116,11 +116,11 @@ public final class Hotel {
         int opcion = Integer.parseInt(sc.nextLine());
 
         int contador = 1;
-
         for (Reserva r : reservas) {
             if (r.getPasajero().getDni().equalsIgnoreCase(dni)) {
                 if (contador == opcion) {
                     reservas.eliminar(r);
+                    eliminarReservaSQL(r.getId());
                     IO.println("Reserva eliminada correctamente");
                     return;
                 }
@@ -240,28 +240,24 @@ public final class Hotel {
 
         System.out.println("Introduzca el año de la estadía:");
         int anio = Integer.parseInt(sc.nextLine());
-
         if (anio < LocalDate.now().getYear()) {
             throw new FechaInvalidaException("El año es invalido");
         }
 
         System.out.println("Introduzca el mes:");
         int mes = Integer.parseInt(sc.nextLine());
-
         if (mes < 1 || mes > 12) {
             throw new FechaInvalidaException("El mes es invalido");
         }
 
         System.out.println("Introduzca el dia:");
         int dia = Integer.parseInt(sc.nextLine());
-
         if (dia < 1 || dia > LocalDate.of(anio, mes, 1).lengthOfMonth()) {
             throw new FechaInvalidaException("El dia es invalido");
         }
 
         System.out.println("Introduzca el mes de salida:");
         int mesfin = Integer.parseInt(sc.nextLine());
-
         if (mesfin < 1 || mesfin > 12) {
             throw new FechaInvalidaException("El mes de salida es invalido");
         }
@@ -304,7 +300,7 @@ public final class Hotel {
 
         Reserva reserva = new Reserva(pasajero, habitacion, checkin, checkout);
 
-        if (agregarReservaHotel(reserva)) {
+        if (agregarReservaHotel(reserva) && agregarReservaSQL(reserva)) {
             System.out.println("Reserva agregada correctamente");
         } else {
             System.out.println("No se pudo agregar la reserva");
@@ -373,8 +369,9 @@ public final class Hotel {
             //agregamos la estadia al historial del pasajero
             reserva.getPasajero().agregarEstadia(nuevaEstadia);
 
-            //agregamos la estadia al repositorio del hotel
+            //agregamos la estadia al repositorio del hotel y a sql
             estadias.agregar(nuevaEstadia);
+            agregarEstadiaSQL(nuevaEstadia);
             habitacion.ocupar();
         }
     }
@@ -398,7 +395,6 @@ public final class Hotel {
     }
 
     public Reserva buscarReserva(int id) throws IDNoEncontradoException {
-
         for (Reserva r : reservas) {
             if (r.getId() == id) {
                 return r;
@@ -472,12 +468,12 @@ public final class Hotel {
     public void bloquearHabitacion(int numero, String motivo) {
         Habitacion habitacion = buscarHabitacion(numero);
         if (habitacion == null) {
-            System.out.println("clases.Habitacion no encontrada");
+            System.out.println("Habitacion no encontrada");
         } else if (motivo == null || motivo.isBlank()) {
             System.out.println("Debe haber un motivo.");
         } else {
             habitacion.bloquear(motivo);
-            System.out.println("clases.Habitacion bloqueada");
+            System.out.println("Habitacion bloqueada");
         }
     }
 
