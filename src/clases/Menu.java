@@ -27,6 +27,7 @@ public class Menu {
             System.out.println("=== MENU PRINCIPAL ===");
             System.out.println("1. Ingresar usuario.");
             System.out.println("2. Ingresar pasajero.");
+            System.out.println("3. Crear cuenta como pasajero.");
             System.out.println("0. Salir del programa.");
             try {
                 opcion = Integer.parseInt(sc.nextLine());
@@ -54,7 +55,6 @@ public class Menu {
                     }
                     break;
                 case 2:
-                    // AGREGAR COMO LOGUEAR AL PASAJERO
                     try {
                         System.out.println("Ingresar DNI: ");
                         String dniPasajero = sc.nextLine();
@@ -62,6 +62,24 @@ public class Menu {
                         menuPasajero(p);
                     } catch (PasajeroNoEncontradoException e){
                         System.out.println(e.getMessage());
+                    }
+                    break;
+                case 3:
+                    System.out.println("Introduzca su DNI: ");
+                    String dniPasajero = sc.nextLine();
+                    if(hotel.getPasajeros().contiene(dniPasajero)){
+                        System.out.println("error, ya hay un pasajero con ese dni");
+                    } else {
+                        System.out.println("Introduzca su nombre: ");
+                        String nombre = sc.nextLine();
+                        System.out.println("Introduzca ciudad de origen: ");
+                        String ciudad = sc.nextLine();
+                        System.out.println("Introduzca su domicilio: ");
+                        String domicilio = sc.nextLine();
+                        Pasajero p = new Pasajero(nombre, dniPasajero, ciudad, domicilio, hotel);
+                        hotel.getPasajeros().agregar(dniPasajero, p);
+                        System.out.println("pasajero creado correctamente");
+                        menuPasajero(p);
                     }
                     break;
                 case 0:
