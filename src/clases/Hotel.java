@@ -149,8 +149,8 @@ public final class Hotel {
         for (Reserva r : reservas) {
             if (r.getPasajero().getDni().equalsIgnoreCase(dni)) {
                 if (contador == opcion) {
-                    reservas.eliminar(r);
                     eliminarReservaSQL(r.getId());
+                    reservas.eliminar(r);
                     IO.println("Reserva eliminada correctamente");
                     return;
                 }
@@ -303,7 +303,7 @@ public final class Hotel {
 
         int aniofin;
 
-        if (mesfin < mes) {
+        if (mesfin < mes || (mesfin == mes && diafin < dia)) {
             aniofin = anio + 1;
         } else {
             aniofin = anio;
@@ -336,7 +336,8 @@ public final class Hotel {
 
         Reserva reserva = new Reserva(pasajero, habitacion, checkin, checkout);
 
-        if (agregarReservaHotel(reserva) && agregarReservaSQL(reserva)) {
+        agregarReservaSQL(reserva);
+        if (agregarReservaHotel(reserva)) {
             System.out.println("Reserva agregada correctamente");
         } else {
             System.out.println("No se pudo agregar la reserva");
@@ -421,13 +422,18 @@ public final class Hotel {
             estadia.getHabitacion().habilitar();
     }
 
-    public Estadia buscarEstadiaPasajero(String dni) {
-        for (Estadia estadia : estadias) {
-            if (estadia.getPasajero().getDni().equals(dni)) {
-                return estadia;
-            }
+    public String buscarEstadiaPasajero(String dni) throws ColeccionVaciaException, PasajeroNoEncontradoException{
+        boolean b = false;
+        StringBuilder sb = new StringBuilder();
+        Pasajero p = buscarPasajero(dni);
+        for (Estadia estadia : p.getHistorial()) {
+            sb.append(estadia);
+            b = true;
         }
-        return null;
+        if(!b){
+            throw new ColeccionVaciaException(Estadia.class, " realizada por el pasajero con dni " + dni);
+        }
+        return sb.toString();
     }
 
     public Reserva buscarReserva(int id) throws IDNoEncontradoException {
@@ -531,7 +537,7 @@ public final class Hotel {
     public String listarHabitacionesDisponibles()
             throws ColeccionVaciaException{
         StringBuilder sb = new StringBuilder();
-        sb.append("habitaciones no disponibles: \n");
+        sb.append("habitaciones disponibles: \n");
         boolean b = false;
         for(Habitacion x: habitaciones.values()){
             if(x.estaDisponible()){
@@ -550,9 +556,9 @@ public final class Hotel {
         StringBuilder sb = new StringBuilder();
         sb.append("habitaciones no disponibles: \n");
         boolean b = false;
-        for(Habitacion x: habitaciones.values()){
-            if(x.getEstado() == EEstadoHabitacion.NO_DISPONIBLE){
-                sb.append(x.mostrarInformacion());
+        for (Estadia estadia: estadias){
+            if(estadia.estaActiva()){
+                sb.append(estadia.getHabitacion().mostrarInformacion());
                 b = true;
             }
         }
@@ -586,7 +592,7 @@ public final class Hotel {
         }
         System.out.println("\nListado habitaciones:");
         for (Habitacion habitacion : habitaciones.values()) {
-            habitacion.mostrarInformacion();
+            System.out.println(habitacion.mostrarInformacion());
             System.out.println("---");
         }
     }
@@ -669,7 +675,6 @@ public final class Hotel {
     public boolean agregarEstadiaSQL(Estadia estadia) {
         try {
             HotelDAO.guardarOcupacion(estadia);
-            estadias.agregar(estadia);
             return true;
 
         } catch (SQLException e) {

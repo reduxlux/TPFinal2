@@ -28,33 +28,72 @@ public class Administrador extends Usuario {
     }
 
     public Administrador crearAdministrador() {
-        System.out.print("Nombre: ");
-        String nombre = teclado.nextLine();
 
         System.out.print("Usuario: ");
         String usuario = teclado.nextLine();
+        boolean x = true;
+        for (Administrador administrador : super.getHotel().getAdministradores().getPersonas().values()) {
+            if (administrador.getUsuario() == usuario){
+                x = false;
+            }
+        }
+        for (Recepcionista recepcionista : super.getHotel().getRecepcionistas().getPersonas().values()) {
+            if (recepcionista.getUsuario() == usuario){
+                x = false;
+            }
+        }
 
-        System.out.print("Contraseña: ");
-        String contrasenia = teclado.nextLine();
+        if(x) {
 
-        Administrador admin = new Administrador(
-                getHotel(), usuario, contrasenia, nombre);
+            System.out.print("Nombre: ");
+            String nombre = teclado.nextLine();
 
-        return admin;
+            System.out.print("Contraseña: ");
+            String contrasenia = teclado.nextLine();
+
+            Administrador admin = new Administrador(
+                    getHotel(), usuario, contrasenia, nombre);
+
+            return admin;
+        } else {
+            System.out.println("error, ya hay otro usuario con ese nombre de usuario");
+        }
+        return null;
     }
 
     public Recepcionista crearRecepcionista() {
-        System.out.print("Nombre: ");
-        String nombre = teclado.nextLine();
 
         System.out.print("Usuario: ");
         String usuario = teclado.nextLine();
 
-        System.out.println("Contrasenia: ");
-        String contrasenia = teclado.nextLine();
+        boolean x = true;
+        for (Administrador administrador : super.getHotel().getAdministradores().getPersonas().values()) {
+            if (administrador.getUsuario() == usuario){
+                x = false;
+            }
+        }
+        for (Recepcionista recepcionista : super.getHotel().getRecepcionistas().getPersonas().values()) {
+            if (recepcionista.getUsuario() == usuario){
+                x = false;
+            }
+        }
 
-        Recepcionista recepcionista = new Recepcionista(getHotel(), usuario, contrasenia, nombre);
-        return recepcionista;
+        if(x) {
+
+            System.out.print("Nombre: ");
+            String nombre = teclado.nextLine();
+
+            System.out.print("Contraseña: ");
+            String contrasenia = teclado.nextLine();
+
+            Recepcionista r = new Recepcionista(
+                    getHotel(), usuario, contrasenia, nombre);
+
+            return r;
+        } else {
+            System.out.println("error, ya hay otro usuario con ese nombre de usuario");
+        }
+        return null;
     }
 
     public void eliminarRecepcionista(int id) throws IDNoEncontradoException {
