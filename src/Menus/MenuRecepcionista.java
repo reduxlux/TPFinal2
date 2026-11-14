@@ -57,6 +57,8 @@ public class MenuRecepcionista {
                         System.out.println(e.getMessage());
                     } catch (FechaInvalidaException e) {
                         System.out.println(e.getMessage());
+                    } catch (SQLException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case 2:

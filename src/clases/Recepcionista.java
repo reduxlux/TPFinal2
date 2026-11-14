@@ -3,6 +3,7 @@ package clases;
 import Excepciones.ColeccionVaciaException;
 import Excepciones.FechaInvalidaException;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class Recepcionista extends Usuario {
@@ -55,7 +56,7 @@ public class Recepcionista extends Usuario {
         super.getHotel().habilitarHabitacion(numero);
     }
 
-    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException {
+    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException, SQLException {
         getHotel().crearReserva(pasajero);
     }
 }
