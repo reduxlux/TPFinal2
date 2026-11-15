@@ -81,10 +81,10 @@ public class Habitacion {
 
     public String mostrarInformacion() {
         StringBuilder sb = new StringBuilder();
-        sb.append("clases.Habitacion: " + this.numero);
-        sb.append("Piso: " + this.piso);
-        sb.append("Tipo: " + this.tipo);
-        sb.append("Estado: " + this.estado);
+        sb.append("Habitacion: " + this.numero + " ");
+        sb.append("Piso: " + this.piso + " ");
+        sb.append("Tipo: " + this.tipo + " ");
+        sb.append("Estado: " + this.estado + " ");
         if (!estaDisponible()) {
             sb.append("Motivo: " + motivoNoDisponible);
         }

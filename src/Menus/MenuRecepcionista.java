@@ -28,15 +28,16 @@ public class MenuRecepcionista {
             System.out.println("\n=== MENU RECEPCIONISTA ===");
             System.out.println("1. Realizar reserva");
             System.out.println("2. Eliminar reserva");
-            System.out.println("2. Realizar check-in");
-            System.out.println("3. Realizar check-out");
-            System.out.println("4. Consultar habitaciones");
-            System.out.println("5. Consultar habitaciones disponibles");
-            System.out.println("6. Consultar habitaciones no disponibles");
-            System.out.println("7. Consultar habitaciones ocupadas");
-            System.out.println("8. Consultar disponibilidad habitacion");
-            System.out.println("9. Bloquear habitacion");
-            System.out.println("10. Habilitar habitacion");
+            System.out.println("3. Realizar check-in");
+            System.out.println("4. Realizar check-out");
+            System.out.println("5. Consultar habitaciones");
+            System.out.println("6. Consultar habitaciones disponibles");
+            System.out.println("7. Consultar habitaciones no disponibles");
+            System.out.println("8. Consultar habitaciones ocupadas");
+            System.out.println("9. Consultar disponibilidad habitacion");
+            System.out.println("10. Bloquear habitacion");
+            System.out.println("11. Habilitar habitacion");
+            System.out.println("12. Consultar reservas.");
             System.out.println("0. Cerrar sesion");
 
             try {
@@ -47,86 +48,88 @@ public class MenuRecepcionista {
 
             switch (opcion) {
 
-                    case 1:
-                        IO.println("ingrese dni del pasajero: ");
-                        String dni = sc.nextLine();
+                case 1:
+                    IO.println("Ingrese DNI del pasajero: ");
+                    String dni = sc.nextLine();
+                    Pasajero p = null;
+                    try {
+                        // Buscamos al pasajero
+                        p = hotel.buscarPasajero(dni);
+                    } catch (PasajeroNoEncontradoException e) {
+                        // Si no existe, creamos el objeto
+                        IO.println("Pasajero no encontrado. Vamos a registrarlo.");
+                        p = hotel.crearPasajero();
+                    }
+                    // Si tenemos un pasajero, intentamos realizar la reserva
+                    if (p != null) {
                         try {
-                            Pasajero p = hotel.buscarPasajero(dni);
-                                hotel.crearReserva(p);
-                        } catch (SQLException | FechaInvalidaException e) {
+                            hotel.crearReserva(p);
+                        } catch (FechaInvalidaException e) {
                             IO.println(e.getMessage());
-                        }catch (PasajeroNoEncontradoException e)
-                        {
-                            IO.println(e.getMessage());
-                            Pasajero p = hotel.crearPasajero();
-                    //        hotel.crearReserva(p);
+                        } catch (SQLException e) {
+                            IO.println("Error al guardar la reserva: " + e.getMessage());
+                        } catch (NumberFormatException e) {
+                            IO.println("Error: debe ingresar un número válido");
                         }
-                        break;
+                    }
+                    break;
                 case 2:
                     hotel.eliminarReserva();
                     break;
                 case 3:
                     System.out.println("Introduzca ID de la reserva: ");
                     try {
+                        r.consultarReservas();
                         int id = Integer.parseInt(sc.nextLine());
                         Reserva reserva = hotel.buscarReserva(id);
                         r.realizarCheckInRec(reserva);
                     } catch (NumberFormatException e) {
                         System.out.println("Error, dato invalido");
-                    } catch (IDNoEncontradoException e) {
-                        System.out.println(e.getMessage());
-                    } catch (FechaInvalidaException e) {
+                    } catch (IDNoEncontradoException | FechaInvalidaException | ColeccionVaciaException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
-
                 case 4:
                     System.out.println("Introduzca el ID de la estadia: ");
                     try {
+                        r.consultarReservas();
                         int idEstadia = Integer.parseInt(sc.nextLine());
                         Estadia estadia = hotel.buscarEstadiaPorId(idEstadia);
                         r.realizarCheckOutRec(estadia);
                     } catch (NumberFormatException e) {
                         System.out.println("Error, dato invalido");
-                    } catch (IDNoEncontradoException e) {
-                        System.out.println(e.getMessage());
-                    } catch (FechaInvalidaException e) {
+                    } catch (IDNoEncontradoException | ColeccionVaciaException | FechaInvalidaException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
-
                 case 5:
                     try {
-                        r.consultarHabitaciones();
+                        hotel.listarHabitaciones();
                     } catch (ColeccionVaciaException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
-
                 case 6:
                     try {
-                        r.consultarHabitacionesDisponibles();
+                        System.out.println(hotel.listarHabitacionesDisponibles());
                     } catch (ColeccionVaciaException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
-
                 case 7:
                     try {
-                        r.consultarHabitacionesNoDisponibles();
+                        System.out.println(hotel.listarHabitacionesNoDisponibles());
                     } catch (ColeccionVaciaException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
-
                 case 8:
                     try {
-                        r.consultarHabitacionesOcupadar();
+                        System.out.println(hotel.listarHabitacionesOcupadas());
                     } catch (ColeccionVaciaException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
-
                 case 9:
                     System.out.println(
                             "Ingresar numero de habitacion a consultar: ");
@@ -180,7 +183,13 @@ public class MenuRecepcionista {
                         System.out.println("Error: dato invalido");
                     }
                     break;
-
+                case 12:
+                    try {
+                        r.consultarReservas();
+                    } catch (ColeccionVaciaException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
                 case 0:
                     r.cerrarSesion();
                     System.out.println("Saliendo...");

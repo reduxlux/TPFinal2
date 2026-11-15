@@ -10,6 +10,7 @@ public class Estadia {
     private Habitacion habitacion;
     private LocalDate fechaCheckIn;
     private LocalDate fechaCheckOut;
+    private int idReserva;
 
     public Estadia(Pasajero pasajero, Habitacion habitacion,
                    LocalDate fechaCheckIn, LocalDate fechaCheckOut) {
@@ -20,8 +21,22 @@ public class Estadia {
         this.fechaCheckOut = fechaCheckOut;
     }
 
+    public Estadia(Pasajero pasajero, Habitacion habitacion,
+                   LocalDate fechaCheckIn, LocalDate fechaCheckOut, int idReserva) {
+        id = contador++;
+        this.pasajero = pasajero;
+        this.habitacion = habitacion;
+        this.fechaCheckIn = fechaCheckIn;
+        this.fechaCheckOut = fechaCheckOut;
+        this.idReserva = idReserva;
+    }
+
     public Estadia(int id) {
         this.id = id;
+    }
+
+    public int getIdReserva() {
+        return idReserva;
     }
 
     public int getId() {

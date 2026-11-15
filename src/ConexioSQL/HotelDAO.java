@@ -6,6 +6,7 @@ import Enum.EEstadoReserva;
 import Enum.ETipoHabitacion;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 public class HotelDAO {
 
@@ -144,6 +145,31 @@ public class HotelDAO {
         }
     }
 
+    private static void guardarPasajero(Connection cn, Pasajero p)
+            throws SQLException {
+
+        String sql = """
+        INSERT INTO pasajeros
+        (dni, nombre, origen, domicilio_origen)
+        VALUES (?, ?, ?, ?)
+
+        ON DUPLICATE KEY UPDATE
+            nombre = VALUES(nombre),
+            origen = VALUES(origen),
+            domicilio_origen = VALUES(domicilio_origen)
+        """;
+
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setString(1, p.getDni());
+            ps.setString(2, p.getNombre());
+            ps.setString(3, p.getOrigen());
+            ps.setString(4, p.getDomicilioOrigen());
+
+            ps.executeUpdate();
+        }
+    }
+
     // GUARDAR HABITACION
     public static void guardarHabitacion(Habitacion h)
             throws SQLException {
@@ -210,6 +236,120 @@ public class HotelDAO {
         }
     }
 
+    private static void guardarReserva(Connection cn, Reserva r)
+            throws SQLException {
+
+        String sql = """
+        INSERT INTO reservas
+        (id, dni_pasajero, numero_habitacion,
+         fecha_entrada, fecha_salida, estado)
+        VALUES (?, ?, ?, ?, ?, ?)
+
+        ON DUPLICATE KEY UPDATE
+            dni_pasajero = VALUES(dni_pasajero),
+            numero_habitacion = VALUES(numero_habitacion),
+            fecha_entrada = VALUES(fecha_entrada),
+            fecha_salida = VALUES(fecha_salida),
+            estado = VALUES(estado)
+        """;
+
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, r.getId());
+            ps.setString(2, r.getPasajero().getDni());
+            ps.setInt(3, r.getHabitacion().getNumero());
+            ps.setDate(4, Date.valueOf(r.getFechaEntrada()));
+            ps.setDate(5, Date.valueOf(r.getFechaSalida()));
+            ps.setString(6, r.getEstado().name());
+
+            ps.executeUpdate();
+        }
+    }
+
+    public static void guardarReservaConPasajero(
+            Pasajero p, Reserva r, boolean pasajeroNuevo) throws SQLException {
+
+        String sqlPasajero = """
+        INSERT INTO pasajeros
+        (dni, nombre, origen, domicilio_origen)
+        VALUES (?, ?, ?, ?)
+        """;
+
+        String sqlReserva = """
+        INSERT INTO reservas
+        (id, dni_pasajero, numero_habitacion,
+         fecha_entrada, fecha_salida, estado)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """;
+
+        try (Connection cn = ConexioBD.conectar()) {
+
+            // Desactivamos el guardado automático
+            cn.setAutoCommit(false);
+
+            try {
+
+                // 1. Guardamos el pasajero solamente si es nuevo
+                if (pasajeroNuevo) {
+                    try (PreparedStatement ps =
+                                 cn.prepareStatement(sqlPasajero)) {
+
+                        ps.setString(1, p.getDni());
+                        ps.setString(2, p.getNombre());
+                        ps.setString(3, p.getOrigen());
+                        ps.setString(4, p.getDomicilioOrigen());
+
+                        ps.executeUpdate();
+                    }
+                }
+
+                // 2. Guardamos la reserva
+                try (PreparedStatement ps =
+                             cn.prepareStatement(sqlReserva)) {
+
+                    ps.setInt(1, r.getId());
+                    ps.setString(2, p.getDni());
+                    ps.setInt(3, r.getHabitacion().getNumero());
+                    ps.setDate(4, Date.valueOf(r.getFechaEntrada()));
+                    ps.setDate(5, Date.valueOf(r.getFechaSalida()));
+                    ps.setString(6, r.getEstado().name());
+
+                    ps.executeUpdate();
+                }
+
+                // 3. Si salió bien, confirmamos los cambios
+                cn.commit();
+
+            } catch (SQLException e) {
+
+                // Si algo falla, deshacemos todos los cambios
+                cn.rollback();
+
+                throw e;
+            }
+        }
+    }
+
+    public static void guardarReservaCompleta(Pasajero p, Reserva r)
+            throws SQLException {
+
+        try (Connection cn = ConexioBD.conectar()) {
+
+            cn.setAutoCommit(false);
+
+            try {
+                guardarPasajero(cn, p);
+                guardarReserva(cn, r);
+
+                cn.commit();
+
+            } catch (SQLException e) {
+                cn.rollback();
+                throw e;
+            }
+        }
+    }
+
     // GUARDAR OCUPACION
     public static void guardarOcupacion(Estadia o)
             throws SQLException {
@@ -242,6 +382,128 @@ public class HotelDAO {
             }
 
             ps.executeUpdate();
+        }
+    }
+
+    public static void guardarOcupacionYActualizarHabitacion(Estadia o)
+            throws SQLException {
+
+        String sqlOcupacion = """
+        INSERT INTO ocupaciones
+        (dni_pasajero, numero_habitacion,
+         fecha_check_in, fecha_check_out)
+        VALUES (?, ?, ?, ?)
+        """;
+
+        String sqlHabitacion = """
+        UPDATE habitaciones
+        SET estado = ?, motivo_no_disponible = ?
+        WHERE numero = ?
+        """;
+
+        try (Connection cn = ConexioBD.conectar()) {
+
+            cn.setAutoCommit(false);
+
+            try {
+                // 1. Guardamos la ocupación
+                try (PreparedStatement ps =
+                             cn.prepareStatement(sqlOcupacion)) {
+
+                    ps.setString(1, o.getPasajero().getDni());
+                    ps.setInt(2, o.getHabitacion().getNumero());
+                    ps.setDate(3, Date.valueOf(o.getFechaCheckIn()));
+
+                    if (o.getFechaCheckOut() == null) {
+                        ps.setNull(4, Types.DATE);
+                    } else {
+                        ps.setDate(4, Date.valueOf(o.getFechaCheckOut()));
+                    }
+
+                    ps.executeUpdate();
+                }
+
+                // 2. Actualizamos el estado de la habitación
+                try (PreparedStatement ps =
+                             cn.prepareStatement(sqlHabitacion)) {
+
+                    ps.setString(1, EEstadoHabitacion.NO_DISPONIBLE.name());
+                    ps.setString(2, "");
+                    ps.setInt(3, o.getHabitacion().getNumero());
+
+                    if (ps.executeUpdate() != 1) {
+                        throw new SQLException(
+                                "No se pudo actualizar el estado de la habitación");
+                    }
+                }
+
+                // 3. Confirmamos ambas operaciones
+                cn.commit();
+
+            } catch (SQLException e) {
+                cn.rollback();
+                throw e;
+            }
+        }
+    }
+
+    public static void actualizarCheckOut(Estadia estadia, LocalDate fechaSalida) throws SQLException {
+
+        String sqlOcupacion = """
+        UPDATE ocupaciones
+        SET fecha_check_out = ?
+        WHERE dni_pasajero = ?
+          AND numero_habitacion = ?
+          AND fecha_check_in = ?
+          AND fecha_check_out IS NULL
+        """;
+
+        String sqlHabitacion = """
+        UPDATE habitaciones
+        SET estado = ?, motivo_no_disponible = ?
+        WHERE numero = ?
+        """;
+
+        try (Connection cn = ConexioBD.conectar()) {
+
+            cn.setAutoCommit(false);
+
+            try {
+                // 1. Actualizamos la fecha de salida de la ocupación
+                try (PreparedStatement ps = cn.prepareStatement(sqlOcupacion)) {
+
+                    ps.setDate(1, Date.valueOf(fechaSalida));
+                    ps.setString(2, estadia.getPasajero().getDni());
+                    ps.setInt(3, estadia.getHabitacion().getNumero());
+                    ps.setDate(4, Date.valueOf(estadia.getFechaCheckIn()));
+
+                    if (ps.executeUpdate() != 1) {
+                        throw new SQLException(
+                                "No se encontró una ocupación activa para actualizar");
+                    }
+                }
+
+                // 2. Habilitamos la habitación en SQL
+                try (PreparedStatement ps =
+                             cn.prepareStatement(sqlHabitacion)) {
+
+                    ps.setString(1, EEstadoHabitacion.DISPONIBLE.name());
+                    ps.setString(2, "");
+                    ps.setInt(3, estadia.getHabitacion().getNumero());
+
+                    if (ps.executeUpdate() != 1) {
+                        throw new SQLException(
+                                "No se pudo actualizar la habitación");
+                    }
+                }
+
+                // 3. Confirmamos ambas operaciones
+                cn.commit();
+
+            } catch (SQLException e) {
+                cn.rollback();
+                throw e;
+            }
         }
     }
 

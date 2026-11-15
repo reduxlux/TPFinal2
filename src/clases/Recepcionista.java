@@ -28,14 +28,6 @@ public class Recepcionista extends Usuario {
         super.getHotel().realizarCheckOutHotel(estadia);
     }
 
-    public void consultarHabitaciones() throws ColeccionVaciaException {
-        super.getHotel().listarHabitaciones();
-    }
-
-    public void consultarHabitacionesDisponibles() throws ColeccionVaciaException{
-        super.getHotel().listarHabitacionesDisponibles();
-    }
-
     public void consultarHabitacionesNoDisponibles() throws ColeccionVaciaException{
         super.getHotel().listarHabitacionesNoDisponibles();
     }
@@ -58,5 +50,9 @@ public class Recepcionista extends Usuario {
 
     public void crearReserva(Pasajero pasajero) throws FechaInvalidaException, SQLException {
         getHotel().crearReserva(pasajero);
+    }
+
+    public void consultarReservas() throws ColeccionVaciaException {
+        super.getHotel().listarReservas();
     }
 }
