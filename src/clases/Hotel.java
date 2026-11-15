@@ -139,9 +139,7 @@ public final class Hotel {
         return true;
     }
 
-    public void eliminarReserva() {
-        IO.println("Ingrese el DNI:");
-        String dni = sc.nextLine();
+    public void eliminarReserva(String dni) throws ColeccionVaciaException, InputMismatchException{
 
         IO.println(mostrarReservasPorPasajero(dni));
 
@@ -207,17 +205,22 @@ public final class Hotel {
         estadias.agregar(estadia);
     }
 
-    public String mostrarReservasPorPasajero(String dni) {
+    public String mostrarReservasPorPasajero(String dni) throws ColeccionVaciaException{
         StringBuilder mensaje = new StringBuilder();
         int contador = 1;
+        boolean x = false;
 
         for (Reserva r : reservas) {
             if (r.getPasajero().getDni().equalsIgnoreCase(dni)) {
-                mensaje.append(contador++)
-                        .append("- ")
+                x = true;
+                mensaje.append(contador++ + ":  ")
                         .append(r)
                         .append("\n");
             }
+        }
+
+        if(!x){
+            throw new ColeccionVaciaException(Reserva.class, "");
         }
 
         return mensaje.toString();
@@ -289,74 +292,75 @@ public final class Hotel {
         return pasajeros.obtener(dni);
     }
 
-    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException, SQLException {
+    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException, SQLException{
+        try {
+            System.out.println("Introduzca el año de la estadía:");
+            int anio = sc.nextInt();
+            if (anio < LocalDate.now().getYear()) {
+                throw new FechaInvalidaException("El año es invalido");
+            }
 
-        System.out.println("Introduzca el año de la estadía:");
-        int anio = Integer.parseInt(sc.nextLine());
-        if (anio < LocalDate.now().getYear()) {
-            throw new FechaInvalidaException("El año es invalido");
-        }
+            System.out.println("Introduzca el mes:");
+            int mes = sc.nextInt();
+            if (mes < 1 || mes > 12 || (anio == LocalDate.now().getYear() && mes < LocalDate.now().getMonthValue())) {
+                throw new FechaInvalidaException("El mes es invalido");
+            }
 
-        System.out.println("Introduzca el mes:");
-        int mes = Integer.parseInt(sc.nextLine());
-        if (mes < 1 || mes > 12) {
-            throw new FechaInvalidaException("El mes es invalido");
-        }
+            System.out.println("Introduzca el dia:");
+            int dia = sc.nextInt();
+            if (dia < 1 || dia > LocalDate.of(anio, mes, 1).lengthOfMonth() ||
+                    LocalDate.of(anio, mes, dia).isBefore(LocalDate.now())) {
+                throw new FechaInvalidaException("El dia es invalido");
+            }
 
-        System.out.println("Introduzca el dia:");
-        int dia = Integer.parseInt(sc.nextLine());
-        if (dia < 1 || dia > LocalDate.of(anio, mes, 1).lengthOfMonth()) {
-            throw new FechaInvalidaException("El dia es invalido");
-        }
+            System.out.println("Introduzca el mes de salida:");
+            int mesfin = sc.nextInt();
+            if (mesfin < 1 || mesfin > 12) {
+                throw new FechaInvalidaException("El mes de salida es invalido");
+            }
 
-        System.out.println("Introduzca el mes de salida:");
-        int mesfin = Integer.parseInt(sc.nextLine());
-        if (mesfin < 1 || mesfin > 12) {
-            throw new FechaInvalidaException("El mes de salida es invalido");
-        }
+            System.out.println("Introduzca el dia de salida:");
+            int diafin = sc.nextInt();
 
-        System.out.println("Introduzca el dia de salida:");
-        int diafin = Integer.parseInt(sc.nextLine());
+            int aniofin;
 
-        int aniofin;
+            if (mesfin < mes || (mesfin == mes && diafin <= dia)) {
+                aniofin = anio + 1;
+            } else {
+                aniofin = anio;
+            }
 
-        if (mesfin < mes || (mesfin == mes && diafin < dia)) {
-            aniofin = anio + 1;
-        } else {
-            aniofin = anio;
-        }
+            if (diafin < 1 ||
+                    diafin > LocalDate.of(aniofin, mesfin, 1).lengthOfMonth()) {
+                throw new FechaInvalidaException("El dia de salida es invalido");
+            }
 
-        if (diafin < 1 ||
-                diafin > LocalDate.of(aniofin, mesfin, 1).lengthOfMonth()) {
-            throw new FechaInvalidaException("El dia de salida es invalido");
-        }
+            LocalDate checkin = LocalDate.of(anio, mes, dia);
+            LocalDate checkout = LocalDate.of(aniofin, mesfin, diafin);
 
-        LocalDate checkin = LocalDate.of(anio, mes, dia);
-        LocalDate checkout = LocalDate.of(aniofin, mesfin, diafin);
+            if (!checkout.isAfter(checkin)) {
+                throw new FechaInvalidaException(
+                        "La fecha de salida debe ser posterior a la entrada");
+            }
 
-        if (checkin.isBefore(LocalDate.now())) {
-            throw new FechaInvalidaException(
-                    "La fecha de entrada no puede ser anterior a hoy");
-        }
+            IO.println(mostrarHabitacionesEnFecha(checkin, checkout));
 
-        if (!checkout.isAfter(checkin)) {
-            throw new FechaInvalidaException(
-                    "La fecha de salida debe ser posterior a la entrada");
-        }
+            System.out.println("Ingrese el numero de habitacion:");
+            int nrohabitacion = sc.nextInt();
 
-        IO.println(mostrarHabitacionesEnFecha(checkin, checkout));
+            Habitacion habitacion = buscarHabitacion(nrohabitacion);
 
-        System.out.println("Ingrese el numero de habitacion:");
-        int nrohabitacion = Integer.parseInt(sc.nextLine());
-
-        Habitacion habitacion = buscarHabitacion(nrohabitacion);
-
-        Reserva reserva = new Reserva(pasajero, habitacion, checkin, checkout);
-        if (agregarReservaCompleta(reserva)) {
-            System.out.println("Reserva agregada correctamente");
-            reserva.getHabitacion().reservar();
-        } else {
-            System.out.println("No se pudo agregar la reserva");
+            Reserva reserva = new Reserva(pasajero, habitacion, checkin, checkout);
+            if (agregarReservaCompleta(reserva)) {
+                System.out.println("Reserva agregada correctamente");
+                reserva.getHabitacion().reservar();
+            } else {
+                System.out.println("No se pudo agregar la reserva");
+            }
+        } catch (InputMismatchException e){
+            System.out.println("error, tipo de dato invalido");
+        } finally {
+            sc.nextLine();
         }
     }
 
@@ -565,22 +569,22 @@ public final class Hotel {
     }
 
     /// HABITACIONES
-    public void agregarHabitacion(Habitacion habitacion) {
+    public boolean agregarHabitacion(Habitacion habitacion) {
 
         if (habitacion == null) {
             System.out.println("La habitación es inválida");
-            return;
+            return false;
         }
 
         if (habitaciones.containsKey(habitacion.getNumero())) {
             System.out.println("Habitación existente");
-            return;
+            return false;
         }
 
         if (agregarHabitacionSQL(habitacion)) {
             habitaciones.put(habitacion.getNumero(), habitacion);
-            System.out.println("Habitación agregada al hotel");
         }
+        return true;
     }
 
     public boolean eliminarHabitacion(int numero) throws IDNoEncontradoException{
@@ -709,7 +713,6 @@ public final class Hotel {
             return false;
         }
         if (habitacion.getEstado() == EEstadoHabitacion.NO_DISPONIBLE) {
-            System.out.println("Habitacion no disponible");
             return false;
         }
         for (Reserva reserva : reservas) {
@@ -718,12 +721,10 @@ public final class Hotel {
                         fechaEntrada.isBefore(reserva.getFechaSalida())
                                 && fechaSalida.isAfter(reserva.getFechaEntrada());
                 if (seSuperponen) {
-                    System.out.println("La habitacion ya está reservada en esas fechas");
                     return false;
                 }
             }
         }
-        System.out.println("Habitacion disponible en esas fechas");
         return true;
     }
 
@@ -732,7 +733,6 @@ public final class Hotel {
     public boolean agregarHabitacionSQL(Habitacion habitacion) {
         try {
             HotelDAO.guardarHabitacion(habitacion);
-            System.out.println("Habitación agregada correctamente.");
             return true;
         } catch (SQLException e) {
             System.out.println("Error al guardar la habitación: " + e.getMessage());

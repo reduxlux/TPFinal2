@@ -24,9 +24,10 @@ public class MenuPasajero {
         do {
             System.out.println("=== MENU PASAJEROS ===");
             System.out.println("1. Agregar reserva.");
-            System.out.println("2. Mostrar estadia.");
+            System.out.println("2. Mostrar estadia actual.");
             System.out.println("3. Eliminar reserva.");
             System.out.println("4. Mostrar historial.");
+            System.out.println("5. Mostrar reservas.");
             System.out.println("0. Salir.");
 
             try {
@@ -43,7 +44,6 @@ public class MenuPasajero {
 
                     } catch (FechaInvalidaException e) {
                         System.out.println(e.getMessage());
-
                     } catch (InputMismatchException e) {
                         System.out.println("Error, el dato es invalido");
                     } catch (SQLException e){
@@ -56,9 +56,14 @@ public class MenuPasajero {
                     break;
 
                 case 3:
-                    hotel.eliminarReserva();
+                    try {
+                        hotel.eliminarReserva(p.getDni());
+                    } catch (ColeccionVaciaException e) {
+                        System.out.println(e.getMessage());
+                    } catch (InputMismatchException e) {
+                        System.out.println("error, tipo de dato incorrecto");
+                    }
                     break;
-
                 case 4:
                     try {
                         System.out.println(p.mostrarHistorial());
@@ -67,7 +72,13 @@ public class MenuPasajero {
                         System.out.println(e.getMessage());
                     }
                     break;
-
+                case 5:
+                    try {
+                        System.out.println(hotel.mostrarReservasPorPasajero(p.getDni()));
+                    } catch (ColeccionVaciaException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
                 case 0:
                     System.out.println("Saliendo...");
                     break;

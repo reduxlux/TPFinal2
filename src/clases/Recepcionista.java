@@ -56,5 +56,8 @@ public class Recepcionista extends Usuario {
         super.getHotel().listarReservas();
     }
 
-
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

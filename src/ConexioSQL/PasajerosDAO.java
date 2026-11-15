@@ -39,7 +39,7 @@ public class PasajerosDAO implements IntDAO<Pasajero> {
                         h
                 );
 
-                h.registrarPasajeroHotel(p);
+                h.getPasajeros().agregar(p.getDni(), p);
             }
         }
     }
