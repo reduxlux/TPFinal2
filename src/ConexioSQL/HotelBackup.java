@@ -38,7 +38,7 @@ public class HotelBackup {
 
                 // 1. VACIAR LAS TABLAS DEL DESTINO
                 // Primero las tablas que tienen claves foráneas.
-                st.executeUpdate("DELETE FROM " + destino + ".ocupaciones");
+                st.executeUpdate("DELETE FROM " + destino + ".estadias");
                 st.executeUpdate("DELETE FROM " + destino + ".reservas");
                 st.executeUpdate("DELETE FROM " + destino + ".habitaciones");
                 st.executeUpdate("DELETE FROM " + destino + ".pasajeros");
@@ -77,8 +77,8 @@ public class HotelBackup {
 
                 // 7. COPIAR OCUPACIONES
                 st.executeUpdate(
-                        "INSERT INTO " + destino + ".ocupaciones " +
-                                "SELECT * FROM " + origen + ".ocupaciones"
+                        "INSERT INTO " + destino + ".estadias " +
+                                "SELECT * FROM " + origen + ".estadias"
                 );
                 // 8. CONFIRMAR LOS CAMBIOS
                 cn.commit();

@@ -33,12 +33,12 @@ public class Administrador extends Usuario {
         String usuario = teclado.nextLine();
         boolean x = true;
         for (Administrador administrador : super.getHotel().getAdministradores().getPersonas().values()) {
-            if (administrador.getUsuario() == usuario){
+            if (administrador.getUsuario().equals(usuario)){
                 x = false;
             }
         }
         for (Recepcionista recepcionista : super.getHotel().getRecepcionistas().getPersonas().values()) {
-            if (recepcionista.getUsuario() == usuario){
+            if (recepcionista.getUsuario().equals(usuario)){
                 x = false;
             }
         }
@@ -68,12 +68,12 @@ public class Administrador extends Usuario {
 
         boolean x = true;
         for (Administrador administrador : super.getHotel().getAdministradores().getPersonas().values()) {
-            if (administrador.getUsuario() == usuario){
+            if (administrador.getUsuario().equals(usuario)){
                 x = false;
             }
         }
         for (Recepcionista recepcionista : super.getHotel().getRecepcionistas().getPersonas().values()) {
-            if (recepcionista.getUsuario() == usuario){
+            if (recepcionista.getUsuario().equals(usuario)){
                 x = false;
             }
         }
