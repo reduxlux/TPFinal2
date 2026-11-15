@@ -123,7 +123,9 @@ public class Administrador extends Usuario {
     }
 
     public void agregarHabitacion(Habitacion habitacion) {
-        super.getHotel().agregarHabitacion(habitacion);
+        if(super.getHotel().agregarHabitacion(habitacion)){
+            System.out.println("habitacion agregada correctamente");
+        }
     }
 
     public Habitacion crearHabitacion() {
@@ -174,6 +176,7 @@ public class Administrador extends Usuario {
             }
         } catch (InputMismatchException e){
             System.out.println("error, tipo de dato invalido");
+            teclado.nextLine();
         }
         return null;
     }

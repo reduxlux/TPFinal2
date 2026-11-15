@@ -55,4 +55,9 @@ public class Recepcionista extends Usuario {
     public void consultarReservas() throws ColeccionVaciaException {
         super.getHotel().listarReservas();
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

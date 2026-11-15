@@ -9,6 +9,7 @@ import Excepciones.PasajeroNoEncontradoException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.DateTimeException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MenuRecepcionista {
@@ -80,7 +81,15 @@ public class MenuRecepcionista {
                     }
                     break;
                 case 2:
-                    hotel.eliminarReserva();
+                    try {
+                        System.out.println("introduzca el dni del pasajero de la reserva: ");
+                        String dniPasajero = sc.nextLine();
+                        hotel.eliminarReserva(dniPasajero);
+                    } catch (InputMismatchException e){
+                        System.out.println("error, tipo de dato incorrecto");
+                    } catch (ColeccionVaciaException e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 3:
                     try {

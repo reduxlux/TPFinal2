@@ -112,9 +112,6 @@ public class Pasajero {
         System.out.println("su estadia actual es: " + actual.toString());
     }
 
-    public void eliminarEstadia() {
-        hotel.eliminarReserva();
-    }
 
 
     public Estadia obtenerUltimaEstadia() {

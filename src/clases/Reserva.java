@@ -109,8 +109,8 @@ public class Reserva {
     public String toString() {
         return "Reserva{" +
                 "id=" + id +
-                ", pasajero=" + pasajero +
-                ", habitacion=" + habitacion +
+                ", pasajero=" + pasajero.toString() +
+                ", habitacion=" + habitacion.mostrarInformacion() +
                 ", fechaEntrada=" + fechaEntrada +
                 ", fechaSalida=" + fechaSalida +
                 ", estado=" + estado +

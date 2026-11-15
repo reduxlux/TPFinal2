@@ -68,7 +68,7 @@ public class EstadiasDAO implements IntDAO<Estadia> {
                                 : salida.toLocalDate()
                 );
 
-                hotel.agregarEstadia(o);
+                hotel.getEstadias().agregar(o);
                 p.agregarEstadia(o);
             }
         }

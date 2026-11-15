@@ -110,4 +110,11 @@ public abstract class Usuario implements Autenticable {
             System.out.println("No hay ninguna sesion iniciada.");
         }
     }
+
+    @Override
+    public String toString() {
+        return "id: " + id +
+                ", usuario: " + usuario +
+                ", nombre: " + nombre;
+    }
 }

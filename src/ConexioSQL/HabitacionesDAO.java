@@ -50,7 +50,7 @@ public class HabitacionesDAO implements IntDAO<Habitacion> {
                         rs.getString("motivo_no_disponible")
                 );
 
-                hotel.agregarHabitacion(h);
+                hotel.getHabitaciones().put(h.getNumero(), h);
             }
         }
     }
