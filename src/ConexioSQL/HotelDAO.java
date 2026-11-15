@@ -29,9 +29,9 @@ public class HotelDAO {
             administradoresDAO.crearTabla(st);
             recepcionistasDAO.crearTabla(st);
             pasajerosDAO.crearTabla(st);
-            estadiasDAO.crearTabla(st);
-            reservasDAO.crearTabla(st);
             habitacionesDAO.crearTabla(st);
+            reservasDAO.crearTabla(st);
+            estadiasDAO.crearTabla(st);
 
             System.out.println("Tablas creadas correctamente");
         }
