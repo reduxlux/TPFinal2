@@ -26,19 +26,19 @@ public class MenuRecepcionista {
 
         do {
             System.out.println("\n=== MENU RECEPCIONISTA ===");
-            System.out.println("1. Realizar reserva");
-            System.out.println("2. Eliminar reserva");
-            System.out.println("3. Realizar check-in");
-            System.out.println("4. Realizar check-out");
-            System.out.println("5. Consultar habitaciones");
-            System.out.println("6. Consultar habitaciones disponibles");
-            System.out.println("7. Consultar habitaciones no disponibles");
-            System.out.println("8. Consultar habitaciones ocupadas");
-            System.out.println("9. Consultar disponibilidad habitacion");
-            System.out.println("10. Bloquear habitacion");
-            System.out.println("11. Habilitar habitacion");
+            System.out.println("1. Realizar reserva.");
+            System.out.println("2. Eliminar reserva.");
+            System.out.println("3. Realizar check-in.");
+            System.out.println("4. Realizar check-out.");
+            System.out.println("5. Consultar habitaciones.");
+            System.out.println("6. Consultar habitaciones disponibles (no reservadas).");
+            System.out.println("7. Consultar habitaciones no disponibles (con motivo).");
+            System.out.println("8. Consultar habitaciones ocupadas.");
+            System.out.println("9. Consultar disponibilidad habitacion.");
+            System.out.println("10. Bloquear habitacion.");
+            System.out.println("11. Habilitar habitacion.");
             System.out.println("12. Consultar reservas.");
-            System.out.println("0. Cerrar sesion");
+            System.out.println("0. Cerrar sesion.");
 
             try {
                 opcion = Integer.parseInt(sc.nextLine());
@@ -77,9 +77,9 @@ public class MenuRecepcionista {
                     hotel.eliminarReserva();
                     break;
                 case 3:
-                    System.out.println("Introduzca ID de la reserva: ");
                     try {
                         r.consultarReservas();
+                        System.out.println("Introduzca ID de la reserva: ");
                         int id = Integer.parseInt(sc.nextLine());
                         Reserva reserva = hotel.buscarReserva(id);
                         r.realizarCheckInRec(reserva);
@@ -90,9 +90,9 @@ public class MenuRecepcionista {
                     }
                     break;
                 case 4:
-                    System.out.println("Introduzca el ID de la estadia: ");
                     try {
                         r.consultarReservas();
+                        System.out.println("Introduzca el ID de la estadia: ");
                         int idEstadia = Integer.parseInt(sc.nextLine());
                         Estadia estadia = hotel.buscarEstadiaPorId(idEstadia);
                         r.realizarCheckOutRec(estadia);
