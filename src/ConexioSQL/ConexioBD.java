@@ -10,7 +10,7 @@ public class ConexioBD {
     private static final String URL = "jdbc:mysql://localhost:3306/";
     private static final String BD = "Hotel";
     private static final String USUARIO = "root";
-    private static final String PASSWORD = "Luli0407";
+    private static final String PASSWORD = "PONER_SU_CONSTRASENIA_DE_MYSQL";
 
     public static void crearBaseDeDatos() {
         String sql = "create database if not exists " + BD;
