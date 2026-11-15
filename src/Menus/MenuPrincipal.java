@@ -2,6 +2,8 @@ package Menus;
 
 import clases.*;
 import Excepciones.PasajeroNoEncontradoException;
+
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class MenuPrincipal {
@@ -81,32 +83,11 @@ public class MenuPrincipal {
                     break;
 
                 case 3:
-                    System.out.println("Introduzca su DNI: ");
-                    String dni = sc.nextLine();
-
-                    if (hotel.getPasajeros().contiene(dni)) {
-                        System.out.println(
-                                "Error, ya hay un pasajero con ese DNI");
-
-                    } else {
-                        System.out.println("Introduzca su nombre: ");
-                        String nombre = sc.nextLine();
-
-                        System.out.println("Introduzca ciudad de origen: ");
-                        String ciudad = sc.nextLine();
-
-                        System.out.println("Introduzca su domicilio: ");
-                        String domicilio = sc.nextLine();
-
-                        Pasajero p = new Pasajero(
-                                nombre, dni, ciudad, domicilio, hotel);
-
-                        hotel.getPasajeros().agregar(dni, p);
-
-                        System.out.println(
-                                "Pasajero creado correctamente");
-
+                    try {
+                        Pasajero p = hotel.crearPasajero();
                         menuPasajero.menuPasajero(p);
+                    } catch (SQLException e) {
+                        System.out.println("hubo un problema al intentar crear la cuenta.");
                     }
                     break;
 

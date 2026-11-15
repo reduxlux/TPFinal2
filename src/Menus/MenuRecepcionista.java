@@ -58,7 +58,13 @@ public class MenuRecepcionista {
                     } catch (PasajeroNoEncontradoException e) {
                         // Si no existe, creamos el objeto
                         IO.println("Pasajero no encontrado. Vamos a registrarlo.");
-                        p = hotel.crearPasajero();
+                        try {
+                            p = hotel.crearPasajero();
+                            System.out.println("pasajero guardado correctamente");
+                        } catch (SQLException ex) {
+                            System.out.println("se produjo un error al crear el pasajero");
+                            p = null;
+                        }
                     }
                     // Si tenemos un pasajero, intentamos realizar la reserva
                     if (p != null) {

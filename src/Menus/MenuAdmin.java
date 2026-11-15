@@ -1,5 +1,6 @@
 package Menus;
 
+import Excepciones.ColeccionVaciaException;
 import clases.*;
 import Excepciones.IDNoEncontradoException;
 import java.util.Scanner;
@@ -20,7 +21,7 @@ public class MenuAdmin {
         do {
             System.out.println("=== MENU ADMIN ===");
             System.out.println("1. Crear usuario.");
-            System.out.println("2. Eliminar usuario.");
+            System.out.println("2. Eliminar recepcionista.");
             System.out.println("3. Crear y agregar habitacion.");
             System.out.println("4. Eliminar habitacion.");
             System.out.println("5. Realizar backup del hotel a hotel_backup.");
@@ -68,13 +69,15 @@ public class MenuAdmin {
                     break;
 
                 case 2:
-                    System.out.println("Introduzca el ID del recepcionista: ");
-
                     try {
+                        a.listarRecepcionistas();
+                        System.out.println("Introduzca el ID del recepcionista: ");
                         int id = Integer.parseInt(sc.nextLine());
 
                         a.eliminarRecepcionista(id);
 
+                    } catch (ColeccionVaciaException e){
+                        System.out.println(e.getMessage());
                     } catch (NumberFormatException e) {
                         System.out.println(
                                 "Error, el dato introducido es invalido");
@@ -89,17 +92,23 @@ public class MenuAdmin {
                     break;
 
                 case 4:
-                    System.out.println(
+                    try {
+                        a.listarHabitaciones();
+
+                        System.out.println(
                             "Ingresar numero de habitacion a eliminar: ");
 
-                    try {
                         int nroHabitacion =
                                 Integer.parseInt(sc.nextLine());
 
                         a.eliminarHabitacion(nroHabitacion);
 
+                    } catch (ColeccionVaciaException e){
+                        System.out.println(e.getMessage());
                     } catch (NumberFormatException e) {
                         System.out.println("Error, dato invalido");
+                    } catch (IDNoEncontradoException e){
+                        System.out.println(e.getMessage());
                     }
                     break;
 

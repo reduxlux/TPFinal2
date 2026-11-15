@@ -1,10 +1,12 @@
 package clases;
 
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import ConexioSQL.HotelBackup;
 import Enum.ETipoHabitacion;
+import Excepciones.ColeccionVaciaException;
 import Excepciones.IDNoEncontradoException;
 
 public class Administrador extends Usuario {
@@ -125,50 +127,66 @@ public class Administrador extends Usuario {
     }
 
     public Habitacion crearHabitacion() {
-        System.out.print("Ingrese el número de habitación: ");
-        int numero = Integer.parseInt(teclado.nextLine());
+        try {
+            System.out.print("Ingrese el número de habitación: ");
+            int numero = teclado.nextInt();
+            if (numero <= 0){
+                System.out.println("El numero de habitacion debe ser mayor a 0.");
+            } else if(super.getHotel().getHabitaciones().containsKey(numero)) {
+                System.out.println("error, ya hay otra habitacion con ese numero.");
+            } else {
+                System.out.print("Ingrese el piso: ");
+                int piso = teclado.nextInt();
+                if(piso < 0) {
+                    System.out.println("El hotel no tiene subsuelo, el piso debe ser igual o mayor a 0.");
+                } else {
 
-        System.out.print("Ingrese el piso: ");
-        int piso = Integer.parseInt(teclado.nextLine());
+                    System.out.println("Seleccione el tipo:");
+                    System.out.println("1. Simple");
+                    System.out.println("2. Doble");
+                    System.out.println("3. Suite");
 
-        if (numero <= 0 || piso < 0) {
-            System.out.println("El numero de habitacion debe ser mayor a 0." +
-                    "El hotel no tiene subsuelo, el piso debe ser igual o mayor a 0.");
+                    int tipo = teclado.nextInt();
+                    ETipoHabitacion tipoHabitacion;
+
+                    switch (tipo) {
+                        case 1:
+                            tipoHabitacion = ETipoHabitacion.SIMPLE;
+                            break;
+                        case 2:
+                            tipoHabitacion = ETipoHabitacion.DOBLE;
+                            break;
+                        case 3:
+                            tipoHabitacion = ETipoHabitacion.SUITE;
+                            break;
+                        default:
+                            System.out.println("Tipo inválido.");
+                            tipoHabitacion = null;
+                            break;
+                    }
+                    if (tipoHabitacion != null) {
+                        Habitacion habitacion =
+                                new Habitacion(numero, piso, tipoHabitacion);
+
+                        return habitacion;
+                    }
+                }
+            }
+        } catch (InputMismatchException e){
+            System.out.println("error, tipo de dato invalido");
         }
-
-        System.out.println("Seleccione el tipo:");
-        System.out.println("1. Simple");
-        System.out.println("2. Doble");
-        System.out.println("3. Suite");
-
-        int tipo = Integer.parseInt(teclado.nextLine());
-        ETipoHabitacion tipoHabitacion = null;
-
-        switch (tipo) {
-            case 1:
-                tipoHabitacion = ETipoHabitacion.SIMPLE;
-                break;
-            case 2:
-                tipoHabitacion = ETipoHabitacion.DOBLE;
-                break;
-            case 3:
-                tipoHabitacion = ETipoHabitacion.SUITE;
-                break;
-            default:
-                System.out.println("Tipo inválido.");
-                break;
-        }
-        if (tipoHabitacion != null) {
-            System.out.println("Habitacion creada con exito.");
-        }
-        Habitacion habitacion =
-                new Habitacion(numero, piso, tipoHabitacion);
-
-        return habitacion;
+        return null;
     }
 
-    public void eliminarHabitacion(int numeroHabitacion) {
+    public void eliminarHabitacion(int numeroHabitacion) throws IDNoEncontradoException{
         super.getHotel().eliminarHabitacion(numeroHabitacion);
     }
 
+    public void listarRecepcionistas() throws ColeccionVaciaException {
+        super.getHotel().listarRecepcionistas();
+    }
+
+    public void listarHabitaciones() throws ColeccionVaciaException{
+        super.getHotel().listarHabitaciones();
+    }
 }

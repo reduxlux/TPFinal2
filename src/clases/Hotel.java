@@ -99,7 +99,7 @@ public final class Hotel {
 
     /// PASAJEROS
 
-    public Pasajero crearPasajero() {
+    public Pasajero crearPasajero() throws SQLException{
         System.out.println("Introduzca su DNI: ");
         String dni = sc.nextLine();
 
@@ -120,6 +120,8 @@ public final class Hotel {
 
             Pasajero p = new Pasajero(
                     nombre, dni, ciudad, domicilio, this);
+
+            HotelDAO.guardarPasajero(p);
 
             return p;
         }
@@ -192,7 +194,6 @@ public final class Hotel {
                 return estadia;
             }
         }
-
         return null;
     }
 
@@ -227,7 +228,7 @@ public final class Hotel {
         if (agregarAdministradorSQL(nuevoAdministrador)) {
             administradores.agregar(nuevoAdministrador.getId(), nuevoAdministrador);
 
-            System.out.println("Administrador guardado en HashMap con ID: " + nuevoAdministrador.getId());
+            System.out.println("Administrador guardado con ID: " + nuevoAdministrador.getId());
 
             return true;
         }
@@ -243,7 +244,7 @@ public final class Hotel {
         if (agregarRecepcionistaSQL(nuevoRecepcionista)) {
             recepcionistas.agregar(nuevoRecepcionista.getId(), nuevoRecepcionista);
 
-            System.out.println("Recepcionista guardado en HashMap con ID: " + nuevoRecepcionista.getId());
+            System.out.println("Recepcionista guardado con ID: " + nuevoRecepcionista.getId());
 
             return true;
         }
@@ -262,6 +263,15 @@ public final class Hotel {
             System.out.println("Recepcionista eliminado correctamente");
         } else {
             System.out.println("No se pudo eliminar el recepcionista");
+        }
+    }
+
+    public void listarRecepcionistas() throws ColeccionVaciaException{
+        if(recepcionistas.estaVacio()){
+            throw new ColeccionVaciaException(Recepcionista.class, "");
+        }
+        for (Recepcionista recepcionista: recepcionistas.getPersonas().values()){
+            System.out.println(recepcionista.toString());
         }
     }
 
@@ -567,10 +577,9 @@ public final class Hotel {
         }
     }
 
-    public boolean eliminarHabitacion(int numero) {
+    public boolean eliminarHabitacion(int numero) throws IDNoEncontradoException{
         if (!habitaciones.containsKey(numero)) {
-            System.out.println("Habitacion no encontrada");
-            return false;
+            throw new IDNoEncontradoException(Habitacion.class, numero);
         }
 
         if (eliminarHabitacionSQL(numero)) {
@@ -578,8 +587,6 @@ public final class Hotel {
             System.out.println("Habitacion eliminada correctamente");
             return true;
         }
-
-        System.out.println("No se pudo eliminar la habitacion");
         return false;
     }
 
@@ -730,10 +737,9 @@ public final class Hotel {
     public boolean eliminarHabitacionSQL(int numeroHabitacion) {
         try {
             HotelDAO.eliminarHabitacion(numeroHabitacion);
-            System.out.println("Habitación eliminada.");
             return true;
         } catch (SQLException e) {
-            System.out.println("No se pudo eliminar la habitación: " + e.getMessage());
+            System.out.println("No se pudo eliminar la habitación numero " + numeroHabitacion);
             return false;
         }
     }

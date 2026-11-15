@@ -105,6 +105,10 @@ public class Pasajero {
 
     public void mostrarEstadiaActual() {
         Estadia actual = hotel.obtenerEstadiaActual(dni);
+        if(actual == null){
+            System.out.println("no tiene ninguna estadia activa");
+            return;
+        }
         System.out.println("su estadia actual es: " + actual.toString());
     }
 

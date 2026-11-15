@@ -40,7 +40,7 @@ public class HotelDAO {
     // GUARDAR PASAJERO
     public static void guardarPasajero(Pasajero p)
             throws SQLException {
-        try (Connection cn = ConexioBD.conectar()){
+        try (Connection cn = ConexioBD.conectar()) {
             pasajerosDAO.guardar(cn, p);
         }
     }
