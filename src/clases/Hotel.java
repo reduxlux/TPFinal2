@@ -796,7 +796,7 @@ public final class Hotel {
     // ESTADIA
     public boolean agregarEstadiaSQL(Estadia estadia) {
         try {
-            HotelDAO.guardarOcupacionYActualizarHabitacion(estadia);
+            HotelDAO.guardarEstadiaYActualizarHabitacion(estadia);
             estadias.agregar(estadia);
             return true;
 
