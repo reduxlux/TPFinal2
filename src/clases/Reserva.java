@@ -107,13 +107,11 @@ public class Reserva {
     ///toString
     @Override
     public String toString() {
-        return "Reserva{" +
-                "id=" + id +
-                ", pasajero=" + pasajero +
-                ", habitacion=" + habitacion +
-                ", fechaEntrada=" + fechaEntrada +
-                ", fechaSalida=" + fechaSalida +
-                ", estado=" + estado +
-                '}';
+        return "ID: " + id +
+                " | Pasajero: " + pasajero.getNombre() +
+                " | Habitacion: " + habitacion.getNumero() +
+                " | Entrada: " + fechaEntrada +
+                " | Salida: " + fechaSalida +
+                " | Estado: " + estado;
     }
 }

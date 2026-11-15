@@ -146,9 +146,15 @@ public final class Hotel {
         IO.println(mostrarReservasPorPasajero(dni));
 
         IO.println("Ingrese la reserva que desea eliminar:");
-        int opcion = Integer.parseInt(sc.nextLine());
+        int opcion;
+        try {
+            opcion = Integer.parseInt(sc.nextLine());
+        } catch (NumberFormatException e) {
+            IO.println("Error: debe ingresar un numero valido");
+            return;
+        }
 
-        int contador = 1;
+        int contador = 0;
         for (Reserva r : reservas) {
             if (r.getPasajero().getDni().equalsIgnoreCase(dni)) {
                 if (contador == opcion) {

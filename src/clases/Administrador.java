@@ -129,15 +129,17 @@ public class Administrador extends Usuario {
     public Habitacion crearHabitacion() {
         try {
             System.out.print("Ingrese el número de habitación: ");
-            int numero = teclado.nextInt();
-            if (numero <= 0){
+            int numero = Integer.parseInt(teclado.nextLine());
+
+            if (numero <= 0) {
                 System.out.println("El numero de habitacion debe ser mayor a 0.");
-            } else if(super.getHotel().getHabitaciones().containsKey(numero)) {
+            } else if (super.getHotel().getHabitaciones().containsKey(numero)) {
                 System.out.println("error, ya hay otra habitacion con ese numero.");
             } else {
                 System.out.print("Ingrese el piso: ");
-                int piso = teclado.nextInt();
-                if(piso < 0) {
+                int piso = Integer.parseInt(teclado.nextLine());
+
+                if (piso < 0) {
                     System.out.println("El hotel no tiene subsuelo, el piso debe ser igual o mayor a 0.");
                 } else {
 
@@ -146,7 +148,7 @@ public class Administrador extends Usuario {
                     System.out.println("2. Doble");
                     System.out.println("3. Suite");
 
-                    int tipo = teclado.nextInt();
+                    int tipo = Integer.parseInt(teclado.nextLine());
                     ETipoHabitacion tipoHabitacion;
 
                     switch (tipo) {
@@ -164,6 +166,7 @@ public class Administrador extends Usuario {
                             tipoHabitacion = null;
                             break;
                     }
+
                     if (tipoHabitacion != null) {
                         Habitacion habitacion =
                                 new Habitacion(numero, piso, tipoHabitacion);
@@ -172,9 +175,10 @@ public class Administrador extends Usuario {
                     }
                 }
             }
-        } catch (InputMismatchException e){
-            System.out.println("error, tipo de dato invalido");
+        } catch (NumberFormatException e) {
+            System.out.println("Error, tipo de dato invalido");
         }
+
         return null;
     }
 

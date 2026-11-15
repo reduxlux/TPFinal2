@@ -85,13 +85,16 @@ public class Habitacion {
 
     public String mostrarInformacion() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Habitacion: " + this.numero + " ");
-        sb.append("Piso: " + this.piso + " ");
-        sb.append("Tipo: " + this.tipo + " ");
-        sb.append("Estado: " + this.estado + " ");
+
+        sb.append("Habitación N° ").append(this.numero).append("\n");
+        sb.append("Piso: ").append(this.piso);
+        sb.append(" | Tipo: ").append(this.tipo);
+        sb.append(" | Estado: ").append(this.estado);
+
         if (this.estado == EEstadoHabitacion.NO_DISPONIBLE) {
-            sb.append("Motivo: " + motivoNoDisponible);
+            sb.append("\nMotivo: ").append(motivoNoDisponible);
         }
+
         return sb.toString();
     }
 
