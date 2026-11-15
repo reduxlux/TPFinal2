@@ -74,6 +74,10 @@ public class Habitacion {
         this.motivoNoDisponible = "";
     }
 
+    public void reservar() {
+        this.estado = EEstadoHabitacion.RESERVADA;
+    }
+
     public void bloquear(String motivo) {
         this.estado = EEstadoHabitacion.NO_DISPONIBLE;
         this.motivoNoDisponible = motivo;
@@ -85,7 +89,7 @@ public class Habitacion {
         sb.append("Piso: " + this.piso + " ");
         sb.append("Tipo: " + this.tipo + " ");
         sb.append("Estado: " + this.estado + " ");
-        if (!estaDisponible()) {
+        if (this.estado == EEstadoHabitacion.NO_DISPONIBLE) {
             sb.append("Motivo: " + motivoNoDisponible);
         }
         return sb.toString();

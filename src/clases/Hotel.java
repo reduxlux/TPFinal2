@@ -181,25 +181,6 @@ public final class Hotel {
         return true;
     }
 
-    public Habitacion obtenerHabitacionActualDelPasajero(String dni) {
-
-        if (dni == null) {
-            return null;
-        }
-
-        for (Estadia estadia : estadias) {
-
-            if (estadia.getPasajero().getDni().equals(dni)
-                    && estadia.getFechaCheckOut() == null) {
-
-                return estadia.getHabitacion();
-            }
-        }
-
-        return null;
-    }
-
-
     public Estadia obtenerEstadiaActual(String dni) {
         if (dni == null) {
             return null;
@@ -355,9 +336,9 @@ public final class Hotel {
         Habitacion habitacion = buscarHabitacion(nrohabitacion);
 
         Reserva reserva = new Reserva(pasajero, habitacion, checkin, checkout);
-
         if (agregarReservaCompleta(reserva)) {
             System.out.println("Reserva agregada correctamente");
+            reserva.getHabitacion().reservar();
         } else {
             System.out.println("No se pudo agregar la reserva");
         }
@@ -430,8 +411,9 @@ public final class Hotel {
         if (!pasajeros.contiene(r.getPasajero().getDni())) {
             pasajeros.agregar(r.getPasajero().getDni(), r.getPasajero());
         }
-
         reservas.agregar(r);
+        r.getHabitacion().reservar();
+        System.out.println("Estado reserva: " + r.getHabitacion().getEstado());
         return true;
     }
 
@@ -445,13 +427,13 @@ public final class Hotel {
         }
         try {
             HotelDAO.guardarReservaCompleta(r.getPasajero(), r);
-            // Si el pasajero era nuevo, lo agregamos a memoria.
+            // Si el pasajero era nuevo, lo agrega a memoria.
             if (!pasajeros.contiene(r.getPasajero().getDni())) {
                 pasajeros.agregar(r.getPasajero().getDni(), r.getPasajero());
             }
             return true;
         } catch (SQLException e) {
-            // Si falla SQL, quitamos la reserva que habíamos agregado
+            // Si falla SQL, quita la reserva que había agregado
             // previamente a la colección en memoria.
             reservas.eliminar(r);
             System.out.println("Error al guardar reserva: " + e.getMessage());
@@ -485,9 +467,9 @@ public final class Hotel {
         System.out.println("ID Estadia: " + nuevaEstadia.getId());
         System.out.println("ID Reserva guardado en Estadia: " + nuevaEstadia.getIdReserva());
 
-        // Guardamos la estadía y actualizamos la habitación en SQL
+        // Guardamos la estadía y actualiza la habitación en SQL
         if (agregarEstadiaSQL(nuevaEstadia)) {
-            // Si SQL funcionó, actualizamos memoria
+            // Si SQL funcionó, actualiza memoria
             reserva.getPasajero().agregarEstadia(nuevaEstadia);
             habitacion.ocupar();
             System.out.println("Check-in realizado correctamente");
@@ -516,9 +498,9 @@ public final class Hotel {
             estadia.realizarCheckOut(fechaSalida);
             estadia.getHabitacion().habilitar();
 
-            // Eliminamos la reserva de SQL
+            // Elimina la reserva de SQL
             if (eliminarReservaSQL(estadia.getIdReserva())) {
-                // Eliminamos la reserva de memoria
+                // Elimina la reserva de memoria
                 try {
                     Reserva reserva = buscarReserva(estadia.getIdReserva());
                     reservas.eliminar(reserva);
@@ -536,20 +518,6 @@ public final class Hotel {
         }
     }
 
-    public String buscarEstadiaPasajero(String dni) throws ColeccionVaciaException, PasajeroNoEncontradoException {
-        boolean b = false;
-        StringBuilder sb = new StringBuilder();
-        Pasajero p = buscarPasajero(dni);
-        for (Estadia estadia : p.getHistorial()) {
-            sb.append(estadia);
-            b = true;
-        }
-        if (!b) {
-            throw new ColeccionVaciaException(Estadia.class, " realizada por el pasajero con dni " + dni);
-        }
-        return sb.toString();
-    }
-
     public Reserva buscarReserva(int id) throws IDNoEncontradoException {
         for (Reserva r : reservas) {
             if (r.getId() == id) {
@@ -560,23 +528,13 @@ public final class Hotel {
         throw new IDNoEncontradoException(Reserva.class, id);
     }
 
-    public Reserva buscarReservaPasajero(String dni) {
-        for (Reserva x : reservas) {
-            if (x.getPasajero().getDni().equals(dni)) {
-                return x;
-            }
-        }
-        return null;
-    }
-
     public Estadia buscarEstadiaPorId(int id)
             throws IDNoEncontradoException {
 
         System.out.println("Buscando estadía con ID: " + id);
         System.out.println("Cantidad de estadías: " + estadias.cantidad());
-
+        System.out.println("Estadías encontrada en colección:");
         for (Estadia estadia : estadias) {
-            System.out.println("Estadía encontrada en colección:");
             System.out.println("ID: " + estadia.getId());
             System.out.println("Pasajero: " + estadia.getPasajero().getNombre());
         }
@@ -660,7 +618,15 @@ public final class Hotel {
         String resultado = "Habitaciones disponibles:\n";
         boolean hayHabitaciones = false;
         for (Habitacion x : habitaciones.values()) {
-            if (x.estaDisponible()) {
+            boolean reservada = false;
+            for (Reserva r : reservas) {
+                if (r.getHabitacion().getNumero() == x.getNumero()
+                && r.getEstado() == EEstadoReserva.CONFIRMADA) {
+                    reservada = true;
+                    break;
+                }
+            }
+            if (x.estaDisponible() && !reservada) {
                 resultado += x.mostrarInformacion() + "\n";
                 hayHabitaciones = true;
             }
@@ -772,17 +738,6 @@ public final class Hotel {
         }
     }
 
-    // RESERVA
-    public boolean agregarReservaSQL(Reserva r) {
-        try {
-            HotelDAO.guardarReserva(r);
-            return true;
-        } catch (SQLException e) {
-            System.out.println("Error al guardar reserva: " + e.getMessage());
-            return false;
-        }
-    }
-
     public boolean eliminarReservaSQL(int id) {
         try {
             HotelDAO.eliminarReserva(id);
@@ -812,17 +767,6 @@ public final class Hotel {
             return true;
         } catch (SQLException e) {
             System.out.println("Error SQL: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // PASAJERO
-    public boolean agregarPasajeroSQL(Pasajero p) {
-        try {
-            HotelDAO.guardarPasajero(p);
-            return true;
-        } catch (SQLException e) {
-            System.out.println("Error al guardar pasajero: " + e.getMessage());
             return false;
         }
     }
