@@ -19,7 +19,7 @@ public class MenuAdmin {
         int opcion;
 
         do {
-            System.out.println("=== MENU ADMIN ===");
+            System.out.println("=== MENU ADMIN === ADMIN: " + a.getNombre());
             System.out.println("1. Crear usuario.");
             System.out.println("2. Eliminar recepcionista.");
             System.out.println("3. Crear y agregar habitacion.");

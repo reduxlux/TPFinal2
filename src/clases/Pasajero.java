@@ -145,11 +145,11 @@ public class Pasajero {
 
     @Override
     public String toString() {
-        return "Pasajero{" +
-                "nombre='" + nombre + '\'' +
-                ", dni='" + dni + '\'' +
-                ", origen='" + origen + '\'' +
-                ", domicilioOrigen='" + domicilioOrigen + '\'' +
-                '}';
+        return "\n========== PASAJERO ==========\n" +
+                "Nombre: " + nombre + "\n" +
+                "DNI: " + dni + "\n" +
+                "Origen: " + origen + "\n" +
+                "Domicilio de origen: " + domicilioOrigen + "\n" +
+                "==============================";
     }
 }

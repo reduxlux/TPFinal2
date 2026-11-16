@@ -23,7 +23,7 @@ public class MenuPasajero {
         int opcion;
 
         do {
-            System.out.println("=== MENU PASAJEROS ===");
+            System.out.println("=== MENU PASAJEROS === Pasajero: " + p.getNombre());
             System.out.println("1. Agregar reserva.");
             System.out.println("2. Mostrar estadia actual.");
             System.out.println("3. Eliminar reserva.");

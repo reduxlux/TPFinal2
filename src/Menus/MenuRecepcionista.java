@@ -26,7 +26,7 @@ public class MenuRecepcionista {
         int opcion;
 
         do {
-            System.out.println("\n=== MENU RECEPCIONISTA ===");
+            System.out.println("\n=== MENU RECEPCIONISTA === Recepcionista: " + r.getNombre());
             System.out.println("1. Realizar reserva.");
             System.out.println("2. Eliminar reserva.");
             System.out.println("3. Realizar check-in.");

@@ -100,18 +100,12 @@ public class Estadia {
     ///toString
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Ocupacion{" +
-                "id=" + id +
-                ", pasajero=" + pasajero.toString() + ", habitacion=");
-        if(habitacion != null) {
-            sb.append(habitacion);
-        } else {
-            sb.append("no tiene");
-        }
-        sb.append(", fechaCheckIn=" + fechaCheckIn +
-                ", fechaCheckOut=" + fechaCheckOut +
-                '}');
-        return sb.toString();
+        return "========== ESTADIA ==========\n" +
+                "ID: " + id + "\n" +
+                "Pasajero: " + pasajero + "\n" +
+                "Habitación: " + (habitacion != null ? habitacion.getNumero() : "No tiene") + "\n" +
+                "Fecha de Check-In: " + fechaCheckIn + "\n" +
+                "Fecha de Check-Out: " + (fechaCheckOut != null ? fechaCheckOut : "Pendiente") + "\n" +
+                "===============================";
     }
 }
