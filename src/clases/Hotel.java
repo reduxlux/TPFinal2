@@ -636,43 +636,133 @@ public final class Hotel {
         }
     }
 
+
+
     public void bloquearHabitacion(int numero, String motivo)
-            throws IDNoEncontradoException, FechaInvalidaException{
+            throws IDNoEncontradoException {
+
         Habitacion habitacion = buscarHabitacion(numero);
+
         if (habitacion == null) {
-        } else if (motivo == null || motivo.isBlank()) {
+            System.out.println("Habitacion no encontrada.");
+            return;
+        }
+
+        if (motivo == null || motivo.isBlank()) {
             System.out.println("Debe haber un motivo.");
+            return;
+        }
+
+        // Verificar reservas sin importar la fecha
+        boolean tieneReserva = false;
+
+        for (Reserva reserva : reservas) {
+            if (reserva.getHabitacion().getNumero() == numero
+                    && reserva.getEstado() == EEstadoReserva.CONFIRMADA) {
+
+                tieneReserva = true;
+                break;
+            }
+        }
+
+        // Verificar si esta ocupada actualmente
+        boolean estaOcupada = false;
+
+        for (Estadia estadia : estadias) {
+            if (estadia.getHabitacion().getNumero() == numero
+                    && estadia.estaActiva()) {
+
+                estaOcupada = true;
+                break;
+            }
+        }
+
+        if (tieneReserva) {
+            System.out.println("ATENCION: La habitacion tiene reservas confirmadas.");
+        }
+
+        if (estaOcupada) {
+            System.out.println("ATENCION: La habitacion esta ocupada actualmente.");
+        }
+
+        // Confirmar bloqueo
+        System.out.println("""
+            ¿Seguro que desea bloquear la habitacion?
+            1: Si
+            2: No
+            """);
+
+        int opcion;
+
+        try {
+            opcion = Integer.parseInt(sc.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Opcion invalida.");
+            return;
+        }
+
+        if (opcion == 1) {
+
+            EEstadoHabitacion estadoAnterior = habitacion.getEstado();
+            String motivoAnterior = habitacion.getMotivoNoDisponible();
+
+            habitacion.bloquear(motivo);
+
+            try {
+                HotelDAO.guardarHabitacion(habitacion);
+                System.out.println("Habitacion bloqueada correctamente");
+
+            } catch (SQLException e) {
+
+                habitacion.setEstado(estadoAnterior);
+                habitacion.setMotivoNoDisponible(motivoAnterior);
+
+                System.out.println("Error al actualizar SQL: " + e.getMessage());
+            }
+
+        } else if (opcion == 2) {
+            System.out.println("La habitacion no se bloqueo.");
+
         } else {
-            int x = 1;
-            if(!consultarDisponibilidad(numero, LocalDate.now(), LocalDate.now().plusDays(1))) {
-                System.out.println("la habitacion esta ocupada, seguro que quieres bloquearla?\n 1: si\n 2: no");
-                try {
-                    x = sc.nextInt();
-                } catch (InputMismatchException e){
-                    x = -1;
-                } finally {
-                    sc.nextLine();
-                }
-            }
-            if(x == 1){
-                habitacion.bloquear(motivo);
-                System.out.println("Habitacion bloqueada");
-            } else if(x == 2){
-                System.out.println("la habitacion no se bloqueo");
-            } else {
-                System.out.println("error, el dato introducido es invalido");
-            }
+            System.out.println("Opcion invalida.");
         }
     }
 
+
+
+
     public void habilitarHabitacion(int numero) {
+
         Habitacion habitacion = buscarHabitacion(numero);
+
         if (habitacion == null) {
-        } else {
-            habitacion.habilitar();
-            System.out.println("Habitacion habilitada");
+            System.out.println("Habitacion no encontrada.");
+            return;
+        }
+
+        // Guardar el estado anterior por si falla SQL
+        EEstadoHabitacion estadoAnterior = habitacion.getEstado();
+        String motivoAnterior = habitacion.getMotivoNoDisponible();
+
+        // Habilitar habitacion en Java
+        habitacion.habilitar();
+
+        try {
+            // Actualizar habitacion en SQL
+            HotelDAO.guardarHabitacion(habitacion);
+
+            System.out.println("Habitacion habilitada correctamente.");
+
+        } catch (SQLException e) {
+
+            // Restaurar el estado anterior si falla SQL
+            habitacion.setEstado(estadoAnterior);
+            habitacion.setMotivoNoDisponible(motivoAnterior);
+
+            System.out.println("Error al actualizar SQL: " + e.getMessage());
         }
     }
+
 
     public String listarHabitacionesDisponibles() throws ColeccionVaciaException {
         String resultado = "Habitaciones disponibles:\n";
