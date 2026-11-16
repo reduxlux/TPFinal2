@@ -61,10 +61,12 @@ public class MenuRecepcionista {
                         IO.println("Pasajero no encontrado. Vamos a registrarlo.");
                         try {
                             p = hotel.crearPasajero();
-                            System.out.println("pasajero guardado correctamente");
                         } catch (SQLException ex) {
                             System.out.println("se produjo un error al crear el pasajero");
                             p = null;
+                        }
+                        if(p != null) {
+                            System.out.println("pasajero guardado correctamente");
                         }
                     }
                     // Si tenemos un pasajero, intentamos realizar la reserva
@@ -77,6 +79,8 @@ public class MenuRecepcionista {
                             IO.println("Error al guardar la reserva: " + e.getMessage());
                         } catch (NumberFormatException e) {
                             IO.println("Error: debe ingresar un número válido");
+                        } catch (IDNoEncontradoException e){
+                            System.out.println(e.getMessage());
                         }
                     }
                     break;
@@ -106,7 +110,9 @@ public class MenuRecepcionista {
                     break;
                 case 4:
                     try {
-                        r.consultarReservas();
+                        System.out.println("introduzca el dni del pasajero de la estadia: ");
+                        String dniP = sc.nextLine();
+                        r.mostrarEstadiasPasajero(dniP);
                         System.out.println("Introduzca el ID de la estadia: ");
                         int idEstadia = Integer.parseInt(sc.nextLine());
                         Estadia estadia = hotel.buscarEstadiaPorId(idEstadia);
@@ -167,11 +173,19 @@ public class MenuRecepcionista {
                         System.out.println("Dia: ");
                         int dia2 = Integer.parseInt(sc.nextLine());
                         LocalDate diaSalida = LocalDate.of(anio2, mes2, dia2);
-                        r.consultarDisponibilidad(nroHabitacion, diaEntrada, diaSalida);
+                        if(r.consultarDisponibilidad(nroHabitacion, diaEntrada, diaSalida)){
+                            System.out.println("La habitacion esta disponible en esa fecha");
+                        } else {
+                            System.out.println("la habitacion no esta disponible en esa fecha");
+                        }
                     } catch (NumberFormatException e) {
                         System.out.println("Error, dato invalido");
                     } catch (DateTimeException e) {
                         System.out.println("Error, fecha invalida");
+                    } catch (IDNoEncontradoException e){
+                        System.out.println(e.getMessage());
+                    } catch (FechaInvalidaException e){
+                        System.out.println(e.getMessage());
                     }
                     break;
 
@@ -183,8 +197,12 @@ public class MenuRecepcionista {
                         System.out.println("Ingresar motivo de bloqueo: ");
                         String motivo = sc.nextLine();
                         r.bloquearHabitacion(nroHabitacion, motivo);
-                    } catch (NumberFormatException e) {
+                    } catch (NumberFormatException | InputMismatchException e){
                         System.out.println("Error: dato invalido");
+                    } catch (IDNoEncontradoException e){
+                        System.out.println(e.getMessage());
+                    } catch (FechaInvalidaException e){
+                        System.out.println(e.getMessage());
                     }
                     break;
 

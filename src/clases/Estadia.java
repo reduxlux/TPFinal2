@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 /// INFORMACION DE HABITACION OCUPADA
 public class Estadia {
-    private static int contador = 0;
+    private static int contador = 1;
     private int id;
     private Pasajero pasajero;
     private Habitacion habitacion;
@@ -100,12 +100,18 @@ public class Estadia {
     ///toString
     @Override
     public String toString() {
-        return "Ocupacion{" +
+        StringBuilder sb = new StringBuilder();
+        sb.append("Ocupacion{" +
                 "id=" + id +
-                ", pasajero=" + pasajero +
-                ", habitacion=" + habitacion +
-                ", fechaCheckIn=" + fechaCheckIn +
+                ", pasajero=" + pasajero.toString() + ", habitacion=");
+        if(habitacion != null) {
+            sb.append(habitacion);
+        } else {
+            sb.append("no tiene");
+        }
+        sb.append(", fechaCheckIn=" + fechaCheckIn +
                 ", fechaCheckOut=" + fechaCheckOut +
-                '}';
+                '}');
+        return sb.toString();
     }
 }

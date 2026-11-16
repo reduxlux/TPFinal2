@@ -13,7 +13,7 @@ public class AdministradoresDAO implements IntDAO<Administrador> {
                CREATE TABLE IF NOT EXISTS administradores (
                id INT PRIMARY KEY,
                nombre VARCHAR(100) NOT NULL,
-               usuario VARCHAR(100) PRIMARY KEY,
+               usuario VARCHAR(100) NOT NULL,
                contrasenia VARCHAR(100) NOT NULL
                )
                """;

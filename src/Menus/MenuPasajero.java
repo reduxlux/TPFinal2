@@ -1,5 +1,6 @@
 package Menus;
 
+import Excepciones.IDNoEncontradoException;
 import clases.*;
 import Excepciones.ColeccionVaciaException;
 import Excepciones.FechaInvalidaException;
@@ -48,6 +49,8 @@ public class MenuPasajero {
                         System.out.println("Error, el dato es invalido");
                     } catch (SQLException e){
                         System.out.println("no se pudo agregar la reserva");
+                    } catch (IDNoEncontradoException e){
+                        System.out.println(e.getMessage());
                     }
                     break;
 

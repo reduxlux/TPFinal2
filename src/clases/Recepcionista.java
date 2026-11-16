@@ -2,6 +2,7 @@ package clases;
 
 import Excepciones.ColeccionVaciaException;
 import Excepciones.FechaInvalidaException;
+import Excepciones.IDNoEncontradoException;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -16,7 +17,8 @@ public class Recepcionista extends Usuario {
         super(id, usuario, contrasenia, nombre, hotel);
     }
 
-    public void realizarReservaRec(Reserva reserva) {
+    public void realizarReservaRec(Reserva reserva)
+            throws FechaInvalidaException, IDNoEncontradoException{
         super.getHotel().agregarReservaHotel(reserva);
     }
 
@@ -36,11 +38,13 @@ public class Recepcionista extends Usuario {
         super.getHotel().listarHabitacionesOcupadas();
     }
 
-    public void consultarDisponibilidad(int numero, LocalDate fechaEntrada, LocalDate fechaSalida) {
-        super.getHotel().consultarDisponibilidad(numero, fechaEntrada, fechaSalida);
+    public boolean consultarDisponibilidad(int numero, LocalDate fechaEntrada, LocalDate fechaSalida)
+            throws IDNoEncontradoException, FechaInvalidaException {
+        return super.getHotel().consultarDisponibilidad(numero, fechaEntrada, fechaSalida);
     }
 
-    public void bloquearHabitacion(int numero, String motivo) {
+    public void bloquearHabitacion(int numero, String motivo)
+            throws IDNoEncontradoException, FechaInvalidaException{
         super.getHotel().bloquearHabitacion(numero, motivo);
     }
 
@@ -48,7 +52,7 @@ public class Recepcionista extends Usuario {
         super.getHotel().habilitarHabitacion(numero);
     }
 
-    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException, SQLException {
+    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException, SQLException, IDNoEncontradoException{
         getHotel().crearReserva(pasajero);
     }
 
@@ -59,5 +63,9 @@ public class Recepcionista extends Usuario {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    public String mostrarEstadiasPasajero(String dni) throws ColeccionVaciaException{
+        return getHotel().mostrarEstadiaPasajero(dni);
     }
 }

@@ -131,7 +131,7 @@ public class Administrador extends Usuario {
     public Habitacion crearHabitacion() {
         try {
             System.out.print("Ingrese el número de habitación: ");
-            int numero = Integer.parseInt(teclado.nextLine());
+            int numero = teclado.nextInt();
 
             if (numero <= 0) {
                 System.out.println("El numero de habitacion debe ser mayor a 0.");
@@ -139,7 +139,7 @@ public class Administrador extends Usuario {
                 System.out.println("error, ya hay otra habitacion con ese numero.");
             } else {
                 System.out.print("Ingrese el piso: ");
-                int piso = Integer.parseInt(teclado.nextLine());
+                int piso = teclado.nextInt();
 
                 if (piso < 0) {
                     System.out.println("El hotel no tiene subsuelo, el piso debe ser igual o mayor a 0.");
@@ -150,7 +150,7 @@ public class Administrador extends Usuario {
                     System.out.println("2. Doble");
                     System.out.println("3. Suite");
 
-                    int tipo = Integer.parseInt(teclado.nextLine());
+                    int tipo = teclado.nextInt();
                     ETipoHabitacion tipoHabitacion;
 
                     switch (tipo) {

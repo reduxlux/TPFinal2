@@ -152,7 +152,7 @@ public final class Hotel {
             return;
         }
 
-        int contador = 0;
+        int contador = 1;
         for (Reserva r : reservas) {
             if (r.getPasajero().getDni().equalsIgnoreCase(dni)) {
                 if (contador == opcion) {
@@ -226,6 +226,21 @@ public final class Hotel {
         return mensaje.toString();
     }
 
+    public String mostrarEstadiaPasajero(String dni) throws ColeccionVaciaException{
+        boolean x = false;
+        StringBuilder sb = new StringBuilder();
+        for (Estadia estadia: estadias){
+            if(estadia.getPasajero().getDni().equals(dni)){
+                sb.append(estadia);
+                x = true;
+            }
+        }
+        if(!x){
+            throw new ColeccionVaciaException(Estadia.class, " del pasajero con dni " + dni);
+        }
+        return sb.toString();
+    }
+
     /// ADMINISTRADORES
 
     public boolean agregarAdministrador(Administrador nuevoAdministrador) {
@@ -292,7 +307,7 @@ public final class Hotel {
         return pasajeros.obtener(dni);
     }
 
-    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException, SQLException{
+    public void crearReserva(Pasajero pasajero) throws FechaInvalidaException, SQLException, IDNoEncontradoException{
         try {
             System.out.println("Introduzca el año de la estadía:");
             int anio = sc.nextInt();
@@ -369,14 +384,17 @@ public final class Hotel {
         int contador = 0;
 
         for (Habitacion h : habitaciones.values()) {
+            try {
+                if (consultarDisponibilidad(h.getNumero(), entrada, salida)) {
+                    mensaje.append("Numero: ").append(h.getNumero())
+                            .append(" | Piso: ").append(h.getPiso())
+                            .append(" | Tipo: ").append(h.getTipo())
+                            .append("\n");
 
-            if (consultarDisponibilidad(h.getNumero(), entrada, salida)) {
-                mensaje.append("Numero: ").append(h.getNumero())
-                        .append(" | Piso: ").append(h.getPiso())
-                        .append(" | Tipo: ").append(h.getTipo())
-                        .append("\n");
-
-                contador++;
+                    contador++;
+                }
+            } catch (FechaInvalidaException | IDNoEncontradoException e){
+                //no hacer nada aca
             }
         }
 
@@ -411,7 +429,8 @@ public final class Hotel {
         }
     }
 
-    public boolean agregarReservaHotel(Reserva r) {
+    public boolean agregarReservaHotel(Reserva r)
+            throws IDNoEncontradoException, FechaInvalidaException{
         if (r == null
                 || reservas.contiene(r)
                 || r.getHabitacion() == null
@@ -437,7 +456,8 @@ public final class Hotel {
         return true;
     }
 
-    public boolean agregarReservaCompleta(Reserva r) {
+    public boolean agregarReservaCompleta(Reserva r)
+            throws IDNoEncontradoException, FechaInvalidaException{
 
         if (r == null) {
             return false;
@@ -475,26 +495,30 @@ public final class Hotel {
         }
 
         Habitacion habitacion = reserva.getHabitacion();
-        Estadia nuevaEstadia = new Estadia(
-                reserva.getPasajero(),
-                habitacion,
-                LocalDate.now(),
-                null,
-                reserva.getId()
-        );
+        if(habitacion != null) {
+            Estadia nuevaEstadia = new Estadia(
+                    reserva.getPasajero(),
+                    habitacion,
+                    LocalDate.now(),
+                    null,
+                    reserva.getId()
+            );
 
-        System.out.println("ID Reserva: " + reserva.getId());
-        System.out.println("ID Estadia: " + nuevaEstadia.getId());
-        System.out.println("ID Reserva guardado en Estadia: " + nuevaEstadia.getIdReserva());
+            System.out.println("ID Reserva: " + reserva.getId());
+            System.out.println("ID Estadia: " + nuevaEstadia.getId());
+            System.out.println("ID Reserva guardado en Estadia: " + nuevaEstadia.getIdReserva());
 
-        // Guardamos la estadía y actualiza la habitación en SQL
-        if (agregarEstadiaSQL(nuevaEstadia)) {
-            // Si SQL funcionó, actualiza memoria
-            reserva.getPasajero().agregarEstadia(nuevaEstadia);
-            habitacion.ocupar();
-            System.out.println("Check-in realizado correctamente");
+            // Guardamos la estadía y actualiza la habitación en SQL
+            if (agregarEstadiaSQL(nuevaEstadia)) {
+                // Si SQL funcionó, actualiza memoria
+                reserva.getPasajero().agregarEstadia(nuevaEstadia);
+                habitacion.ocupar();
+                System.out.println("Check-in realizado correctamente");
+            } else {
+                System.out.println("No se pudo realizar el Check-in");
+            }
         } else {
-            System.out.println("No se pudo realizar el Check-in");
+            System.out.println("no se pudo realizar el Check-in");
         }
     }
 
@@ -512,29 +536,32 @@ public final class Hotel {
             throw new FechaInvalidaException(
                     "La fecha de salida no puede ser anterior al check-in");
         }
+        if(estadia.getHabitacion() != null) {
+            if (actualizarCheckOutSQL(estadia, fechaSalida)) {
 
-        if (actualizarCheckOutSQL(estadia, fechaSalida)) {
+                estadia.realizarCheckOut(fechaSalida);
+                estadia.getHabitacion().habilitar();
 
-            estadia.realizarCheckOut(fechaSalida);
-            estadia.getHabitacion().habilitar();
+                // Elimina la reserva de SQL
+                if (eliminarReservaSQL(estadia.getIdReserva())) {
+                    // Elimina la reserva de memoria
+                    try {
+                        Reserva reserva = buscarReserva(estadia.getIdReserva());
+                        reservas.eliminar(reserva);
+                    } catch (IDNoEncontradoException e) {
+                        System.out.println(e.getMessage());
+                    }
 
-            // Elimina la reserva de SQL
-            if (eliminarReservaSQL(estadia.getIdReserva())) {
-                // Elimina la reserva de memoria
-                try {
-                    Reserva reserva = buscarReserva(estadia.getIdReserva());
-                    reservas.eliminar(reserva);
-                } catch (IDNoEncontradoException e) {
-                    System.out.println(e.getMessage());
+                    System.out.println("Check-out realizado correctamente");
+                } else {
+                    System.out.println("Check-out realizado, pero no se pudo eliminar la reserva");
                 }
 
-                System.out.println("Check-out realizado correctamente");
             } else {
-                System.out.println("Check-out realizado, pero no se pudo eliminar la reserva");
+                System.out.println("No se pudo realizar el check-out");
             }
-
         } else {
-            System.out.println("No se pudo realizar el check-out");
+            System.out.println("no se pudo realizar el Check-out");
         }
     }
 
@@ -609,22 +636,38 @@ public final class Hotel {
         }
     }
 
-    public void bloquearHabitacion(int numero, String motivo) {
+    public void bloquearHabitacion(int numero, String motivo)
+            throws IDNoEncontradoException, FechaInvalidaException{
         Habitacion habitacion = buscarHabitacion(numero);
         if (habitacion == null) {
-            System.out.println("Habitacion no encontrada");
         } else if (motivo == null || motivo.isBlank()) {
             System.out.println("Debe haber un motivo.");
         } else {
-            habitacion.bloquear(motivo);
-            System.out.println("Habitacion bloqueada");
+            int x = 1;
+            if(!consultarDisponibilidad(numero, LocalDate.now(), LocalDate.now().plusDays(1))) {
+                System.out.println("la habitacion esta ocupada, seguro que quieres bloquearla?\n 1: si\n 2: no");
+                try {
+                    x = sc.nextInt();
+                } catch (InputMismatchException e){
+                    x = -1;
+                } finally {
+                    sc.nextLine();
+                }
+            }
+            if(x == 1){
+                habitacion.bloquear(motivo);
+                System.out.println("Habitacion bloqueada");
+            } else if(x == 2){
+                System.out.println("la habitacion no se bloqueo");
+            } else {
+                System.out.println("error, el dato introducido es invalido");
+            }
         }
     }
 
     public void habilitarHabitacion(int numero) {
         Habitacion habitacion = buscarHabitacion(numero);
         if (habitacion == null) {
-            System.out.println("Habitacion no encontrada");
         } else {
             habitacion.habilitar();
             System.out.println("Habitacion habilitada");
@@ -637,10 +680,12 @@ public final class Hotel {
         for (Habitacion x : habitaciones.values()) {
             boolean reservada = false;
             for (Reserva r : reservas) {
-                if (r.getHabitacion().getNumero() == x.getNumero()
-                && r.getEstado() == EEstadoReserva.CONFIRMADA) {
-                    reservada = true;
-                    break;
+                if(r.getHabitacion() != null) {
+                    if (r.getHabitacion().getNumero() == x.getNumero()
+                            && r.getEstado() == EEstadoReserva.CONFIRMADA) {
+                        reservada = true;
+                        break;
+                    }
                 }
             }
             if (x.estaDisponible() && !reservada) {
@@ -662,8 +707,10 @@ public final class Hotel {
         boolean b = false;
         for (Estadia estadia : estadias) {
             if (estadia.estaActiva()) {
-                sb.append(estadia.getHabitacion().mostrarInformacion());
-                b = true;
+                if(estadia.getHabitacion() != null) {
+                    sb.append(estadia.getHabitacion().mostrarInformacion());
+                    b = true;
+                }
             }
         }
         if (!b) {
@@ -702,26 +749,31 @@ public final class Hotel {
         }
     }
 
-    public boolean consultarDisponibilidad(int numero, LocalDate fechaEntrada, LocalDate fechaSalida) {
+    public boolean consultarDisponibilidad(int numero, LocalDate fechaEntrada, LocalDate fechaSalida)
+            throws IDNoEncontradoException, FechaInvalidaException {
         Habitacion habitacion = buscarHabitacion(numero);
         if (habitacion == null) {
-            System.out.println("Habitacion no encontrada");
-            return false;
+            throw new IDNoEncontradoException(Habitacion.class, numero);
         }
-        if (fechaEntrada == null || fechaSalida == null || !fechaEntrada.isBefore(fechaSalida)) {
-            System.out.println("Fecha Invalida");
-            return false;
+        if (fechaEntrada == null || fechaSalida == null || !fechaEntrada.isBefore(fechaSalida) || fechaEntrada.isBefore(LocalDate.now())) {
+            throw new FechaInvalidaException("la fecha es invalida");
         }
         if (habitacion.getEstado() == EEstadoHabitacion.NO_DISPONIBLE) {
             return false;
         }
         for (Reserva reserva : reservas) {
-            if (reserva.getHabitacion().getNumero() == numero && reserva.getEstado() == EEstadoReserva.CONFIRMADA) {
-                boolean seSuperponen =
-                        fechaEntrada.isBefore(reserva.getFechaSalida())
-                                && fechaSalida.isAfter(reserva.getFechaEntrada());
-                if (seSuperponen) {
-                    return false;
+            if(reserva.getHabitacion() != null) {
+                if (reserva.getHabitacion().getNumero() == numero && reserva.getEstado() == EEstadoReserva.CONFIRMADA) {
+                    boolean seSuperponen =
+                            (fechaEntrada.isBefore(reserva.getFechaEntrada())
+                                    && fechaSalida.isAfter(reserva.getFechaSalida()))
+                                    || (fechaEntrada.isBefore(reserva.getFechaSalida())
+                                    && fechaEntrada.isAfter(reserva.getFechaEntrada()))
+                                    || (fechaSalida.isAfter(reserva.getFechaEntrada())
+                                    && fechaEntrada.isBefore(reserva.getFechaSalida()));
+                    if (seSuperponen) {
+                        return false;
+                    }
                 }
             }
         }

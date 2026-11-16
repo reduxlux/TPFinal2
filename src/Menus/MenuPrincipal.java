@@ -85,7 +85,9 @@ public class MenuPrincipal {
                 case 3:
                     try {
                         Pasajero p = hotel.crearPasajero();
-                        menuPasajero.menuPasajero(p);
+                        if(p != null) {
+                            menuPasajero.menuPasajero(p);
+                        }
                     } catch (SQLException e) {
                         System.out.println("hubo un problema al intentar crear la cuenta.");
                     }

@@ -231,9 +231,9 @@ public class HotelDAO {
         try (Connection con = ConexioBD.conectar()) {
             administradoresDAO.cargar(hotel, con);
             recepcionistasDAO.cargar(hotel, con);
+            pasajerosDAO.cargar(hotel, con);
             estadiasDAO.cargar(hotel, con);
             habitacionesDAO.cargar(hotel, con);
-            pasajerosDAO.cargar(hotel, con);
             reservasDAO.cargar(hotel, con);
         }
     }

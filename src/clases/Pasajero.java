@@ -142,4 +142,14 @@ public class Pasajero {
     public int hashCode() {
         return Objects.hashCode(dni);
     }
+
+    @Override
+    public String toString() {
+        return "Pasajero{" +
+                "nombre='" + nombre + '\'' +
+                ", dni='" + dni + '\'' +
+                ", origen='" + origen + '\'' +
+                ", domicilioOrigen='" + domicilioOrigen + '\'' +
+                '}';
+    }
 }

@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Reserva {
 
     private int id;
-    private static int contador = 0;
+    private static int contador = 1;
     private Pasajero pasajero;
     private Habitacion habitacion;
     private LocalDate fechaEntrada;
