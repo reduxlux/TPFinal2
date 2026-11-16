@@ -226,17 +226,22 @@ public class HotelDAO {
     }
 
     // CARGAR TODOS LOS DATOS
-    public static void cargarDatos(Hotel hotel)
-            throws SQLException {
+
+    public static void cargarDatos(Hotel hotel) throws SQLException {
         try (Connection con = ConexioBD.conectar()) {
+
+            // Primero cargamos los objetos independientes
+            habitacionesDAO.cargar(hotel, con);
+            pasajerosDAO.cargar(hotel, con);
+
+            // Después los que dependen de ellos
             administradoresDAO.cargar(hotel, con);
             recepcionistasDAO.cargar(hotel, con);
-            pasajerosDAO.cargar(hotel, con);
-            estadiasDAO.cargar(hotel, con);
-            habitacionesDAO.cargar(hotel, con);
             reservasDAO.cargar(hotel, con);
+            estadiasDAO.cargar(hotel, con);
         }
     }
+
 
     // ELIMINACION
     public static void eliminarHabitacion(int numero) throws SQLException {

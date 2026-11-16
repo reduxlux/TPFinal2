@@ -7,19 +7,21 @@ import interfaces.IntDAO;
 import java.sql.*;
 
 public class AdministradoresDAO implements IntDAO<Administrador> {
+
     @Override
     public void crearTabla(Statement st) throws SQLException {
         String sqlAdministradores = """
-               CREATE TABLE IF NOT EXISTS administradores (
-               id INT PRIMARY KEY,
-               nombre VARCHAR(100) NOT NULL,
-               usuario VARCHAR(100) NOT NULL,
-               contrasenia VARCHAR(100) NOT NULL
-               )
-               """;
+            CREATE TABLE IF NOT EXISTS administradores (
+                id INT PRIMARY KEY,
+                nombre VARCHAR(100) NOT NULL,
+                usuario VARCHAR(100) NOT NULL UNIQUE,
+                contrasenia VARCHAR(100) NOT NULL
+            )
+            """;
 
         st.executeUpdate(sqlAdministradores);
     }
+
 
     @Override
     public void cargar(Hotel hotel, Connection c) throws SQLException {
